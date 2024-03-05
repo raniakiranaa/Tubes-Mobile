@@ -21,10 +21,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.uhuyy.Everlast"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e958c917-343b-4fc6-b1de-26f003cf2587"
+      }
+    },
+    "expo": {
+      "splash": {
+        "image": "./assets/Logo.png",
+        "backgroundColor": "785846"
+      }
     }
   }
 }
