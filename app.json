@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Tubes-Mobile",
-    "slug": "Tubes-Mobile",
+    "name": "Everlast",
+    "slug": "Everlast",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#785846"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -37,6 +37,7 @@
         "image": "./assets/Logo.png",
         "backgroundColor": "785846"
       }
-    }
+    },
+    "owner": "tubes-mobile-expo"
   }
 }
