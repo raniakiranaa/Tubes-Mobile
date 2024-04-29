@@ -27,17 +27,17 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "e958c917-343b-4fc6-b1de-26f003cf2587"
-      }
-    },
     "expo": {
       "splash": {
         "image": "./assets/Logo.png",
         "backgroundColor": "785846"
       }
     },
-    "owner": "tubes-mobile-expo"
+    "owner": "tubes-mobile-expo",
+    "extra": {
+      "eas": {
+        "projectId": "2ee0eefd-eb92-427a-8fc9-a660b2e40095"
+      }
+    }
   }
 }
