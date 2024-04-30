@@ -1,8 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, Image, View } from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from './firebase/index.js'
 import { useEffect } from 'react';
+// import CustomHeader from './components/CustomHeader.js'
+import HomeScreen from './screens/HomeScreen.js';
+
+const Stack = createNativeStackNavigator();
+
+const CustomHeader = () => {
+  return (
+    <View style={styles.container}>
+      <Image
+        style={styles.logo}
+        source={require('./assets/Header.png')}
+        resizeMode="contain"
+      />
+    </View>
+  );
+};
 
 export default function App() {
 
@@ -52,10 +70,15 @@ export default function App() {
   // }, [])
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          header: () => <CustomHeader />, // Use custom header for every screen
+        }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -64,9 +87,14 @@ setTimeout(SplashScreen.hideAsync, 5000);
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 75,
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+    height: 100, 
+  }, logo: {
+    width: '100%',
+  }
 });
