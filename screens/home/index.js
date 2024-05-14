@@ -12,6 +12,7 @@ const HomeScreen = ({ navigation }) => {
         // buttonColor = { MyTheme.colors.pink_3 }
         textColor = { MyTheme.colors.black }
         // onPress={() => navigation.navigate('Profile')}
+        size = "large-square"
       />
       <IconButton 
         iconSource= {require('./../../assets/icons/icon-chat.png')}
