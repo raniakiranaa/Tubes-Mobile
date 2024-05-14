@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/poppins": "^0.2.3",
     "@react-native-firebase/app": "^19.2.2",
     "@react-navigation/native-stack": "^6.9.26",
     "eas-cli": "^7.8.5",
@@ -19,7 +20,9 @@
     "firebase": "^10.11.1",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react-native": "0.74.1",
+    "react-native-paper": "^5.12.3",
+    "tailwind-react-native-classnames": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

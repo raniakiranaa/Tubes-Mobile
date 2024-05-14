@@ -5,10 +5,10 @@
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icons/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#785846"
     },
@@ -21,17 +21,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.uhuyy.Everlast"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/favicon.png"
     },
     "expo": {
       "splash": {
-        "image": "./assets/Logo.png",
+        "image": "./assets/icons/Logo.png",
         "backgroundColor": "785846"
       }
     },
