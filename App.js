@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from './firebase/index.js'
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from './src/firebase/index.js'
 import { useEffect } from 'react';
-import Navigation from './navigation';
+import Navigation from './src/navigation';
 
 export default function App() {
 

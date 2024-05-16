@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { OutlineButton, IconButton } from '../../components/shares/Buttons';
+import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
 import MyTheme from '../../config/theme.js';
 
 const HomeScreen = ({ navigation }) => {
@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
         size = "large-square"
       />
       <IconButton 
-        iconSource= {require('./../../assets/icons/icon-chat.png')}
+        iconSource= {require('../../../assets/icons/icon-chat.png')}
         title="hai"
         buttonColor = { MyTheme.colors.pink_3 }
         textColor = { MyTheme.colors.black }
