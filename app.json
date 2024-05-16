@@ -2,7 +2,10 @@
   "expo": {
     "name": "Everlast",
     "slug": "Everlast",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
@@ -40,6 +43,31 @@
       "eas": {
         "projectId": "2ee0eefd-eb92-427a-8fc9-a660b2e40095"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "poppinsblack": "./assets/fonts/poppinsblack.ttf",
+          "poppinsblackitalic": "./assets/fonts/poppinsblackitalic.ttf",
+          "poppinsbold": "./assets/fonts/poppinsbold.ttf",
+          "poppinsbolditalic": "./assets/fonts/poppinsbolditalic.ttf",
+          "poppinsextrabold": "./assets/fonts/poppinsextrabold.ttf",
+          "poppinsextrabolditalic": "./assets/fonts/poppinsextrabolditalic.ttf",
+          "poppinsextralight": "./assets/fonts/poppinsextralight.ttf",
+          "poppinsextralightitalic": "./assets/fonts/poppinsextralightitalic.ttf",
+          "poppinsitalic": "./assets/fonts/poppinsitalic.ttf",
+          "poppinslight": "./assets/fonts/poppinslight.ttf",
+          "poppinslightitalic": "./assets/fonts/poppinslightitalic.ttf",
+          "poppinsmedium": "./assets/fonts/poppinsmedium.ttf",
+          "poppinsmediumitalic": "./assets/fonts/poppinsmediumitalic.ttf",
+          "poppinsregular": "./assets/fonts/poppinsregular.ttf",
+          "poppinssemibold": "./assets/fonts/poppinssemibold.ttf",
+          "poppinssemibolditalic": "./assets/fonts/poppinssemibolditalic.ttf",
+          "poppinsthin": "./assets/fonts/poppinsthin.ttf",
+          "poppinsthinitalic": "./assets/fonts/poppinsthinitalic.ttf"
+        }
+      ]
+    ]
   }
 }

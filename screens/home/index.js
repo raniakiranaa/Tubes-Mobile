@@ -6,7 +6,7 @@ import MyTheme from '../../config/theme.js';
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My App!</Text>
+      <Text style={{ fontFamily: 'poppinsBold' }}>Welcome to My app!</Text>
       <OutlineButton
         title='hai'
         // buttonColor = { MyTheme.colors.pink_3 }

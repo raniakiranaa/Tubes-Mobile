@@ -1,16 +1,3 @@
-// import { DefaultTheme } from 'styled-components';
-// import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from "@expo-google-fonts/Poppins"
-// import { useFonts } from "expo-font";
-
-// async function loadPoppinsFonts() {
-//     await useFonts({
-//         Poppins_400Regular,
-//         Poppins_500Medium,
-//         Poppins_600SemiBold,
-//         Poppins_700Bold,
-//     });
-// }
-
 const MyTheme = {
     colors: {
         brown_1: '#5A463B',
@@ -41,7 +28,7 @@ const MyTheme = {
     typography: {
         lineHeight: 1.5,
         headings: {
-        // fontFamily: Poppins_700Bold,
+        fontFamily: 'poppinsBold',
         h1: {
             fontSize: 60
         },
@@ -59,7 +46,7 @@ const MyTheme = {
         },
       },
       subtitle: {
-        // fontFamily: Poppins_600SemiBold,
+        fontFamily: 'poppinsSemibold',
         sub_1: {
             fontSize: 22,
         },
@@ -74,7 +61,7 @@ const MyTheme = {
         }
       },
       body: {
-        // fontFamily: Poppins_400Regular,
+        fontFamily: 'poppinsRegular',
         body_1: {
             fontSize: 14
         },

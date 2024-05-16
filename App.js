@@ -3,9 +3,34 @@ import { StyleSheet, Text, Image, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from './firebase/index.js'
 import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
 import Navigation from './navigation';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    poppinsBlack: require("./assets/fonts/poppinsblack.ttf"),
+    poppinsBlackItalic: require("./assets/fonts/poppinsblackitalic.ttf"),
+    poppinsBold: require("./assets/fonts/poppinsbold.ttf"),
+    poppinsBoldItalic: require("./assets/fonts/poppinsbolditalic.ttf"),
+    poppinsExtraBold: require("./assets/fonts/poppinsextrabold.ttf"),
+    poppinsExtraBoldItalic: require("./assets/fonts/poppinsextrabolditalic.ttf"),
+    poppinsExtraLight: require("./assets/fonts/poppinsextralight.ttf"),
+    poppinsExtraLightItalic: require("./assets/fonts/poppinsextralightitalic.ttf"),
+    poppinsItalic: require("./assets/fonts/poppinsitalic.ttf"),
+    poppinsLight: require("./assets/fonts/poppinslight.ttf"),
+    poppinsLightItalic: require("./assets/fonts/poppinslightitalic.ttf"),
+    poppinsMedium: require("./assets/fonts/poppinsmedium.ttf"),
+    poppinsMediumItalic: require("./assets/fonts/poppinsmediumitalic.ttf"),
+    poppinsRegular: require("./assets/fonts/poppinsregular.ttf"),
+    poppinsSemiBold: require("./assets/fonts/poppinssemibold.ttf"),
+    poppinsSemiBoldItalic: require("./assets/fonts/poppinssemibolditalic.ttf"),
+    poppinsThin: require("./assets/fonts/poppinsthin.ttf"),
+    poppinsThinItalic: require("./assets/fonts/poppinsthinitalic.ttf")
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   // basic CRUD function
   // const [data, setData] = useState([]);
