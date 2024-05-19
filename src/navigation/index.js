@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { CustomHeader } from '../components/shares/Nav';
 import HomeScreen from '../screens/home';
+import Login from '../screens/Login';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export default function Navigation() {
               header: () => <CustomHeader />, // Use custom header for every screen
             }}>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Login" component={Login} />
             {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
           </Stack.Navigator>
         </NavigationContainer>
