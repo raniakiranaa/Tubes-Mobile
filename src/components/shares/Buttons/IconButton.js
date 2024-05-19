@@ -18,14 +18,16 @@ export const IconButton = (props) => {
                     {}
                 }
                 // onPress={() => console.log('Pressed')}
-                style={
+                style={[
                     props.size === 'primary-square' ? { width: primaryWidth, height: 44, borderRadius:5 } :
                     props.size === 'primary' ? { width: primaryWidth, height: 44 } :
                     props.size === 'large-square' ? { width: largeWidth, borderRadius: 5 } :
                     props.size === 'large' ? { width: largeWidth } :
                     props.size === 'small-square' ? { width: 12, borderRadius: 5 } :
-                    { width: 12 } // small
-                }
+                    { width: 12 }, // small
+                    {backgroundColor: props.buttonColor}
+                ]}
+                labelStyle={{color: props.textColor}}
             >
                 { props.title }
             </Button>

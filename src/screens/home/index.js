@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
 import MyTheme from '../../config/theme.js';
+import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -17,10 +18,14 @@ const HomeScreen = ({ navigation }) => {
       <IconButton 
         iconSource= {require('../../../assets/icons/icon-chat.png')}
         title="hai"
-        buttonColor = { MyTheme.colors.pink_3 }
-        textColor = { MyTheme.colors.black }
+        buttonColor = { MyTheme.colors.brown_2 }
+        textColor = { MyTheme.colors.white }
         // type="right"
         size="primary"
+      />
+      <TextInputIcon 
+        iconSource = {require('../../../assets/icons/icon-chat.png')}
+        placeholder = "Tes"
       />
     </View>
   );
