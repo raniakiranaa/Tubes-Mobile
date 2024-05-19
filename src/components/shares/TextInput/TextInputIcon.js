@@ -1,48 +1,55 @@
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, View, TextInput, Image } from 'react-native';
 import * as React from 'react';
-import { Icon, TextInput } from 'react-native-paper';
 import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 import { useState } from 'react';
 import MyTheme from '../../../config/theme';
-// import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const TextInputIcon = (props) => {
-    const primaryWidth = SCREEN_WIDTH * 0.872;
-    const largeWidth = SCREEN_WIDTH * 0.3;
+    const [isFocused, setIsFocused] = useState(false);
 
-    const [text, setText] = useState("");
+    const secureTextEntry = props.type === "password" ? true : false;    
 
     return (
-        <View style={styles.container}>
-            {/* <Image source={props.iconSource} style={styles.ImageStyle}/> */}
+        <View style={[styles.container, {borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4}]}>
+            <Image 
+                source={props.iconSource}
+                style={styles.ImageStyle}
+            />
             <TextInput 
                 style={styles.input}
-
                 placeholder={props.placeholder}
                 placeholderTextColor={MyTheme.colors.neutral_2p}
-                // underlineColorAndroid={transparent}
-                mode="outlined" 
-
-                onChangeText={(text) => {
-                    setText(text)
-                    // setErrors(errors => ({...errors, text: ""}))
-                }}
-                value={text}
+                onChangeText={props.onChangeText}
+                selectionColor={MyTheme.colors.brown_3} 
+                inputMode={props.mode}
+                secureTextEntry={secureTextEntry}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
             />
       </View>
     );
 }
 
 const styles = StyleSheet.create({
-    input : {
+    container : {
+        flexDirection: "row",
+        alignItems: "center",
         height: 42,
         width: SCREEN_WIDTH * 0.872,
         backgroundColor: MyTheme.colors.white,
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 8,
-        borderTopStartRadius: 8,
-        borderTopEndRadius: 8,
         borderColor: MyTheme.colors.neutral_4,
-        // fontFamily: "Popp"
+    },
+    input : {
+        flex: 1,
+        fontFamily:'poppinsRegular',
+        fontSize:14,
+    },
+    ImageStyle : {
+        padding: 10,
+        height: 24,
+        width: 24,
+        marginHorizontal: 8
     }
   });

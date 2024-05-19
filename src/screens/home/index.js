@@ -6,6 +6,7 @@ import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 import { useNavigation } from 'expo-router';
+import ProfileIcon from '../../../assets/icons/Profile.svg';
 
 const HomeScreen = ({ navigation }) => {
   // const navi = useNavigation();
@@ -36,8 +37,10 @@ const HomeScreen = ({ navigation }) => {
         buttonColor = { MyTheme.colors.brown_2 }
       />
       <TextInputIcon 
-        iconSource = {require('../../../assets/icons/icon-chat.png')}
-        placeholder = "Tes"
+        iconSource= {require('../../../assets/icons/Profile.png')}
+        placeholder = "Profile"
+        type = "password"
+        mode = "text"
       />
     </View>
   );
