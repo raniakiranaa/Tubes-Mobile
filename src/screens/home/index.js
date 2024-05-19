@@ -5,13 +5,13 @@ import { CustomButton } from '../../components/shares/Buttons/index.js';
 import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
-import { useNavigation } from 'expo-router';
-import ProfileIcon from '../../../assets/icons/Profile.svg';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
-  // const navi = useNavigation();
+  const navi = useNavigation();
   const handlePress = () => {
     console.log("Button Pressed");
+    navi.navigate("Login");
   }
 
   return (

@@ -13,9 +13,10 @@ export default function Navigation() {
     return (
         <NavigationContainer>
           <Stack.Navigator
-            screenOptions={{
-              header: () => <CustomHeader />, // Use custom header for every screen
-            }}>
+            // screenOptions={{
+            //   header: () => <CustomHeader />, // Use custom header for every screen
+            // }}
+            >
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Login" component={Login} />
             {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}

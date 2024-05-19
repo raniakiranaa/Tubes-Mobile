@@ -24,6 +24,7 @@
     "react-native": "0.74.1",
     "react-native-paper": "^5.12.3",
     "react-native-status-bar-height": "^2.6.0",
+    "react-navigation": "^5.0.0",
     "tailwind-react-native-classnames": "^1.5.1"
   },
   "devDependencies": {
