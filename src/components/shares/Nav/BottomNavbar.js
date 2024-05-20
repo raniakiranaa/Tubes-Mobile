@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
 import HomeIcon from '../../../../assets/icons/Home.svg';
@@ -20,10 +21,13 @@ import MyBlogFillIcon from '../../../../assets/icons/MyBlog-fill.svg';
 import MyTheme from '../../../config/theme';
 import CustomAppbar from '../Appbar/CustomAppbar.js';
 import CancelIcon from '../../../../assets/icons/Cancel.svg';
-import Dots from '../../../../assets/icons/Dots.svg';
-import Notification from '../../../../assets/icons/Notification.svg';
+import DotsIcon from '../../../../assets/icons/Dots.svg';
+import NotificationIcon from '../../../../assets/icons/Notification.svg';
+import VendorScreen from '../../../screens/vendor/index.js';
+import { CustomHeader } from './CustomHeader.js';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function BottomNavbar({ isAdmin }) {
   return (
@@ -76,7 +80,7 @@ export default function BottomNavbar({ isAdmin }) {
               }}
             />
             <Tab.Screen
-              name="Chat"
+              name="Vendor"
               component={VendorScreen}
               options={{
                 tabBarLabel: 'Vendor',
@@ -84,61 +88,60 @@ export default function BottomNavbar({ isAdmin }) {
             />
             <Tab.Screen
               name="Orders"
-              component={OrdersScreen}
+              component={OrdersStack}
               options={{
                 tabBarLabel: 'Orders',
               }}
             />
             <Tab.Screen
-              name="MyBlog"
-              component={MyPlanScreen}
+              name="MyPlan"
+              component={MyPlanStack}
               options={{
                 tabBarLabel: 'My Plan',
               }}
             />
             <Tab.Screen
               name="Profile"
-              component={ProfileScreen}
+              component={ProfileStack}
               options={{
                 tabBarLabel: 'Profile',
               }}
             />
           </>
         )}
-        {/* Add a Tab.Screen for Admin if user is an admin */}
         {isAdmin && (
           <>
             <Tab.Screen
               name="Home"
-              component={HomeScreen}
+              component={HomeStack}
               options={{
                 tabBarLabel: 'Home',
               }}
             />
             <Tab.Screen
               name="Chat"
-              component={ChatScreen}
+              component={ChatStack}
               options={{
                 tabBarLabel: 'Chat',
               }}
             />
             <Tab.Screen
               name="Orders"
-              component={OrdersScreen}
+              component={OrdersStack}
               options={{
                 tabBarLabel: 'Orders',
               }}
             />
             <Tab.Screen
               name="MyBlog"
-              component={MyBlogScreen}
+              component={MyBlogStack}
               options={{
                 tabBarLabel: 'My Blog',
               }}
             />
             <Tab.Screen
               name="Profile"
-              component={ProfileScreen}
+              component={ProfileStack}
               options={{
                 tabBarLabel: 'Profile',
               }}
@@ -150,19 +153,156 @@ export default function BottomNavbar({ isAdmin }) {
   );
 }
 
-function HomeScreen() {
+function HomeStack() {
   return (
-    <CustomAppbar title="Home" isBackButton={true} isAction={true} ActionIcon={CancelIcon}/>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="Home" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
   );
 }
 
-function VendorScreen() {
+function VendorStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="VendorScreen"
+        component={VendorScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function OrdersStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="OrdersScreen"
+        component={OrdersScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="Orders" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function MyPlanStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MyPlanScreen"
+        component={MyPlanScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="My Plan" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="Profile" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ChatStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="Chat" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function MyBlogStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MyBlogScreen"
+        component={MyBlogScreen}
+        options={{
+          header: () => (
+            <>
+              <CustomHeader />
+              <CustomAppbar title="My Blog" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+            </>
+          ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// The same structure for other stacks like VendorStack, OrdersStack, etc.
+
+function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium">Vendor!</Text>
+      <Text variant="headlineMedium">Home!</Text>
     </View>
   );
 }
+
+// function VendorScreen() {
+//   return (
+//     <View style={styles.container}>
+//       <Text variant="headlineMedium">Vendor!</Text>
+//     </View>
+//   );
+// }
 
 function OrdersScreen() {
   return (

@@ -9,7 +9,7 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon }) => {
   const navigation = useNavigation();
 
   return (
-    <Appbar.Header>
+    <Appbar.Header style={styles.transparentHeader}>
       {isBackButton && (
         <Appbar.Action
           icon={() => <BackButton />}
@@ -17,7 +17,7 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon }) => {
         />
       )}
       <View style={styles.titleContainer}>
-        <Text variant="titleMedium" style={[MyTheme.typography.subtitle.sub_2]}>
+        <Text style={[MyTheme.typography.subtitle.sub_2]}>
           {title}
         </Text>
       </View>
@@ -34,6 +34,11 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon }) => {
 };
 
 const styles = StyleSheet.create({
+  transparentHeader: {
+    backgroundColor: 'transparent',
+    elevation: 0, // removes the shadow on Android
+    shadowOpacity: 0, // removes the shadow on iOS
+  },
   titleContainer: {
     position: 'absolute',
     left: 0,

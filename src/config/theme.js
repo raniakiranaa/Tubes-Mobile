@@ -26,52 +26,60 @@ const MyTheme = {
         white: '#FFFFFF'
     },
     typography: {
-        lineHeight: 1.5,
         headings: {
-        fontFamily: 'poppinsBold',
-        h1: {
-            fontSize: 60
+            h1: {
+                fontFamily: 'poppinsBold',
+                fontSize: 60
+            },
+            h2: {
+                fontFamily: 'poppinsBold',
+                fontSize: 48
+            },
+            h3: {
+                fontFamily: 'poppinsBold',
+                fontSize: 36
+            },
+            h4: {
+                fontFamily: 'poppinsBold',
+                fontSize: 24
+            },
+            h5: {
+                fontFamily: 'poppinsBold',
+                fontSize: 20
+            },
         },
-        h2: {
-            fontSize: 48
+        subtitle: {
+            sub_1: {
+                fontFamily: 'poppinsBold',
+                fontSize: 22,
+            },
+            sub_2: {
+                fontFamily: 'poppinsBold',
+                fontSize: 18,
+            },
+            sub_3: {
+                fontFamily: 'poppinsBold',
+                fontSize: 14,
+            },
+            sub_4: {
+                fontFamily: 'poppinsBold',
+                fontSize: 10
+            }
         },
-        h3: {
-            fontSize: 36
-        },
-        h4: {
-            fontSize: 24
-        },
-        h5: {
-            fontSize: 20
-        },
-      },
-      subtitle: {
-        fontFamily: 'poppinsSemibold',
-        sub_1: {
-            fontSize: 22,
-        },
-        sub_2: {
-            fontSize: 18,
-        },
-        sub_3: {
-            fontSize: 14,
-        },
-        sub_4: {
-            fontSize: 10
+        body: {
+            body_1: {
+                fontFamily: 'poppinsRegular',
+                fontSize: 14
+            },
+            body_2: {
+                fontFamily: 'poppinsRegular',
+                fontSize: 12
+            },
+            body_3: {
+                fontFamily: 'poppinsRegular',
+                fontSize: 10
+            }
         }
-      },
-      body: {
-        fontFamily: 'poppinsRegular',
-        body_1: {
-            fontSize: 14
-        },
-        body_2: {
-            fontSize: 12
-        },
-        body_3: {
-            fontSize: 10
-        }
-      }
     },
     shadows: {
         shadow_1: "0px 0px 6px rgba(190, 190, 190, 0.3)",

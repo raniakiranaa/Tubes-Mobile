@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import Navigation from './src/navigation/index.js';
 import BottomNavbar from './src/components/shares/Nav/index.js';
+import VendorScreen from './src/screens/vendor/index.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,6 +35,7 @@ export default function App() {
 
   return (
     <BottomNavbar />
+    // <VendorScreen />
   );
 }
 
