@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
-// import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';

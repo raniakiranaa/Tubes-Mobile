@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import MyTheme from '../../config/theme.js';
+import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 
 const VendorScreen = ({ navigation }) => {
     return (
@@ -9,6 +10,32 @@ const VendorScreen = ({ navigation }) => {
             <View style={styles.container}>
                 {/* <CustomHeader /> */}
                 <Text style={[MyTheme.typography.subtitle.sub_3]}>Welcome to My app!</Text>
+                <View style={styles.inputContainer}>
+                <TextInputIcon 
+                    iconSource= {require('../../../assets/icons/Mail.png')}
+                    placeholder = "Username"
+                    type = "username"
+                    mode = "text"
+                /> 
+                <TextInputIcon 
+                    iconSource= {require('../../../assets/icons/password.png')}
+                    placeholder = "Password"
+                    type = "password"
+                    mode = "text"
+                />
+                <TextInputIcon 
+                    iconSource= {require('../../../assets/icons/Mail.png')}
+                    placeholder = "Username"
+                    type = "username"
+                    mode = "text"
+                /> 
+                <TextInputIcon 
+                    iconSource= {require('../../../assets/icons/password.png')}
+                    placeholder = "Password"
+                    type = "password"
+                    mode = "text"
+                />
+            </View>
                 {/* <CustomButton 
                     title = "Login"
                     textColor = {MyTheme.colors.brown_2}

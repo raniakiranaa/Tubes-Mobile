@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import Navigation from './src/navigation/index.js';
 import BottomNavbar from './src/components/shares/Nav/index.js';
 import VendorScreen from './src/screens/vendor/index.js';
+import Login from './src/screens/Login/index.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,8 +35,10 @@ export default function App() {
   }
 
   return (
-    <BottomNavbar />
+    // <BottomNavbar />
     // <VendorScreen />
+    // <Login />
+    <Navigation />
   );
 }
 
@@ -44,17 +47,15 @@ setTimeout(SplashScreen.hideAsync, 5000);
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    // position: 'absolute',
     top: 0,
     left: 0,
     right: 0, 
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#ffff',
     alignItems: 'center',
     justifyContent: 'center',
     height: 100, 
-  }, logo: {
-    width: '100%',
-  }
+  },
 });
