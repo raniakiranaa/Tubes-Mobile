@@ -11,10 +11,10 @@ const OrderItem = ({ order }) => {
         <Text style={[styles.package, MyTheme.typography.body.body_3]}>{order.package}</Text>
         <Text style={[styles.price, MyTheme.typography.body.body_3]}>{order.price}</Text>
         <View style={styles.statusContainer}>
-            {order.status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3]}>{order.status}</Text>}
-            {order.status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3]}>{order.status}</Text>}
-            {order.status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3]}>{order.status}</Text>}
-            {order.status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3]}>{order.status}</Text>}
+            {order.status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3, { color: '#D1B75D' }]}>{order.status}</Text>}
+            {order.status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
+            {order.status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3, { color: '#E98D39' }]}>{order.status}</Text>}
+            {order.status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3, { color: '#E2796B' }]}>{order.status}</Text>}
         </View>
       </View>
       <View style={styles.actions}>
