@@ -23,8 +23,9 @@ import CustomAppbar from '../Appbar/CustomAppbar.js';
 import CancelIcon from '../../../../assets/icons/Cancel.svg';
 import DotsIcon from '../../../../assets/icons/Dots.svg';
 import NotificationIcon from '../../../../assets/icons/Notification.svg';
-// import VendorScreen from '../../../screens/vendor/index.js';
+import VendorScreen from '../../../screens/vendor/index.js';
 import { CustomHeader } from './CustomHeader.js';
+import TopNavbar from './TopNavbar.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -59,7 +60,7 @@ export default function BottomNavbar({ isAdmin }) {
             height: 68,
             paddingLeft: 30,
             paddingRight: 30,
-          },
+            position: 'absolute',          },
           tabBarIconStyle: {
             marginTop: 14,
           },
@@ -163,7 +164,7 @@ function HomeStack() {
           header: () => (
             <>
               <CustomHeader />
-              <CustomAppbar title="Home" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+              <CustomAppbar title="Home" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
             </>
           ),
         }}
@@ -182,7 +183,7 @@ function VendorStack() {
           header: () => (
             <>
               <CustomHeader />
-              <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+              <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
             </>
           ),
         }}
@@ -200,8 +201,7 @@ function OrdersStack() {
         options={{
           header: () => (
             <>
-              <CustomHeader />
-              <CustomAppbar title="Orders" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+              <CustomAppbar title="Orders" isBackButton={false} isAction={false} />
             </>
           ),
         }}
@@ -220,7 +220,7 @@ function MyPlanStack() {
           header: () => (
             <>
               <CustomHeader />
-              <CustomAppbar title="My Plan" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+              <CustomAppbar title="My Plan" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
             </>
           ),
         }}
@@ -239,7 +239,7 @@ function ProfileStack() {
           header: () => (
             <>
               <CustomHeader />
-              <CustomAppbar title="Profile" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
+              <CustomAppbar title="Profile" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
             </>
           ),
         }}
@@ -296,19 +296,17 @@ function HomeScreen() {
   );
 }
 
-function VendorScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Vendor!</Text>
-    </View>
-  );
-}
+// function VendorScreen() {
+//   return (
+//     <View style={styles.container}>
+//       <Text variant="headlineMedium">Vendor!</Text>
+//     </View>
+//   );
+// }
 
 function OrdersScreen() {
   return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Orders!</Text>
-    </View>
+    <TopNavbar />
   );
 }
 
