@@ -23,7 +23,7 @@ import CustomAppbar from '../Appbar/CustomAppbar.js';
 import CancelIcon from '../../../../assets/icons/Cancel.svg';
 import DotsIcon from '../../../../assets/icons/Dots.svg';
 import NotificationIcon from '../../../../assets/icons/Notification.svg';
-import VendorScreen from '../../../screens/vendor/index.js';
+// import VendorScreen from '../../../screens/vendor/index.js';
 import { CustomHeader } from './CustomHeader.js';
 
 const Tab = createBottomTabNavigator();
@@ -74,14 +74,14 @@ export default function BottomNavbar({ isAdmin }) {
           <>
             <Tab.Screen
               name="Home"
-              component={HomeScreen}
+              component={HomeStack}
               options={{
                 tabBarLabel: 'Home',
               }}
             />
             <Tab.Screen
               name="Vendor"
-              component={VendorScreen}
+              component={VendorStack}
               options={{
                 tabBarLabel: 'Vendor',
               }}
@@ -296,13 +296,13 @@ function HomeScreen() {
   );
 }
 
-// function VendorScreen() {
-//   return (
-//     <View style={styles.container}>
-//       <Text variant="headlineMedium">Vendor!</Text>
-//     </View>
-//   );
-// }
+function VendorScreen() {
+  return (
+    <View style={styles.container}>
+      <Text variant="headlineMedium">Vendor!</Text>
+    </View>
+  );
+}
 
 function OrdersScreen() {
   return (
