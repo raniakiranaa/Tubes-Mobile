@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import MyTheme from '../../config/theme.js';
-import { CustomHeader } from '../../components/shares/Nav';
 
 const VendorScreen = ({ navigation }) => {
     return (

@@ -1,26 +1,43 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
+import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
+// import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
+import { CustomButton } from '../../components/shares/Buttons/index.js';
+import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';
+import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
+import { useNavigation } from 'expo-router';
 
 const HomeScreen = ({ navigation }) => {
+  // const navi = useNavigation();
+  const handlePress = () => {
+    console.log("Button Pressed");
+  }
+
   return (
     <View style={styles.container}>
       <Text style={{ fontFamily: 'poppinsBold' }}>Welcome to My app!</Text>
-      <OutlineButton
-        title='hai'
-        // buttonColor = { MyTheme.colors.pink_3 }
-        textColor = { MyTheme.colors.black }
-        // onPress={() => navigation.navigate('Profile')}
+      <CustomButton 
+        title = "Login"
+        textColor = {MyTheme.colors.brown_2}
+        onPress = {handlePress}
         size = "large-square"
+        type = "outline"
+        buttonColor = { MyTheme.colors.white }
+        outlineColor = {MyTheme.colors.brown_3}
+        fontSize = {14}
       />
-      <IconButton 
+      <CustomButton 
+        title = "SignUp"
+        textColor = {MyTheme.colors.white}
+        onPress = {handlePress}
+        size = "block-round"
+        type = "icon"
         iconSource= {require('../../../assets/icons/icon-chat.png')}
-        title="hai"
-        buttonColor = { MyTheme.colors.pink_3 }
-        textColor = { MyTheme.colors.black }
-        // type="right"
-        size="primary"
+        buttonColor = { MyTheme.colors.brown_2 }
+      />
+      <TextInputIcon 
+        iconSource = {require('../../../assets/icons/icon-chat.png')}
+        placeholder = "Tes"
       />
     </View>
   );

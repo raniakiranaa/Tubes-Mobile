@@ -6,6 +6,6 @@ export default function MainComponent() {
   const isAdmin = true; // Set to true if user is an admin, false otherwise
 
   return (
-    <BottomNavbar isAdmin={isAdmin} />
+    <BottomNavbar isAdmin={!isAdmin} />
   );
 }
