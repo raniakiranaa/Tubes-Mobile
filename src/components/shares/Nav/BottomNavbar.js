@@ -27,6 +27,8 @@ import VendorScreen from '../../../screens/vendor/index.js';
 import { CustomHeader } from './CustomHeader.js';
 import TopNavbar from './TopNavbar.js';
 
+import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -289,9 +291,15 @@ function MyBlogStack() {
 // The same structure for other stacks like VendorStack, OrdersStack, etc.
 
 function HomeScreen() {
+  const Poster = require('../../../../assets/icons/Poster.png');
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium">Home!</Text>
+      {/* <Text variant="headlineMedium">Home!</Text> */}
+      {/* <CarouselCard image={Poster}/> */}
+      {/* <BigHomeCard image={Poster} title="Local Pride : Traditional Weddings" subtitle="Discover 10 recommendations for traditional weddings" foot="31 Mar 2024 - Mimi Fashion"/> */}
+      {/* <BigSearchCard image={Poster} title="JW Marriott Surabaya" type="Venue" location="Surabaya, Jawa Timur" price="IDR" rating="4.5"/> */}
+      {/* <BigVendorCard image={Poster} title="Royal Ballroom Package" subtitle="IDR 300,000,000" pax="330 pax"/> */}
+      {/* <SmallCard image={Poster} title="JW Marriott Surabaya" rating="4.8"/> */}
     </View>
   );
 }

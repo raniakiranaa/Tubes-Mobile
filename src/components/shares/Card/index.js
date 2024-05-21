@@ -10,9 +10,13 @@ const containerHeight = containerWidth / aspectRatio;
 const aspectRatioSearch = 330 / 182;
 const containerHeightSearch = containerWidth / aspectRatioSearch;
 
+const aspectRatioSmall = 175 / 182;
+const containerHeightSmall = containerWidth / aspectRatioSmall;
+
 const scalePadding = screenWidth * 0.03; 
 const scaleFontSize = screenWidth * 0.04; 
 
+const star = require('../../../../assets/icons/star.png');
 
 export const CarouselCard = ({ image }) => {
     return (
@@ -33,15 +37,48 @@ export const BigHomeCard = ({ image, title, subtitle, foot }) => {
     );
 }
 
-export const BigSearchCard = ({ image, title, type, location, price }) => {
+export const BigSearchCard = ({ image, title, type, location, price, rating }) => {
     return (
         <View style={styles.bigSearchContainer}>
             <Image source={image} style={styles.bigSearchImage} />
-            <Text style={[styles.title,MyTheme.typography.subtitle.sub_3]}>{title}</Text>
+            <View style={styles.titleContainer}>
+                <Text style={[styles.titleSearch, MyTheme.typography.subtitle.sub_3]}>{title}</Text>
+                <View style={styles.ratingContainer}>
+                    <Image style={styles.star} source={star}/>
+                    <Text style={[styles.ratingText, MyTheme.typography.subtitle.body_3,]}>{rating}</Text>
+                </View>
+            </View>
             <Text style={[styles.detailsText, MyTheme.typography.subtitle.body_3]}>
                 <Text style={styles.typeText}>{type}</Text>
-                <Text> • {location} • {price}</Text>
+                <Text> • {location}</Text>
+                {price && <Text> • {price}</Text>}
             </Text>
+        </View>
+    );
+}
+
+export const BigVendorCard = ({ image, title, subtitle, pax }) => {
+    return (
+        <View style={styles.bigSearchContainer}>
+            <Image source={image} style={styles.bigHomeImage} />
+            <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>{ title }</Text>
+            <Text style={[styles.subtitle, MyTheme.typography.subtitle.body_3]}>
+                <Text>{ subtitle }</Text>
+                <Text style={styles.typeText}>        { pax }</Text>
+            </Text>
+        </View>
+    );
+}
+
+export const SmallCard = ({ image, title, rating }) => {
+    return (
+        <View style={styles.smallContainer}>
+            <Image source={image} style={styles.bigSearchImage} />
+            <Text style={[styles.titleSmall, MyTheme.typography.subtitle.sub_3]}>{title}</Text>
+            <View style={styles.ratingSmallContainer}>
+                <Image style={styles.star} source={star}/>
+                <Text style={[styles.ratingText, MyTheme.typography.subtitle.body_3,]}>{rating}</Text>
+            </View>
         </View>
     );
 }
@@ -110,16 +147,78 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
     },
+    titleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingRight: scalePadding,
+    },
+    titleSearch: {
+        textAlign: 'left',
+        alignSelf: 'stretch',
+        paddingLeft: scalePadding,
+        paddingTop: scalePadding * 0.8, 
+        fontSize: scaleFontSize * 1.4,
+        flex: 1,
+    },
+    star: {
+        width: 11,
+        height: 11
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 0.22,
+        borderColor: MyTheme.colors.neutral_300,
+        paddingTop: scalePadding * 0.2,
+        paddingBottom: scalePadding * 0.2,
+        paddingLeft: scalePadding * 0.4,
+        paddingRight: scalePadding * 0.4,
+        borderRadius: 12,
+    },
+    ratingText: {
+        paddingLeft: scalePadding * 0.4,
+        color: MyTheme.colors.black,
+    },
     detailsText: {
         textAlign: 'left',
         alignSelf: 'stretch',
         paddingLeft: scalePadding,
-        paddingTop: scalePadding * 0.4,
+        paddingTop: scalePadding * 0.2,
         color: MyTheme.colors.black,
         fontSize: scaleFontSize * 0.7, 
     },
     typeText: {
         color: MyTheme.colors.pink_2
+    },
+    smallContainer: {
+        width: containerWidth,
+        height: containerHeightSmall,
+        flexDirection: 'column',
+        alignItems: 'left',
+        ...MyTheme.shadows.shadow_1,
+        borderRadius: 10,
+        backgroundColor: MyTheme.colors.white
+    },
+    ratingSmallContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 0.22,
+        borderColor: MyTheme.colors.neutral_300,
+        paddingTop: scalePadding * 0.2,
+        paddingBottom: scalePadding * 0.2,
+        paddingLeft: scalePadding * 0.4,
+        paddingRight: scalePadding * 0.4,
+        borderRadius: 12,
+        marginLeft: scalePadding,
+    },
+    titleSmall: {
+        textAlign: 'left',
+        alignSelf: 'stretch',
+        paddingLeft: scalePadding,
+        paddingTop: scalePadding * 0.8, 
+        paddingBottom: scalePadding * 0.2,
+        fontSize: scaleFontSize * 1.4,
     },
 });
 
