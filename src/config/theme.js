@@ -50,19 +50,33 @@ const MyTheme = {
         },
         subtitle: {
             sub_1: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 22,
             },
             sub_2: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 18,
             },
             sub_3: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 14,
             },
             sub_4: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
+                fontSize: 10
+            }
+        },
+        medium: {
+            medium_1: {
+                fontFamily: 'ppoppinsMedium',
+                fontSize: 14
+            },
+            medium_2: {
+                fontFamily: 'poppinsMedium',
+                fontSize: 12
+            },
+            medium_3: {
+                fontFamily: 'poppinsMedium',
                 fontSize: 10
             }
         },
@@ -82,9 +96,24 @@ const MyTheme = {
         }
     },
     shadows: {
-        shadow_1: "0px 0px 6px rgba(190, 190, 190, 0.3)",
-        shadow_2: "0px 0px 16px rgba(132, 132, 132, 0.25)",
-        shadow_3: "0px 0px 32px rgba(132, 132, 132, 0.25)"
+        shadow_1: {
+            shadowColor: "#BEBEBE",
+            shadowOpacity: 0.3,
+            shadowRadius: 6,
+            elevation: 6, 
+        },
+        shadow_2: {
+            shadowColor: "#848484",
+            shadowOpacity: 0.25,
+            shadowRadius: 16,
+            elevation: 16,
+        },
+        shadow_3: {
+            shadowColor: "#848484",
+            shadowOpacity: 0.25,
+            shadowRadius: 32,
+            elevation: 32,
+        }
     }
 };
   
