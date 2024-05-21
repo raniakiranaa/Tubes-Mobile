@@ -6,6 +6,8 @@ import { useFonts } from 'expo-font';
 import Navigation from './src/navigation/index.js';
 import BottomNavbar from './src/components/shares/Nav/index.js';
 import VendorScreen from './src/screens/vendor/index.js';
+import OrderDetail from './src/screens/order/OrderDetail.js';
+import RatingReview from './src/screens/order/RatingReview.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,8 +36,10 @@ export default function App() {
   }
 
   return (
-    <BottomNavbar />
+    // <BottomNavbar />
     // <VendorScreen />
+    // <OrderDetail />
+    <RatingReview />
   );
 }
 
