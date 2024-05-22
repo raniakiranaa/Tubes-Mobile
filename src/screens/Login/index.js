@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textContainer: {
-    marginLeft: 4,
+    marginHorizontal: 10,
     paddingTop: 24,
   },
   titleText: {
@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   }
-
 });
 
 export default Login;

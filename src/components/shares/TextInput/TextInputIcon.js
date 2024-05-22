@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         height: 42,
-        width: SCREEN_WIDTH * 0.872,
+        marginHorizontal: 10,
         backgroundColor: MyTheme.colors.white,
         borderWidth: 2,
         borderRadius: 8,
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     },
     input : {
         flex: 1,
+        marginRight: 12
     },
     ImageStyle : {
         padding: 10,
@@ -67,6 +68,6 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 24,
         width: 24,
-        marginHorizontal: 16
+        marginRight: 16
     }
   });
