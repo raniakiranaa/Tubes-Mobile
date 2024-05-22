@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 import { useNavigation } from '@react-navigation/native';
+import { UnameIcon } from '../../../assets/icons/Uname.svg'
 
 const HomeScreen = ({ navigation }) => {
   const navi = useNavigation();
@@ -14,34 +16,43 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={{ fontFamily: 'poppinsBold' }}>Welcome to My app!</Text>
-      <CustomButton 
-        title = "Login"
-        textColor = {MyTheme.colors.brown_2}
-        onPress = {handlePress}
-        size = "large-square"
-        type = "outline"
-        buttonColor = { MyTheme.colors.white }
-        outlineColor = {MyTheme.colors.brown_3}
-        fontSize = {14}
-      />
-      <CustomButton 
-        title = "SignUp"
-        textColor = {MyTheme.colors.white}
-        onPress = {handlePress}
-        size = "block-round"
-        type = "icon"
-        iconSource= {require('../../../assets/icons/icon-chat.png')}
-        buttonColor = { MyTheme.colors.brown_2 }
-      />
-      <TextInputIcon 
-        iconSource= {require('../../../assets/icons/Profile.png')}
-        placeholder = "Profile"
-        type = "password"
-        mode = "text"
-      />
-    </View>
+    <KeyboardAwareScrollView
+          style={styles.Acontainer}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={styles.scrollContainer}
+          scrollEnabled={true}
+        >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Text style={{ fontFamily: 'poppinsBold' }}>Welcome to My app!</Text>
+          <CustomButton 
+            title = "Login"
+            textColor = {MyTheme.colors.brown_2}
+            onPress = {handlePress}
+            size = "large-square"
+            type = "outline"
+            buttonColor = { MyTheme.colors.white }
+            outlineColor = {MyTheme.colors.brown_3}
+            fontSize = {14}
+          />
+          <CustomButton 
+            title = "SignUp"
+            textColor = {MyTheme.colors.white}
+            onPress = {handlePress}
+            size = "block-round"
+            type = "icon"
+            iconSource= {UnameIcon}
+            buttonColor = { MyTheme.colors.brown_2 }
+          />
+          <TextInputIcon 
+            iconSource={UnameIcon}
+            placeholder = "Profile"
+            type = "password"
+            mode = "text"
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -51,6 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    marginTop: 400
   },
   title: {
     fontSize: 24,

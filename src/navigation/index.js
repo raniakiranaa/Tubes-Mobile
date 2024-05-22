@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { CustomHeader } from '../components/shares/Nav';
 import HomeScreen from '../screens/home';
 import Login from '../screens/Login';
+import Register from '../screens/register';
 import { HeaderStart } from '../components/shares/Nav/HeaderStart';
 import MyTheme from '../config/theme';
 
@@ -24,7 +25,14 @@ export default function Navigation() {
                     name="Login" 
                     component={Login} 
                     options={{
-                        header: () => <HeaderStart />
+                        header: () => null//<HeaderStart />
+                    }}  
+                />
+                <Stack.Screen 
+                    name="Register" 
+                    component={Register} 
+                    options={{
+                        header: () => null//<HeaderStart />
                     }}  
                 />
             </Stack.Navigator>

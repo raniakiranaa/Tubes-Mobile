@@ -1,73 +1,101 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
 import { SCREEN_HEIGHT } from '../../utils/deviceDimensions.js';
-import { Link } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
+import PasswordIcon from '../../../assets/icons/Password.svg';
+import UnameIcon from '../../../assets/icons/Uname.svg';
+import { HeaderStart } from '../../components/shares/Nav/HeaderStart.js'; // Import HeaderStart
 
 const Login = () => {
+  const nav = useNavigation();
+  
+  const handleRegis = () => {
+    nav.navigate("Register");
+  }
+
+  const handleVendor = () => {
+    nav.navigate("#");
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Text style={[styles.titleText, MyTheme.typography.headings.h3]}>
-          Login
-        </Text>
-        <Text style={[styles.descText, MyTheme.typography.subtitle.sub_3]}>
-          Please sign in to continue
-        </Text>
-        <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
-          Are you a Vendor?
-          <Link href='#' style={styles.innerText}> Login as Vendor</Link>
-        </Text>
-      </View>
-      <View>
-        <View style={styles.inputTextContainer}>
-          <TextInputIcon 
-            iconSource={require('../../../assets/icons/Mail.png')}
-            placeholder="Username"
-            type="username"
-            mode="text"
-            fontSize={MyTheme.typography.body.body_1}
-          />
+    <KeyboardAwareScrollView
+      style={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      contentContainerStyle={styles.scrollContainer}
+      scrollEnabled={true}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          <HeaderStart /> 
+          <View style={styles.contentContainer}>
+            <View style={styles.textContainer}>
+              <Text style={[styles.titleText, MyTheme.typography.headings.h3]}>
+                Login
+              </Text>
+              <Text style={[styles.descText, MyTheme.typography.subtitle.sub_3]}>
+                Please sign in to continue
+              </Text>
+              <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
+                Are you a Vendor?
+                <Text style={styles.innerText} onPress={handleVendor}>  Login as Vendor
+                </Text>
+              </Text>
+            </View>
+            <View>
+              <View style={styles.inputTextContainer}>
+                <TextInputIcon 
+                  iconComponent={UnameIcon}
+                  placeholder="Username"
+                  type="username"
+                  mode="text"
+                  fontSize={MyTheme.typography.body.body_1}
+                />
+              </View>
+              <View style={styles.inputTextContainer}>
+                <TextInputIcon 
+                  iconComponent={PasswordIcon}
+                  placeholder="Password"
+                  type="password"
+                  mode="text"
+                  fontSize={MyTheme.typography.body.body_1}
+                />
+              </View>
+              <Text style={[styles.passContainer, MyTheme.typography.body.body_2]}>
+                Forgot the password?
+              </Text>
+            </View>
+            <View style={styles.submitButtonContainer}>
+              <CustomButton
+                title="Login"
+                textColor={MyTheme.colors.white}
+                // onPress={handlePress}
+                size="block-round"
+                type="fill"
+                buttonColor={MyTheme.colors.brown_2}
+              />
+            </View>
+            <View style={styles.regisContainer}>
+              <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
+                Don’t have an account yet?  
+                <Text style={styles.innerText} 
+                  onPress={handleRegis}
+                > Register
+                </Text>
+              </Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.inputTextContainer}>
-          <TextInputIcon 
-            iconSource={require('../../../assets/icons/password.png')}
-            placeholder="Password"
-            type="password"
-            mode="text"
-            fontSize={MyTheme.typography.body.body_1}
-          />
-        </View>
-        <Text style={[styles.passContainer, MyTheme.typography.body.body_2]}>
-          Forgot the password?
-        </Text>
-      </View>
-      <View style={styles.submitButtonContainer}>
-        <CustomButton
-          title = "Login"
-          textColor = {MyTheme.colors.white}
-          // onPress = {handlePress}
-          size = "block-round"
-          type = "fill"
-          buttonColor = { MyTheme.colors.brown_2 }
-        />
-      </View>
-      <View style={styles.regisContainer}>
-        <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
-          Don’t have an account yet?  
-          <Link href="/Register" style={styles.innerText}>  Register</Link>
-        </Text>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: SCREEN_HEIGHT / 3 ,
+  contentContainer : {
     paddingHorizontal: 20,
   },
   textContainer: {
@@ -79,37 +107,37 @@ const styles = StyleSheet.create({
   },
   descText: {
     color: MyTheme.colors.neutral_2p,
-    paddingTop: 8
+    paddingTop: 8,
   },
   outerText: {
     color: MyTheme.colors.neutral_2p,
     paddingTop: 4,
-    paddingBottom: 20
+    paddingBottom: 4,
   },
   innerText: {
     fontFamily: 'poppinsMedium',
     fontSize: 14,
     color: MyTheme.colors.brown_2,
   },
-  inputTextContainer : {
+  inputTextContainer: {
     alignItems: 'center',
     marginTop: 20,
-    position: 'relative'
+    position: 'relative',
   },
-  passContainer : {
+  passContainer: {
     marginTop: 8,
     alignItems: 'flex-start',
     marginLeft: 10,
-    color: MyTheme.colors.neutral_2p
+    color: MyTheme.colors.neutral_2p,
   },
-  submitButtonContainer : {
-    paddingTop: 60
+  submitButtonContainer: {
+    paddingTop: 40,
   },
-  regisContainer : {
-    paddingTop: 80,
+  regisContainer: {
+    paddingTop: 40,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 export default Login;

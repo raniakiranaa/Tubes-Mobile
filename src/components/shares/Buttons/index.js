@@ -39,7 +39,7 @@ export const CustomButton = (props) => {
     return(
         <View style={styles.buttonContainer}>
             <Button 
-                icon={ props.iconSource } 
+                icon={ () => props.iconSource && <props.iconSource />} 
                 mode={mode}
                 style={buttonStyles}
                 labelStyle={[styles.textContainer, {color: props.textColor, fontFamily: 'poppinsSemiBold', fontSize: props.fontSize}]}

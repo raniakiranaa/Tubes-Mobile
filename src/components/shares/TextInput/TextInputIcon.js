@@ -1,24 +1,26 @@
-import { StyleSheet, View, TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
 import * as React from 'react';
-import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 import { useState } from 'react';
 import MyTheme from '../../../config/theme';
+import EyeIcon from '../../../../assets/icons/eye.svg';
+import EyeOffIcon from '../../../../assets/icons/eye-off.svg';
 
 export const TextInputIcon = (props) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [ isPasswordVisible, setIsPasswordVisible ] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const secureTextEntry = props.type === "password" && !isPasswordVisible;
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
+    const IconComponent = props.iconComponent;
+
     return (
-        <View style={[styles.container, {borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4}]}>
-            <Image 
-                source={props.iconSource}
-                style={styles.ImageStyle}
-            />
+        <View style={[styles.container, { borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4 }]}>
+            {IconComponent && (
+                <IconComponent style={styles.iconStyle} />
+            )}
             <TextInput 
                 style={[styles.input, props.fontSize]}
                 placeholder={props.placeholder}
@@ -32,14 +34,14 @@ export const TextInputIcon = (props) => {
             />
             {props.type === 'password' && (
                 <TouchableOpacity onPress={togglePasswordVisibility}>
-                    <Image 
-                        source={isPasswordVisible? require('../../../../assets/icons/eye-off.png') : require('../../../../assets/icons/eye.png') }
-                        style={styles.eyeIcon}
-                    />
+                    {isPasswordVisible ? (
+                        <EyeOffIcon width={24} height={24} style={styles.eyeIcon} />
+                    ) : (
+                        <EyeIcon width={24} height={24} style={styles.eyeIcon} />
+                    )}
                 </TouchableOpacity>
             )}
-
-      </View>
+        </View>
     );
 }
 
@@ -58,16 +60,12 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 12
     },
-    ImageStyle : {
-        padding: 10,
-        height: 24,
+    iconStyle : {
+        marginHorizontal: 8,
         width: 24,
-        marginHorizontal: 8
+        height: 24
     },
     eyeIcon : {
-        padding: 10,
-        height: 24,
-        width: 24,
         marginRight: 16
     }
-  });
+});

@@ -47,7 +47,7 @@ export default function App() {
 }
 
 SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 5000);
+setTimeout(SplashScreen.hideAsync, 1000);
 
 const styles = StyleSheet.create({
   container: {
