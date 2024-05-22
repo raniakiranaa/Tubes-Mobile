@@ -18,7 +18,7 @@ const Login = () => {
         </Text>
         <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
           Are you a Vendor?
-          <Link href="#" style={styles.innerText}> Login as Vendor</Link>
+          <Link href='#' style={styles.innerText}> Login as Vendor</Link>
         </Text>
       </View>
       <View>
@@ -57,7 +57,7 @@ const Login = () => {
       <View style={styles.regisContainer}>
         <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
           Don’t have an account yet?  
-          <Link href="#" style={styles.innerText}>  Register</Link>
+          <Link href="/Register" style={styles.innerText}>  Register</Link>
         </Text>
       </View>
     </View>

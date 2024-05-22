@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import MyTheme from '../../../config/theme';
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 
 export const HeaderStart = () => {
   const navbarHeight = SCREEN_HEIGHT / 3;
