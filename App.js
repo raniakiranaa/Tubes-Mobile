@@ -35,10 +35,10 @@ export default function App() {
   }
 
   return (
-    // <BottomNavbar />
+    <BottomNavbar />
     // <VendorScreen />
     // <Login />
-    <Navigation />
+    // <Navigation />
   );
 }
 
