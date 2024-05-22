@@ -21,272 +21,185 @@ import MyBlogFillIcon from '../../../../assets/icons/MyBlog-fill.svg';
 import MyTheme from '../../../config/theme';
 import CustomAppbar from '../Appbar/CustomAppbar.js';
 import CancelIcon from '../../../../assets/icons/Cancel.svg';
-import DotsIcon from '../../../../assets/icons/Dots.svg';
-import NotificationIcon from '../../../../assets/icons/Notification.svg';
 import VendorScreen from '../../../screens/vendor/index.js';
 import { CustomHeader } from './CustomHeader.js';
 import TopNavbar from './TopNavbar.js';
+import OrderDetail from '../../../screens/order/OrderDetail.js';
+import RatingReview from '../../../screens/order/RatingReview.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-export default function BottomNavbar({ isAdmin }) {
+function TabNavigator({ isAdmin }) {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: MyTheme.colors.brown_2,
+        tabBarInactiveTintColor: MyTheme.colors.neutral_4,
+        tabBarIcon: ({ focused }) => {
+          if (route.name === 'Home') {
+            return focused ? <HomeFillIcon /> : <HomeIcon />;
+          } else if (route.name === 'Vendor') {
+            return focused ? <VendorFillIcon /> : <VendorIcon />;
+          } else if (route.name === 'Orders') {
+            return focused ? <OrdersFillIcon /> : <OrdersIcon />;
+          } else if (route.name === 'MyPlan') {
+            return focused ? <MyPlanFillIcon /> : <MyPlanIcon />;
+          } else if (route.name === 'Profile') {
+            return focused ? <ProfileFillIcon /> : <ProfileIcon />;
+          } else if (route.name === 'Chat') {
+            return focused ? <ChatFillIcon /> : <ChatIcon />;
+          } else if (route.name === 'MyBlog') {
+            return focused ? <MyBlogFillIcon /> : <MyBlogIcon />;
+          }
+        },
+        tabBarStyle: {
+          height: 68,
+          paddingLeft: 30,
+          paddingRight: 30,
+          position: 'absolute',
+        },
+        tabBarIconStyle: {
+          marginTop: 14,
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'poppinsSemiBold',
+          fontSize: 10,
+          marginBottom: 14,
+        },
+      })}
+    >
+      {!isAdmin && (
+        <>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarLabel: 'Home',
+              header: () => <CustomAppbar title="Home" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Vendor"
+            component={VendorScreen}
+            options={{
+              tabBarLabel: 'Vendor',
+              header: () => <CustomAppbar title="Vendor" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Orders"
+            component={OrdersScreen}
+            options={{
+              tabBarLabel: 'Orders',
+              header: () => <CustomAppbar title="Orders" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="MyPlan"
+            component={MyPlanScreen}
+            options={{
+              tabBarLabel: 'My Plan',
+              header: () => <CustomAppbar title="My Plan" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              tabBarLabel: 'Profile',
+              header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,
+            }}
+          />
+        </>
+      )}
+      {isAdmin && (
+        <>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarLabel: 'Home',
+              header: () => <CustomAppbar title="Home" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={{
+              tabBarLabel: 'Chat',
+              header: () => <CustomAppbar title="Chat" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Orders"
+            component={OrdersScreen}
+            options={{
+              tabBarLabel: 'Orders',
+              header: () => <CustomAppbar title="Orders" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="MyBlog"
+            component={MyBlogScreen}
+            options={{
+              tabBarLabel: 'My Blog',
+              header: () => <CustomAppbar title="My Blog" isBackButton={false} isAction={false} />,
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              tabBarLabel: 'Profile',
+              header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,
+            }}
+          />
+        </>
+      )}
+    </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator({ isAdmin }) {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarActiveTintColor: MyTheme.colors.brown_2,
-          tabBarInactiveTintColor: MyTheme.colors.neutral_4,
-          tabBarIcon: ({ focused, color, size }) => {
-            if (route.name === 'Home') {
-              return focused ? <HomeFillIcon /> : <HomeIcon />;
-            } else if (route.name === 'Vendor') {
-              return focused ? <VendorFillIcon /> : <VendorIcon />;
-            } else if (route.name === 'Orders') {
-              return focused ? <OrdersFillIcon /> : <OrdersIcon />;
-            } else if (route.name === 'MyPlan') {
-              return focused ? <MyPlanFillIcon /> : <MyPlanIcon />;
-            } else if (route.name === 'Profile') {
-              return focused ? <ProfileFillIcon /> : <ProfileIcon />;
-            } else if (route.name === 'Chat') {
-              return focused ? <ChatFillIcon /> : <ChatIcon />;
-            } else if (route.name === 'MyBlog') {
-              return focused ? <MyBlogFillIcon /> : <MyBlogIcon />;
-            }
-          },
-          tabBarStyle: {
-            height: 68,
-            paddingLeft: 30,
-            paddingRight: 30,
-            position: 'absolute',          },
-          tabBarIconStyle: {
-            marginTop: 14,
-          },
-          tabBarLabelStyle: {
-            fontFamily: 'poppinsSemiBold',
-            fontSize: 10,
-            marginBottom: 14,
-          },
-        })}
-      >
-        {!isAdmin && (
-          <>
-            <Tab.Screen
-              name="Home"
-              component={HomeStack}
-              options={{
-                tabBarLabel: 'Home',
-              }}
-            />
-            <Tab.Screen
-              name="Vendor"
-              component={VendorStack}
-              options={{
-                tabBarLabel: 'Vendor',
-              }}
-            />
-            <Tab.Screen
-              name="Orders"
-              component={OrdersStack}
-              options={{
-                tabBarLabel: 'Orders',
-              }}
-            />
-            <Tab.Screen
-              name="MyPlan"
-              component={MyPlanStack}
-              options={{
-                tabBarLabel: 'My Plan',
-              }}
-            />
-            <Tab.Screen
-              name="Profile"
-              component={ProfileStack}
-              options={{
-                tabBarLabel: 'Profile',
-              }}
-            />
-          </>
-        )}
-        {isAdmin && (
-          <>
-            <Tab.Screen
-              name="Home"
-              component={HomeStack}
-              options={{
-                tabBarLabel: 'Home',
-              }}
-            />
-            <Tab.Screen
-              name="Chat"
-              component={ChatStack}
-              options={{
-                tabBarLabel: 'Chat',
-              }}
-            />
-            <Tab.Screen
-              name="Orders"
-              component={OrdersStack}
-              options={{
-                tabBarLabel: 'Orders',
-              }}
-            />
-            <Tab.Screen
-              name="MyBlog"
-              component={MyBlogStack}
-              options={{
-                tabBarLabel: 'My Blog',
-              }}
-            />
-            <Tab.Screen
-              name="Profile"
-              component={ProfileStack}
-              options={{
-                tabBarLabel: 'Profile',
-              }}
-            />
-          </>
-        )}
-      </Tab.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          options={{ headerShown: false }}
+        >
+          {props => <TabNavigator {...props} isAdmin={isAdmin} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="OrderDetail"
+          component={OrderDetail}
+          options={{
+            header: () => (
+              <>
+                <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="RatingReview"
+          component={RatingReview}
+          options={{
+            header: () => (
+              <>
+                <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-function HomeStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="Home" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function VendorStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="VendorScreen"
-        component={VendorScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function OrdersStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="OrdersScreen"
-        component={OrdersScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomAppbar title="Orders" isBackButton={false} isAction={false} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function MyPlanStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="MyPlanScreen"
-        component={MyPlanScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="My Plan" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function ProfileStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="Profile" isBackButton={true} isAction={true} ActionIcon={CancelIcon} isTransparent={true} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function ChatStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="Chat" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function MyBlogStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="MyBlogScreen"
-        component={MyBlogScreen}
-        options={{
-          header: () => (
-            <>
-              <CustomHeader />
-              <CustomAppbar title="My Blog" isBackButton={true} isAction={true} ActionIcon={CancelIcon} />
-            </>
-          ),
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-// The same structure for other stacks like VendorStack, OrdersStack, etc.
 
 function HomeScreen() {
   return (
@@ -295,14 +208,6 @@ function HomeScreen() {
     </View>
   );
 }
-
-// function VendorScreen() {
-//   return (
-//     <View style={styles.container}>
-//       <Text variant="headlineMedium">Vendor!</Text>
-//     </View>
-//   );
-// }
 
 function OrdersScreen() {
   return (

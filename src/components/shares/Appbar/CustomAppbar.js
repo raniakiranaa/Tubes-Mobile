@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
   },
   leftIconsContainer: {
     position: 'absolute',
-    left: 18,
     flexDirection: 'row',
     alignItems: 'center', // vertically center the back button
     height: 48, // ensure the container is also 48 height

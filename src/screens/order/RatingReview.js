@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyTheme from '../../config/theme';
 import CustomStarRating from '../../components/shares/Rating/CustomStarRating';
 import WriteIcon from '../../../assets/icons/Write.svg';
@@ -27,11 +28,29 @@ const RatingReview = () => {
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    // Check if the review has been submitted before
+    const checkSubmission = async () => {
+      const submitted = await AsyncStorage.getItem('isSubmitted');
+      if (submitted === 'true') {
+        setIsSubmitted(true);
+        const savedRating = await AsyncStorage.getItem('rating');
+        if (savedRating) {
+          setRating(parseInt(savedRating, 10));
+        }
+      }
+    };
+    checkSubmission();
+  }, []);
+
+  const handleSubmit = async () => {
     // Handle the submit action (e.g., send the review to your server)
     console.log('Rating:', rating);
     console.log('Review:', review);
+    setIsSubmitted(true);
+    await AsyncStorage.setItem('isSubmitted', 'true');
   };
 
   return (
@@ -45,18 +64,18 @@ const RatingReview = () => {
       </View>
       <View style={styles.rating}>
         <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>How was the order, <Text style={{ color: MyTheme.colors.pink_2 }}>{order.customer.name}</Text></Text>
-        <CustomStarRating rating={rating} onChange={setRating} starSize={40} />
+        <CustomStarRating rating={rating} onChange={setRating} starSize={40} disabled={isSubmitted} />
       </View>
       <View style={styles.packageContainer}>
         <Image source={{ uri: order.vendor.image }} style={styles.packageImage} />
         <View style={styles.packageDetails}>
           <Text style={MyTheme.typography.subtitle.sub_3}>{order.package.name}</Text>
-          <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_2p}]}>by <Text style={{color:MyTheme.colors.pink_2}}>{order.vendor.name}</Text></Text>
+          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>by <Text style={{ color: MyTheme.colors.pink_2 }}>{order.vendor.name}</Text></Text>
           <View style={styles.vendorPriceDetail}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_3}]}>{order.package.price}</Text>
+            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]}>{order.package.price}</Text>
             <Text style={MyTheme.typography.body.body_2}> • {order.package.pax}</Text>
           </View>
-          <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_2p}]}>Date: {order.package.date}</Text>
+          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>Date: {order.package.date}</Text>
         </View>
       </View>
 
@@ -70,14 +89,23 @@ const RatingReview = () => {
           onChangeText={setReview}
           value={review}
           placeholderTextColor={MyTheme.colors.neutral_3}
+          editable={!isSubmitted}
         />
       </View>
 
-      <View style={styles.action}>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Submit</Text>
-        </TouchableOpacity>
-      </View>
+      {!isSubmitted && (
+        <View style={styles.action}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.white }]}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {isSubmitted && (
+        <View style={styles.thankYouContainer}>
+          <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.brown_2 }]}>Thank you for your review!</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -152,7 +180,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: '#fff',
-    padding:20,
+    padding: 20,
   },
   submitButton: {
     flex: 1,
@@ -162,6 +190,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
+  },
+  thankYouContainer: {
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
 

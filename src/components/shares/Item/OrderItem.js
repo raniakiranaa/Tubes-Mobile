@@ -1,30 +1,44 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MyTheme from '../../../config/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const OrderItem = ({ order }) => {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    if (order.status === 'Delivered') {
+      navigation.navigate('RatingReview');
+    }
+    else {
+      navigation.navigate('OrderDetail');
+    }
+  };
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: order.image }} style={styles.image} />
-      <View style={styles.details}>
-        <Text style={styles.title}>{order.title}</Text>
-        <Text style={[styles.package, MyTheme.typography.body.body_3]}>{order.package}</Text>
-        <Text style={[styles.price, MyTheme.typography.body.body_3]}>{order.price}</Text>
-        <View style={styles.statusContainer}>
-            {order.status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3, { color: '#D1B75D' }]}>{order.status}</Text>}
-            {order.status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
-            {order.status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3, { color: '#E98D39' }]}>{order.status}</Text>}
-            {order.status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3, { color: '#E2796B' }]}>{order.status}</Text>}
+    <TouchableOpacity onPress={handlePress}>
+      <View style={styles.container}>
+        <Image source={{ uri: order.image }} style={styles.image} />
+        <View style={styles.details}>
+          <Text style={styles.title}>{order.title}</Text>
+          <Text style={[styles.package, MyTheme.typography.body.body_3]}>{order.package}</Text>
+          <Text style={[styles.price, MyTheme.typography.body.body_3]}>{order.price}</Text>
+          <View style={styles.statusContainer}>
+              {order.status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3, { color: '#D1B75D' }]}>{order.status}</Text>}
+              {order.status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
+              {order.status === 'Delivered' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
+              {order.status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3, { color: '#E98D39' }]}>{order.status}</Text>}
+              {order.status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3, { color: '#E2796B' }]}>{order.status}</Text>}
+          </View>
+        </View>
+        <View style={styles.actions}>
+          <Text style={MyTheme.typography.body.body_3}>{order.date}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
+            {order.status === 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Pay</Text>}
+            {order.status === 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Rating</Text>}
+            {order.status !== 'Waiting for Payment' && order.status !== 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Chat</Text>}
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.actions}>
-        <Text style={MyTheme.typography.body.body_3}>{order.date}</Text>
-        <TouchableOpacity style={styles.button} onPress={console.log('Pressed')}>
-          {order.status === 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Pay</Text>}
-          {order.status !== 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Chat</Text>}
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -36,10 +36,10 @@ export default function App() {
   }
 
   return (
-    // <BottomNavbar />
+    <BottomNavbar />
     // <VendorScreen />
     // <OrderDetail />
-    <RatingReview />
+    // <RatingReview />
   );
 }
 
