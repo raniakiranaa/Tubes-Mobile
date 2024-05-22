@@ -50,19 +50,19 @@ const MyTheme = {
         },
         subtitle: {
             sub_1: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 22,
             },
             sub_2: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 18,
             },
             sub_3: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 14,
             },
             sub_4: {
-                fontFamily: 'poppinsBold',
+                fontFamily: 'poppinsSemiBold',
                 fontSize: 10
             }
         },

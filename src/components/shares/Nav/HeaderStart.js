@@ -1,29 +1,34 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import { SCREEN_HEIGHT } from '../../../utils/deviceDimensions'; 
+import { View, Image, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import MyTheme from '../../../config/theme';
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export const HeaderStart = () => {
-  const navbarHeight = SCREEN_HEIGHT/3;
+  const navbarHeight = SCREEN_HEIGHT / 3;
   return (
-    <View style={[styles.container, {height: navbarHeight}]}>
-      <Image
-        style={styles.img}
-        source={require('../../../../assets/icons/Header-intro.png')}
-        resizeMode="contain"
-      />
+    <View style={{ flex: 1}}>
+      <View style={[styles.container, { height: navbarHeight }]}>
+        <Image
+          style={styles.img}
+          source={require('../../../../assets/icons/Header-intro.png')}
+          resizeMode="contain"
+        />
+      </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    width: SCREEN_WIDTH,
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%', 
+    zIndex: 0,
   },
-  img : {
-    width: '100%'
-  }
+  img: {
+    padding: 0,
+    margin: 0,
+    height: '100%',
+    objectFit: 'contain'
+  },
 });

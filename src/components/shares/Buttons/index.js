@@ -41,10 +41,11 @@ export const CustomButton = (props) => {
                 icon={ props.iconSource } 
                 mode={mode}
                 style={buttonStyles}
-                labelStyle={{color: props.textColor}}
+                labelStyle={[styles.textContainer, {color: props.textColor, fontFamily: 'poppinsSemiBold', fontSize: props.fontSize}]}
                 onPress={props.onPress}    
             >
-                <Text style={{ fontFamily: 'poppinsSemiBold', fontSize: props.fontSize }}>{ props.title }</Text>
+                {props.title}
+                {/* <Text style={[ styles.textContainer, {fontFamily: 'poppinsSemiBold', fontSize: props.fontSize}]}>{ props.title }</Text> */}
             </Button>
         </View>
     );
@@ -52,8 +53,12 @@ export const CustomButton = (props) => {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        flexDirection: 'row',
+        // flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-center',
+    },
+    textContainer : {
+        alignItems: 'center',
+        flexDirection: 'row',
     }
   });
