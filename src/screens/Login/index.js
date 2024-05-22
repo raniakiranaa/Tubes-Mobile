@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   textContainer: {
-    marginLeft: 4,
+    marginHorizontal: 10,
     paddingTop: 24,
   },
   titleText: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   outerText: {
     color: MyTheme.colors.neutral_2p,
     paddingTop: 4,
-    paddingBottom: 8
+    paddingBottom: 20
   },
   innerText: {
     fontFamily: 'poppinsMedium',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   inputTextContainer : {
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 20,
     position: 'relative'
   },
   passContainer : {
@@ -103,14 +103,13 @@ const styles = StyleSheet.create({
     color: MyTheme.colors.neutral_2p
   },
   submitButtonContainer : {
-    paddingTop: 44
+    paddingTop: 60
   },
   regisContainer : {
     paddingTop: 80,
     alignItems: 'center',
     justifyContent: 'center'
   }
-
 });
 
 export default Login;

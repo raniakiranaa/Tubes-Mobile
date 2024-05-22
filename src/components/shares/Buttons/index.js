@@ -5,8 +5,9 @@ import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 import MyTheme from '../../../config/theme';
 
 export const CustomButton = (props) => {
-    const blockWidth = SCREEN_WIDTH * 0.872;
-    const largeWidth = SCREEN_WIDTH * 0.3;
+    const blockWidth = SCREEN_WIDTH * 0.87;
+    const largeWidth = SCREEN_WIDTH * 0.4;
+    const smallWidth = SCREEN_WIDTH * 0.25;
 
     const getButtonStyle = () => {
         switch (props.size) {
@@ -19,9 +20,9 @@ export const CustomButton = (props) => {
             case "large-square":
                 return {width: largeWidth, height: 44, borderRadius: 10};
             case "small-square":
-                return {width: 12, height: 37, borderRadius: 10};
+                return {width: smallWidth, height: 37, borderRadius: 10};
             default:
-                return {width: 12, height: 37, borderRadius: 48};
+                return {width: smallWidth, height: 37, borderRadius: 48};
         }
     }
     
