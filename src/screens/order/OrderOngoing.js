@@ -47,6 +47,28 @@ const ongoingOrders = [
     date: '1 Apr 2024',
     action: 'Chat',
   },
+  // {
+  //   id: '5',
+  //   image: 'https://via.placeholder.com/50',
+  //   title: 'JW Marriott Surabaya',
+  //   package: 'Royal Ballroom Package 330 pax',
+  //   price: 'IDR 300,000,000',
+  //   status: 'Vendor Confirmation',
+  //   statusColor: 'red',
+  //   date: '1 Apr 2024',
+  //   action: 'Chat',
+  // },
+  // {
+  //   id: '6',
+  //   image: 'https://via.placeholder.com/50',
+  //   title: 'JW Marriott Surabaya',
+  //   package: 'Royal Ballroom Package 330 pax',
+  //   price: 'IDR 300,000,000',
+  //   status: 'Vendor Confirmation',
+  //   statusColor: 'red',
+  //   date: '1 Apr 2024',
+  //   action: 'Chat',
+  // },
 ];
 
 const OngoingScreen = () => {

@@ -87,7 +87,12 @@ function TabNavigator({ isAdmin }) {
             component={VendorScreen}
             options={{
               tabBarLabel: 'Vendor',
-              header: () => <CustomAppbar title="Vendor" isBackButton={false} isAction={false} />,
+              header: () => (
+                <>
+                  <CustomHeader />
+                  <CustomAppbar title="Vendor" isBackButton={false} isAction={false} isTransparent={true}/>
+                </>
+              ),
             }}
           />
           <Tab.Screen

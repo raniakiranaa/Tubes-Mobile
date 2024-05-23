@@ -9,7 +9,7 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon, isTransparent
   const navigation = useNavigation();
 
   return (
-    <Appbar.Header style={isTransparent ? styles.transparentHeader : styles.header}>
+    <Appbar.Header style={[isTransparent ? styles.transparentHeader : styles.header]}>
       <View style={styles.leftIconsContainer}>
         {isBackButton && (
           <Appbar.Action
@@ -19,9 +19,8 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon, isTransparent
         )}
       </View>
       <View style={styles.titleContainer}>
-        <Text style={[MyTheme.typography.subtitle.sub_2]}>
-          {title}
-        </Text>
+        {isTransparent && <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>{title}</Text>}
+        {!isTransparent && <Text style={[MyTheme.typography.subtitle.sub_2]}>{title}</Text>}
       </View>
       <View style={styles.rightIconsContainer}>
         {isAction && (
