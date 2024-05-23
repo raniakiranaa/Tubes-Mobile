@@ -6,8 +6,8 @@ import { SCREEN_HEIGHT } from '../../utils/deviceDimensions.js';
 import { useNavigation } from '@react-navigation/native';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
-import PasswordIcon from '../../../assets/icons/Password.svg';
-import UnameIcon from '../../../assets/icons/Uname.svg';
+import PasswordIcon from '../../../assets/icons/Password/index.js';
+import UnameIcon from '../../../assets/icons/Uname/index.js';
 import { HeaderStart } from '../../components/shares/Nav/HeaderStart.js'; // Import HeaderStart
 
 const Register = () => {
@@ -48,38 +48,42 @@ const Register = () => {
                 <View>
                   <View style={styles.inputTextContainer}>
                     <TextInputIcon 
-                      iconComponent={UnameIcon}
+                      iconSource={UnameIcon}
                       placeholder="Name"
                       type="name"
                       mode="text"
                       fontSize={MyTheme.typography.body.body_1}
+                      iconProps={{ width: 20, height: 20 }}
                     />
                   </View>
                   <View style={styles.inputTextContainer}>
                     <TextInputIcon 
-                      iconComponent={UnameIcon}
+                      iconSource={UnameIcon}
                       placeholder="Username"
                       type="username"
                       mode="text"
                       fontSize={MyTheme.typography.body.body_1}
+                      iconProps={{ width: 20, height: 20 }}
                     />
                   </View>
                   <View style={styles.inputTextContainer}>
                     <TextInputIcon 
-                      iconComponent={PasswordIcon}
+                      iconSource={PasswordIcon}
                       placeholder="Password"
                       type="password"
                       mode="text"
                       fontSize={MyTheme.typography.body.body_1}
+                      iconProps={{ width: 20, height: 20 }}
                     />
                   </View>
                   <View style={styles.inputTextContainer}>
                     <TextInputIcon 
-                      iconComponent={PasswordIcon}
+                      iconSource={PasswordIcon}
                       placeholder="Confirm Password"
                       type="password"
                       mode="text"
                       fontSize={MyTheme.typography.body.body_1}
+                      iconProps={{ width: 20, height: 20 }}
                     />
                   </View>
                 </View>

@@ -26,6 +26,7 @@ import { CustomHeader } from './CustomHeader.js';
 import TopNavbar from './TopNavbar.js';
 import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
+import Profile from '../../../screens/profile/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
 
@@ -108,10 +109,11 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="Profile"
-            component={ProfileScreen}
+            component={Profile}
             options={{
               tabBarLabel: 'Profile',
-              header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,
+              // header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,
+              header: () => <CustomHeader />
             }}
           />
         </>
@@ -152,7 +154,7 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="Profile"
-            component={ProfileScreen}
+            component={Profile}
             options={{
               tabBarLabel: 'Profile',
               header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,

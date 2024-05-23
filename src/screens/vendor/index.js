@@ -11,7 +11,7 @@ const VendorScreen = ({ navigation }) => {
                 {/* <CustomHeader /> */}
                 <Text style={[MyTheme.typography.subtitle.sub_3]}>Welcome to My app!</Text>
                 <View style={styles.inputContainer}>
-                <TextInputIcon 
+                {/* <TextInputIcon 
                     iconSource= {require('../../../assets/icons/Mail.png')}
                     placeholder = "Username"
                     type = "username"
@@ -34,7 +34,7 @@ const VendorScreen = ({ navigation }) => {
                     placeholder = "Password"
                     type = "password"
                     mode = "text"
-                />
+                /> */}
             </View>
                 {/* <CustomButton 
                     title = "Login"

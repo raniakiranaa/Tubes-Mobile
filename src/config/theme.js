@@ -69,7 +69,7 @@ const MyTheme = {
         },
         medium: {
             medium_1: {
-                fontFamily: 'ppoppinsMedium',
+                fontFamily: 'poppinsMedium',
                 fontSize: 14
             },
             medium_2: {
