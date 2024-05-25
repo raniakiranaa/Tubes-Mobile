@@ -15,20 +15,17 @@ const VendorPage = () => {
   const locationData = [
     { label: 'Surabaya', value: 'surabaya' },
     { label: 'Jakarta', value: 'jakarta' },
-    // Add more options as needed
   ];
 
   const categoryData = [
     { label: 'Venue', value: 'venue' },
     { label: 'Catering', value: 'catering' },
-    // Add more options as needed
   ];
 
   const budgetData = [
     { label: 'Low', value: 'low' },
     { label: 'Medium', value: 'medium' },
     { label: 'High', value: 'high' },
-    // Add more options as needed
   ];
 
   return (

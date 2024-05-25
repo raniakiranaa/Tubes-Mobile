@@ -48,7 +48,7 @@ export const BigSearchCard = ({ image, title, type, location, price, rating }) =
 
 export const BigVendorCard = ({ image, title, subtitle, pax }) => {
     return (
-        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={{shadow: MyTheme.shadows.shadow_1}}>
+        <View className='h-52 w-72 flex-column items-center border-lg bg-white mr-3' style={{shadow: MyTheme.shadows.shadow_1}}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2 pb-1'>{ title }</Text>
             <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_3 }]} className='text-left self-stretch px-2 mb-3'>
