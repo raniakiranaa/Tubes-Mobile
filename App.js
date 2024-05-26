@@ -10,6 +10,8 @@ import Login from './src/screens/Login/index.js';
 import OrderDetail from './src/screens/order/OrderDetail.js';
 import RatingReview from './src/screens/order/RatingReview.js';
 import VendorDetailPage from './src/screens/vendor/VendorDetail.js';
+import ProductDetailPage from './src/screens/vendor/ProductDetail.js';
+import OrderConfirmationPage from './src/screens/vendor/OrderConfirmation.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -44,7 +46,9 @@ export default function App() {
     // <Navigation />
     // <OrderDetail />
     // <RatingReview />
-    <VendorDetailPage />
+    // <VendorDetailPage />
+    // <ProductDetailPage />
+    <OrderConfirmationPage />
   );
 }
 

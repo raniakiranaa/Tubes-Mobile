@@ -125,7 +125,7 @@ const VendorDetailPage = () => {
       </View>
       <View style={styles.blogSection}>
         <Text style={[MyTheme.typography.medium.medium_1, { color: MyTheme.colors.brown_2 }]} className='mb-2.5'>Blog</Text>
-        <View className='flex-row items-center p-2' style={{ shadow: MyTheme.shadows.shadow_1 }}>
+        <View className='flex-row items-center p-2' style={ MyTheme.shadows.shadow_1 }>
           <Image source={{ uri: 'https://via.placeholder.com/150' }} className='h-11 w-11' />
           <View style={styles.blogCard}>
             <Text style={[MyTheme.typography.subtitle.sub_4, { color: MyTheme.colors.black }]}>Top 3 Honeymoon Destination</Text>
@@ -136,7 +136,7 @@ const VendorDetailPage = () => {
       </View>
       <View style={styles.reviewsSection}>
         <Text style={[MyTheme.typography.medium.medium_1, {color:MyTheme.colors.brown_2}]} className='mb-2.5'>Reviews</Text>
-        <View className='flex-column items-center justify-center mb-3' style={{ width: 78, height:58, shadow: MyTheme.shadows.shadow_1 }}>
+        <View className='flex-column items-center justify-center mb-3' style={[MyTheme.shadows.shadow_1, { width: 78, height:58 }]}>
           <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.black }]}>{averageRating}</Text>
           <View className='flex-row items-center justify-center'>
             {Array.from({ length: 5 }, (_, index) => {

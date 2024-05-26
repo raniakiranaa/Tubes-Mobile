@@ -15,7 +15,7 @@ export const CarouselCard = ({ image }) => {
 
 export const BigHomeCard = ({ image, title, subtitle, foot }) => {
     return (
-        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={{shadow: MyTheme.shadows.shadow_1}}>
+        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={MyTheme.shadows.shadow_1}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2'>{ title }</Text>
             <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_3 }]} className='text-left self-stretch px-2 mb-1'>{ subtitle }</Text>
@@ -26,7 +26,7 @@ export const BigHomeCard = ({ image, title, subtitle, foot }) => {
 
 export const BigSearchCard = ({ image, title, type, location, price, rating }) => {
     return (
-        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={{shadow: MyTheme.shadows.shadow_1}}>
+        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={MyTheme.shadows.shadow_1}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <View className='flex-row justify-between items-center px-2 pt-2 pb-0.5'>
                 <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch flex-1'>{title}</Text>
@@ -48,7 +48,7 @@ export const BigSearchCard = ({ image, title, type, location, price, rating }) =
 
 export const BigVendorCard = ({ image, title, subtitle, pax }) => {
     return (
-        <View className='h-52 w-72 flex-column items-center border-lg bg-white mr-3' style={{shadow: MyTheme.shadows.shadow_1}}>
+        <View className='h-52 w-72 flex-column items-center border-lg bg-white mr-3' style={MyTheme.shadows.shadow_1}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2 pb-1'>{ title }</Text>
             <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_3 }]} className='text-left self-stretch px-2 mb-3'>
@@ -61,7 +61,7 @@ export const BigVendorCard = ({ image, title, subtitle, pax }) => {
 
 export const SmallCard = ({ image, title, rating }) => {
     return (
-        <View className='h-44 w-44 flex-column items-left border-lg bg-white mr-3' style={{shadow: MyTheme.shadows.shadow_1}}>
+        <View className='h-44 w-44 flex-column items-left border-lg bg-white mr-3' style={ MyTheme.shadows.shadow_1}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2 pb-0.5'>{title}</Text>
             <View className='flex-row items-center border rounded-full py-0.5 px-2 mx-2' style={{borderColor: MyTheme.colors.neutral_300}}>
