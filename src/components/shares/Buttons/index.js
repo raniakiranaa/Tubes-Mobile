@@ -59,5 +59,6 @@ const styles = StyleSheet.create({
     textContainer: {
         alignItems: 'center',
         flexDirection: 'row',
+        textAlign: 'center'
     }
 });

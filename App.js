@@ -9,6 +9,7 @@ import VendorScreen from './src/screens/vendor/index.js';
 import Login from './src/screens/Login/index.js';
 import OrderDetail from './src/screens/order/OrderDetail.js';
 import RatingReview from './src/screens/order/RatingReview.js';
+import MyPlan from './src/screens/myplan/index.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
