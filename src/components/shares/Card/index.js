@@ -26,16 +26,16 @@ export const BigHomeCard = ({ image, title, subtitle, foot }) => {
 
 export const BigSearchCard = ({ image, title, type, location, price, rating }) => {
     return (
-        <View className='h-52 w-72 flex-column items-center border-lg bg-white' style={MyTheme.shadows.shadow_1}>
+        <View className='flex-column items-center rounded-xl bg-white' style={[MyTheme.shadows.shadow_1, {width: 330, height: 182}]}>
             <Image source={image} className='h-2/3 w-full rounded-t-lg' />
             <View className='flex-row justify-between items-center px-2 pt-2 pb-0.5'>
                 <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch flex-1'>{title}</Text>
-                <View className='flex-row items-center border rounded-sm py-0.5 px-1' style={{borderColor: MyTheme.colors.neutral_300}}>
+                <View className='flex-row items-center border rounded-full px-2' style={{borderColor: MyTheme.colors.neutral_300}}>
                     <Image className='h-3 w-3' source={star} />
-                    <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]} className='ml-0.5' >{rating}</Text>
+                    {rating % 1 === 0 ? <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}.0</Text> : <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}</Text>}
                 </View>
             </View>
-            <View className='px-2 mb-3'>
+            <View className='px-2 mb-3 text-left self-stretch'>
                 <Text style={[MyTheme.typography.body.body_3]}>
                     <Text style={{color: MyTheme.colors.pink_2}}>{type}</Text>
                     <Text> • {location}</Text>

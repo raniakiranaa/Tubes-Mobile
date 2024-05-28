@@ -12,6 +12,7 @@ import RatingReview from './src/screens/order/RatingReview.js';
 import VendorDetailPage from './src/screens/vendor/VendorDetail.js';
 import ProductDetailPage from './src/screens/vendor/ProductDetail.js';
 import OrderConfirmationPage from './src/screens/vendor/OrderConfirmation.js';
+import SavedVendorPage from './src/screens/vendor/SavedVendor.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -48,7 +49,8 @@ export default function App() {
     // <RatingReview />
     // <VendorDetailPage />
     // <ProductDetailPage />
-    <OrderConfirmationPage />
+    // <OrderConfirmationPage />
+    <SavedVendorPage />
   );
 }
 
