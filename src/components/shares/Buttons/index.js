@@ -14,7 +14,7 @@ export const CustomButton = (props) => {
             case "block-round":
                 return { width: blockWidth, height: 44, borderRadius: 48 };
             case "block-square":
-                return { width: blockWidth, height: 44, borderRadius: 10 };
+                return { width: blockWidth, height: 64, borderRadius: 10 };
             case "large-round":
                 return { width: largeWidth, height: 44, borderRadius: 48 };
             case "large-square":
@@ -39,6 +39,7 @@ export const CustomButton = (props) => {
     return (
         <View style={styles.buttonContainer}>
             <Button
+                className="flex justify-center"
                 icon={props.iconSource ? () => <props.iconSource {...props.iconProps} /> : null}
                 mode={mode}
                 style={buttonStyles}

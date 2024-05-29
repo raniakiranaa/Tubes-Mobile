@@ -1,34 +1,49 @@
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import * as React from 'react';
+import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import MyTheme from '../../../config/theme';
-import { TextInputIcon } from '../../shares/TextInput/TextInputIcon';
 import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
+import { ToDoInput } from './ToDoInput.js';
+import { CustomButton } from '../../../components/shares/Buttons';
+import PlusCircle from "../../../../assets/icons/plus-circle.svg";
 
-const { width: screenWidth } = Dimensions.get('window');
-const aspectRatio = 288 / 193; // original dimensions
-const containerWidth = screenWidth * 0.8; 
-const containerHeight = containerWidth / aspectRatio;
-const scalePadding = screenWidth * 0.03; 
-const scaleFontSize = screenWidth * 0.04; 
 const blockWidth = SCREEN_WIDTH * 0.87;
 
-const checkBox = (props) => {
-    <View>
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0.75" y="0.75" width="13.5" height="13.5" rx="0.75" stroke={props.strokeClassName} stroke-width="1.5"/>
-        </svg>
-    </View>
-}
+export const ToDo = (props) => {
+    const [todos, setTodos] = useState([{ id: 1, value: '' }]); 
 
-export const ToDo = () => {
+    const addNewTodo = () => {
+        const newId = todos.length + 1; 
+        setTodos([...todos, { id: newId, value: '' }]); 
+    };
+
+    const handleTodoChange = (text, id) => {
+        const updatedTodos = todos.map(todo => {
+            if (todo.id === id) {
+                return { ...todo, value: text };
+            }
+            return todo;
+        });
+        setTodos(updatedTodos);
+    };
+
     return (
         <View style={styles.container}>
-            <TextInputIcon
-                // iconSource={}
-                placeHolder = "Add To-Do"
-                type=""
-                mode=""
-            />
+            <Text style={[styles.subTitle, MyTheme.typography.subtitle.sub_2]}>{props.category}</Text>
+            <View style={styles.toDoContainer}>
+                {todos.map(todo => (
+                    <ToDoInput 
+                        key={todo.id}
+                        placeholder="Add to-do"
+                        mode="text"
+                        iconProps={{ width: 20, height: 20 }}
+                        value={todo.value}
+                        onChangeText={(text) => handleTodoChange(text, todo.id)}
+                    />
+                ))}
+            </View>
+            <TouchableOpacity style={styles.addButton} onPress={addNewTodo}>
+                <PlusCircle width={24}/> 
+            </TouchableOpacity>
         </View>
     );
 }
@@ -46,9 +61,20 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10
     },
+    subTitle: {
+        color: MyTheme.colors.brown_2,
+        paddingBottom: 8,
+        paddingLeft: 10,
+        alignSelf: 'flex-start',
+    },
     toDoContainer: {
-        overflow: 'hidden',
-        flexDirection: 'row', 
-    }
+        width: blockWidth,
+        paddingHorizontal: 10,
+    },
+    addButton: {
+        position: 'absolute',
+        top: 15, 
+        right: 20, 
+    },
 });
 

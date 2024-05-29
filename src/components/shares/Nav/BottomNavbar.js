@@ -27,6 +27,7 @@ import TopNavbar from './TopNavbar.js';
 import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
+import MyPlan from '../../../screens/myplan/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
 
@@ -93,7 +94,7 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="Orders"
-            component={OrdersScreen}
+            component={TopNavbar}
             options={{
               tabBarLabel: 'Orders',
               header: () => <CustomAppbar title="Orders" isBackButton={false} isAction={false} />,
@@ -101,7 +102,7 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="MyPlan"
-            component={MyPlanScreen}
+            component={MyPlan}
             options={{
               tabBarLabel: 'My Plan',
               header: () => <CustomAppbar title="My Plan" isBackButton={false} isAction={false} />,
