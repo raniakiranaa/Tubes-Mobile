@@ -8,6 +8,7 @@ const MyTheme = {
         pink_2: '#F19E93',
         pink_3: '#F8BBB2',
 
+        peach_1: '#DBAA7C',
         peach_2: '#C55269',
         peach_3: '#E190A0',
 

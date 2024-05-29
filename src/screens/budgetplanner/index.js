@@ -31,7 +31,7 @@ const BudgetPlanner = () => {
               <View style = {styles.outline}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={[{ color: MyTheme.colors.brown_3, marginRight: 8 }, MyTheme.typography.medium.medium_1]}>Actual Budget</Text>
-                    <Pencil/>
+                    <Pencil width={12} height={12}/>
                   </View>
                   <Text style={[{ color: MyTheme.colors.peach_3 }, MyTheme.typography.medium.medium_1]}>{formatActual}</Text>
               </View>
@@ -45,7 +45,7 @@ const BudgetPlanner = () => {
           <Text style={[{ color: MyTheme.colors.neutral_2p }, MyTheme.typography.medium.medium_1]}>Actual Spend</Text>
         </View> */}
       </ScrollView>
-      <View style={styles.button}>
+      <View style={{ marginBottom: 24 }}>
         <CustomButton
           title="Add Category"
           size="block-round"
@@ -95,9 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 8
-  },
-  button: {
-    marginBottom: 24,
   },
   cashflow: {
     flexDirection: 'row',
