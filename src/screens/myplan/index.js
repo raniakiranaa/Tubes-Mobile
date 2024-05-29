@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet,  ScrollView, Touchable, TouchableOpacity, Dimensions } from 'react-native';
-// import { OutlineButton, IconButton } from '../../components/shares/Buttons/index.js';
 import { CustomButton } from '../../components/shares/Buttons';
-import {Link, Redirect, router} from "expo-router";
 import MyTheme from '../../config/theme.js';
-import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
-import { useNavigation } from 'expo-router';
 import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 
