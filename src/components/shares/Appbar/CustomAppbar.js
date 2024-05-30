@@ -1,7 +1,9 @@
 import React from 'react';
 import { Appbar, Text } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-import BackButton from "../../../../assets/icons/BackButton.svg";
+import BackIcon from '../../../../assets/icons/Back';
+import SaveIcon from '../../../../assets/icons/Save';
+import DotsIcon from '../../../../assets/icons/Dots';
 import { useNavigation } from '@react-navigation/native';
 import MyTheme from '../../../config/theme';
 
@@ -9,28 +11,50 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon, isTransparent
   const navigation = useNavigation();
 
   return (
-    <Appbar.Header style={isTransparent ? styles.transparentHeader : styles.header}>
+    <Appbar.Header style={[isTransparent ? styles.transparentHeader : styles.header]}>
       <View style={styles.leftIconsContainer}>
         {isBackButton && (
           <Appbar.Action
-            icon={() => <BackButton />}
+            icon={
+              isTransparent
+                ? () => <BackIcon strokeColor={MyTheme.colors.white} />
+                : () => <BackIcon strokeColor={MyTheme.colors.black} />
+            }
             onPress={() => navigation.goBack()}
           />
         )}
       </View>
       <View style={styles.titleContainer}>
-        <Text style={[MyTheme.typography.subtitle.sub_2]}>
-          {title}
-        </Text>
-      </View>
-      <View style={styles.rightIconsContainer}>
-        {isAction && (
-          <Appbar.Action
-            icon={ActionIcon}
-            onPress={() => console.log('Pressed')}
-          />
+        {isTransparent ? (
+          <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>{title}</Text>
+        ) : (
+          <Text style={[MyTheme.typography.subtitle.sub_2]}>{title}</Text>
         )}
       </View>
+      <View style={styles.rightIconsContainer}>
+      {isAction && (
+        <Appbar.Action
+          icon={
+            ActionIcon === 'Save' && isTransparent
+              ? () => <SaveIcon strokeColor={MyTheme.colors.white} />
+              : ActionIcon === 'Save' && !isTransparent
+              ? () => <SaveIcon strokeColor={MyTheme.colors.black} />
+              : ActionIcon === 'Dots' && isTransparent
+              ? () => <DotsIcon strokeColor={MyTheme.colors.white} />
+              : ActionIcon === 'Dots' && !isTransparent
+              ? () => <DotsIcon strokeColor={MyTheme.colors.black} />
+              : null
+          }
+          onPress={
+            ActionIcon === 'Save'
+              ? () => navigation.navigate('SavedVendor')
+              : ActionIcon === 'Dots'
+              ? () => console.log('Dots Pressed')
+              : () => console.log('Action Pressed')
+          }
+        />
+      )}
+    </View>
     </Appbar.Header>
   );
 };
@@ -38,19 +62,19 @@ const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon, isTransparent
 const styles = StyleSheet.create({
   header: {
     backgroundColor: MyTheme.colors.white,
-    elevation: 0, // removes the shadow on Android
-    shadowOpacity: 0, // removes the shadow on iOS
+    elevation: 0,
+    shadowOpacity: 0,
     height: 48,
     flexDirection: 'row',
-    alignItems: 'center', // vertically center the children
+    alignItems: 'center',
   },
   transparentHeader: {
     backgroundColor: 'transparent',
-    elevation: 0, // removes the shadow on Android
-    shadowOpacity: 0, // removes the shadow on iOS
+    elevation: 0,
+    shadowOpacity: 0,
     height: 48,
     flexDirection: 'row',
-    alignItems: 'center', // vertically center the children
+    alignItems: 'center',
   },
   titleContainer: {
     position: 'absolute',
@@ -58,21 +82,22 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 48, // ensure the title container also has the same height
+    height: 48,
     flexDirection: 'row',
   },
   leftIconsContainer: {
     position: 'absolute',
+    left: 0,
     flexDirection: 'row',
-    alignItems: 'center', // vertically center the back button
-    height: 48, // ensure the container is also 48 height
+    alignItems: 'center',
+    height: 48,
   },
   rightIconsContainer: {
     position: 'absolute',
     right: 24,
     flexDirection: 'row',
-    alignItems: 'center', // vertically center the action icon
-    height: 48, // ensure the container is also 48 height
+    alignItems: 'center',
+    height: 48,
   },
 });
 

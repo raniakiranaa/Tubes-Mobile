@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -29,6 +29,10 @@ import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
+import VendorDetailPage from '../../../screens/vendor/VendorDetail.js';
+import ProductDetailPage from '../../../screens/vendor/ProductDetail.js';
+import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js';
+import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -58,7 +62,7 @@ function TabNavigator({ isAdmin }) {
           }
         },
         tabBarStyle: {
-          height: 68,
+          height: Platform.OS === 'ios' ? 100 : 68,
           paddingLeft: 30,
           paddingRight: 30,
           position: 'absolute',
@@ -88,7 +92,12 @@ function TabNavigator({ isAdmin }) {
             component={VendorScreen}
             options={{
               tabBarLabel: 'Vendor',
-              header: () => <CustomAppbar title="Vendor" isBackButton={false} isAction={false} />,
+              header: () => (
+                <>
+                  <CustomHeader />
+                  <CustomAppbar title="Vendor" isBackButton={false} isAction={true} ActionIcon={'Save'} isTransparent={true}/>
+                </>
+              ),
             }}
           />
           <Tab.Screen
@@ -180,10 +189,9 @@ export default function AppNavigator({ isAdmin }) {
           name="OrderDetail"
           component={OrderDetail}
           options={{
+            // Navigate back to the previous screen by pressing the back button
             header: () => (
-              <>
-                <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
-              </>
+              <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
             ),
             tabBarStyle: { display: 'none' },
           }}
@@ -193,8 +201,58 @@ export default function AppNavigator({ isAdmin }) {
           component={RatingReview}
           options={{
             header: () => (
+              <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="VendorDetail"
+          component={VendorDetailPage}
+          options={{
+            header: () => (
               <>
-                <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
+                <CustomHeader />
+                <CustomAppbar title="Vendor Detail" isBackButton={true} isAction={false} isTransparent={true}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetailPage}
+          options={{
+            header: () => (
+              <>
+                <CustomHeader />
+                <CustomAppbar title="Product Detail" isBackButton={true} isAction={false} isTransparent={true}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="OrderConfirmation"
+          component={OrderConfirmationPage}
+          options={{
+            header: () => (
+              <>
+                <CustomHeader />
+                <CustomAppbar title="Order Confirmation" isBackButton={true} isAction={false} isTransparent={true}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="SavedVendor"
+          component={SavedVendorPage}
+          options={{
+            header: () => (
+              <>
+                <CustomHeader />
+                <CustomAppbar title="Saved Vendor" isBackButton={true} isAction={false} isTransparent={true}/>
               </>
             ),
             tabBarStyle: { display: 'none' },
@@ -205,6 +263,7 @@ export default function AppNavigator({ isAdmin }) {
   );
 }
 
+// Ensure to have your screen components correctly implemented
 function HomeScreen() {
   const Poster = require('../../../../assets/icons/Poster.png');
   return (
