@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
+    width: '100%',
     ...MyTheme.typography.body.body_1,
   },
   listContent: {
