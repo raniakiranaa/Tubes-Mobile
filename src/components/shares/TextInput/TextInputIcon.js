@@ -4,7 +4,6 @@ import MyTheme from '../../../config/theme';
 import EyeIcon from '../../../../assets/icons/Eye/Eye';
 import EyeOffIcon from '../../../../assets/icons/Eye/Eye-off';
 
-
 export const TextInputIcon = (props) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -17,7 +16,17 @@ export const TextInputIcon = (props) => {
     const IconComponent = props.iconSource;
 
     return (
-        <View style={[styles.container, { borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4 }]}>
+        <View
+            style={[
+                styles.container,
+                { 
+                    borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4,
+                    backgroundColor: props.type === 'search' ? MyTheme.colors.neutral_search : MyTheme.colors.white,
+                    height: props.type === 'search' ? 36 : 42,
+                    borderWidth: props.type === 'search' ? 0 : 2,
+                }
+            ]}
+        >
             {IconComponent && (
                 <IconComponent {...props.iconProps} style={styles.iconStyle} />
             )}
@@ -51,12 +60,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        height: 42,
-        marginHorizontal: 10,
-        backgroundColor: MyTheme.colors.white,
-        borderWidth: 2,
+        // marginHorizontal: 10,
         borderRadius: 8,
-        borderColor: MyTheme.colors.neutral_4,
         paddingHorizontal: 8,
     },
     input: {

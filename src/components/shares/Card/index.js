@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 import * as React from 'react';
 import MyTheme from '../../../config/theme';
 
@@ -18,11 +18,11 @@ const scaleFontSize = screenWidth * 0.04;
 
 const star = require('../../../../assets/icons/star.png');
 
-export const CarouselCard = ({ image }) => {
+export const CarouselCard = ({ image,onPress }) => {
     return (
-        <View style={styles.carouselContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.carouselContainer}>
             <Image source={ image } style={styles.carouselImage} />
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -89,10 +89,12 @@ const styles = StyleSheet.create({
         height: 90,
         borderRadius: 10, 
         overflow: 'hidden',
+        marginRight: 10,
     },
     carouselImage: {
         width: '100%',
         height: '100%',
+        // marginHorizontal: 10,
     },
     bigHomeContainer: {
         width: containerWidth,

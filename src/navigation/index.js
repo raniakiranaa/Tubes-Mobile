@@ -1,12 +1,9 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { CustomHeader } from '../components/shares/Nav';
 import HomeScreen from '../screens/home';
 import Login from '../screens/Login';
 import Register from '../screens/register';
-import { HeaderStart } from '../components/shares/Nav/HeaderStart';
-import MyTheme from '../config/theme';
+import DetailPromo from '../screens/promo'; // Ensure the path is correct
 
 const Stack = createNativeStackNavigator();
 
@@ -15,29 +12,26 @@ export default function Navigation() {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: 'white' } }}>
                 <Stack.Screen 
-                    name="Home" 
-                    component={HomeScreen}
-                    options={{
-                        header: () => <CustomHeader />
-                    }} 
-                />
-                <Stack.Screen 
                     name="Login" 
                     component={Login} 
-                    options={{
-                        header: () => null//<HeaderStart />
-                    }}  
+                    options={{ header: () => null }} 
                 />
                 <Stack.Screen 
                     name="Register" 
                     component={Register} 
-                    options={{
-                        header: () => null//<HeaderStart />
-                    }}  
+                    options={{ header: () => null }} 
+                />
+                <Stack.Screen 
+                    name="Home" 
+                    component={HomeScreen} 
+                    options={{ header: () => null }} 
+                />
+                <Stack.Screen 
+                    name="DetailPromo" 
+                    component={DetailPromo} 
+                    options={{ header: () => null }} 
                 />
             </Stack.Navigator>
         </NavigationContainer>
     );
 }
-
-

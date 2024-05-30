@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     position: 'relative',
+    marginHorizontal: 10,
   },
   submitButtonContainer: {
     paddingTop: 40,

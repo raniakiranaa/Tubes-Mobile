@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     position: 'relative',
+    marginHorizontal: 10,
   },
   passContainer: {
     marginTop: 8,

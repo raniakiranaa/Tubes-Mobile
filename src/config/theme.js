@@ -21,6 +21,7 @@ const MyTheme = {
         neutral_3: '#BEBEBE',
         neutral_4: '#D7D7D7',
         neutral_300: '#E1E1E1',
+        neutral_search: '#F2F4F5',
 
         black: '#000000',
         white: '#FFFFFF'
@@ -64,7 +65,11 @@ const MyTheme = {
             },
             sub_4: {
                 fontFamily: 'poppinsSemiBold',
-                fontSize: 10
+                fontSize: 10,
+            },
+            sub_name: {
+                fontFamily: 'poppinsSemiBold',
+                fontSize: 26,
             }
         },
         medium: {

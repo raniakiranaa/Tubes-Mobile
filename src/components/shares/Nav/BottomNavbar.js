@@ -27,6 +27,8 @@ import TopNavbar from './TopNavbar.js';
 import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
+import HomeScreen from '../../../screens/home/index.js';
+import DetailPromo from '../../../screens/promo/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
 
@@ -80,7 +82,8 @@ function TabNavigator({ isAdmin }) {
             component={HomeScreen}
             options={{
               tabBarLabel: 'Home',
-              header: () => <CustomAppbar title="Home" isBackButton={false} isAction={false} />,
+              // header: () => <CustomAppbar title="Home" isBackButton={false} isAction={false} />,
+              header: () => null,
             }}
           />
           <Tab.Screen
@@ -200,24 +203,29 @@ export default function AppNavigator({ isAdmin }) {
             tabBarStyle: { display: 'none' },
           }}
         />
+        <Stack.Screen 
+                    name="DetailPromo" 
+                    component={DetailPromo} 
+                    options={{ header: () => null }} 
+                />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-function HomeScreen() {
-  const Poster = require('../../../../assets/icons/Poster.png');
-  return (
-    <View style={styles.container}>
-      {/* <Text variant="headlineMedium">Home!</Text> */}
-      {/* <CarouselCard image={Poster}/> */}
-      {/* <BigHomeCard image={Poster} title="Local Pride : Traditional Weddings" subtitle="Discover 10 recommendations for traditional weddings" foot="31 Mar 2024 - Mimi Fashion"/> */}
-      {/* <BigSearchCard image={Poster} title="JW Marriott Surabaya" type="Venue" location="Surabaya, Jawa Timur" price="IDR" rating="4.5"/> */}
-      {/* <BigVendorCard image={Poster} title="Royal Ballroom Package" subtitle="IDR 300,000,000" pax="330 pax"/> */}
-      {/* <SmallCard image={Poster} title="JW Marriott Surabaya" rating="4.8"/> */}
-    </View>
-  );
-}
+// function HomeScreen() {
+//   const Poster = require('../../../../assets/icons/Poster.png');
+//   return (
+//     <View style={styles.container}>
+//       {/* <Text variant="headlineMedium">Home!</Text> */}
+//       {/* <CarouselCard image={Poster}/> */}
+//       {/* <BigHomeCard image={Poster} title="Local Pride : Traditional Weddings" subtitle="Discover 10 recommendations for traditional weddings" foot="31 Mar 2024 - Mimi Fashion"/> */}
+//       {/* <BigSearchCard image={Poster} title="JW Marriott Surabaya" type="Venue" location="Surabaya, Jawa Timur" price="IDR" rating="4.5"/> */}
+//       {/* <BigVendorCard image={Poster} title="Royal Ballroom Package" subtitle="IDR 300,000,000" pax="330 pax"/> */}
+//       {/* <SmallCard image={Poster} title="JW Marriott Surabaya" rating="4.8"/> */}
+//     </View>
+//   );
+// }
 
 function OrdersScreen() {
   return (
