@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import MyTheme from '../../../config/theme';
-import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
+import MyTheme from '../../../config/theme.js';
+import { SCREEN_WIDTH } from '../../../utils/deviceDimensions.js';
 import { Trash } from '../../../../assets/icons/budget/index.js'
-import { Yes, No, None } from '../../../../assets/icons/budget'
+import { Yes, No, None } from '../../../../assets/icons/budget/index.js'
 
 export const Guest = (props) => {
     const [name, setName] = useState('Eveey')
@@ -22,7 +22,7 @@ export const Guest = (props) => {
             <View style={{ marginRight: 12}}>
                 <No width={24} height={24}/>
             </View>
-            <Trash width={24} height={24}/>
+            <Trash width={24} height={24} strokeClassName='#E04B4B'/>
         </View>
     );
 }

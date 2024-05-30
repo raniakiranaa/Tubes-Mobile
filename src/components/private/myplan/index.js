@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import MyTheme from '../../../config/theme';
 import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 import { ToDoInput } from './ToDoInput.js';
-import { CustomButton } from '../../../components/shares/Buttons';
 import PlusCircle from "../../../../assets/icons/plus-circle.svg";
 
 const blockWidth = SCREEN_WIDTH * 0.87;
@@ -12,7 +11,7 @@ export const ToDo = (props) => {
     const [todos, setTodos] = useState([{ id: 1, value: '' }]); 
 
     const addNewTodo = () => {
-        const newId = todos.length + 1; 
+        const newId = Date.now();
         setTodos([...todos, { id: newId, value: '' }]); 
     };
 
@@ -26,6 +25,10 @@ export const ToDo = (props) => {
         setTodos(updatedTodos);
     };
 
+    const handleDelete = (id) => {
+        setTodos(todos.filter(todo => todo.id !== id));
+    };
+
     return (
         <View style={styles.container}>
             <Text style={[styles.subTitle, MyTheme.typography.subtitle.sub_2]}>{props.category}</Text>
@@ -33,11 +36,13 @@ export const ToDo = (props) => {
                 {todos.map(todo => (
                     <ToDoInput 
                         key={todo.id}
+                        id={todo.id}
                         placeholder="Add to-do"
                         mode="text"
                         iconProps={{ width: 20, height: 20 }}
                         value={todo.value}
                         onChangeText={(text) => handleTodoChange(text, todo.id)}
+                        onDelete={handleDelete}
                     />
                 ))}
             </View>
@@ -53,7 +58,7 @@ const styles = StyleSheet.create({
         width: blockWidth,
         borderRadius: 10, 
         backgroundColor: MyTheme.colors.cream_2,
-        marginTop: 30,
+        marginTop: 25,
         justifyContent: 'center',
         alignItems: 'center',
         paddingBottom: 20,
@@ -77,4 +82,3 @@ const styles = StyleSheet.create({
         right: 20, 
     },
 });
-

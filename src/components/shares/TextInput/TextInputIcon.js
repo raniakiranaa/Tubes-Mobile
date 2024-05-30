@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         height: 42,
-        marginHorizontal: 10,
         backgroundColor: MyTheme.colors.white,
         borderWidth: 2,
         borderRadius: 8,

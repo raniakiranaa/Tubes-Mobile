@@ -25,6 +25,7 @@ const MyTheme = {
         neutral_3: '#BEBEBE',
         neutral_4: '#D7D7D7',
         neutral_300: '#E1E1E1',
+        neutral_5: 'E3E5E5',
 
         black: '#000000',
         white: '#FFFFFF'

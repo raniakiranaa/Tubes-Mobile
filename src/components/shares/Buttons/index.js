@@ -7,7 +7,7 @@ import MyTheme from '../../../config/theme';
 export const CustomButton = (props) => {
     const blockWidth = SCREEN_WIDTH * 0.87;
     const largeWidth = SCREEN_WIDTH * 0.4;
-    const smallWidth = SCREEN_WIDTH * 0.25;
+    const smallWidth = SCREEN_WIDTH * 0.3;
 
     const getButtonStyle = () => {
         switch (props.size) {

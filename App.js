@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import Navigation from './src/navigation/index.js';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomNavbar from './src/components/shares/Nav/index.js';
 import VendorScreen from './src/screens/vendor/index.js';
 import Login from './src/screens/Login/index.js';
@@ -38,12 +39,14 @@ export default function App() {
   }
 
   return (
-    <BottomNavbar />
-    // <VendorScreen />
-    // <Login />
-    // <Navigation />
-    // <OrderDetail />
-    // <RatingReview />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    {/* <BottomNavbar />
+    <VendorScreen />
+    <Login /> */}
+      <Navigation />
+    {/* <OrderDetail />
+    <RatingReview /> */}
+    </GestureHandlerRootView>
   );
 }
 

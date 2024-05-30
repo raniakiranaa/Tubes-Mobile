@@ -4,7 +4,7 @@ import MyTheme from '../../config/theme.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import Pencil from '../../../assets/icons/Pencil/index.js'
 import { Yes, No, None } from '../../../assets/icons/budget'
-import { Guest } from '../../components/private/budget/index.js'
+import { Guest } from '../../components/private/guest/index.js'
 
 const GuestManager = () => {
   const [guestCount, setGuestCount] = useState(0)
