@@ -27,6 +27,9 @@ export const ToDo = (props) => {
 
     const handleDelete = (id) => {
         setTodos(todos.filter(todo => todo.id !== id));
+        if (todos.length === 1) {
+            props.onCategoryDelete(); 
+        }
     };
 
     return (

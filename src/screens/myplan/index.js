@@ -33,6 +33,10 @@ const MyPlan = () => {
     }
   };
 
+  const handleCategoryDelete = (categoryId) => {
+    setCategories(categories.filter(category => category.id !== categoryId));
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.listContainer}>
@@ -61,7 +65,7 @@ const MyPlan = () => {
       </View>
       <View style={styles.pad}>
         {categories.map(category => (
-          <ToDo key={category.id} category={category.name} />
+          <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>
         ))}
       </View>
       <View style={styles.padTask}>

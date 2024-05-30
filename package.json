@@ -36,6 +36,7 @@
     "react-native-star-rating-widget": "^1.7.3",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-svg": "^15.3.0",
+    "react-native-table-component": "^1.2.2",
     "react-navigation": "^5.0.0",
     "tailwind-react-native-classnames": "^1.5.1"
   },

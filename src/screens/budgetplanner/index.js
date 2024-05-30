@@ -1,59 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet,  ScrollView, Touchable, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import MyTheme from '../../config/theme.js';
-import { CustomButton } from '../../components/shares/Buttons/index.js';
-import Pencil from '../../../assets/icons/Pencil/index.js'
+import Pencil from '../../../assets/icons/Pencil/index.js';
+import { CashFlow } from '../../components/private/budget/CashFlow.js';
+import ModalTarget from '../../components/private/budget/ModalTarget.js';
 
 const BudgetPlanner = () => {
-  const [budget, setBudget] = useState(0)
-  const [spend, setSpend] = useState(0)
-  const [actual, setActual] = useState(0)
+  const [spend, setSpend] = useState(0);
+  const [target, setTarget] = useState(0);
+  const [newTarget, setNewTarget] = useState('');
+  const budgetRemaining = target - spend;
 
-  const formatBudget = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(budget);
-  const formatSpend = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(spend);
-  const formatActual = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(actual);
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+  };
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlePress = () => {
-    console.log("Button Pressed");
-  }
+    setModalVisible(true);
+  };
+
+  const handleAddTarget = () => {
+    const parsedBudget = parseInt(newTarget.replace(/,/g, ''), 10);
+    if (!isNaN(parsedBudget)) {
+      setTarget(parsedBudget);
+    }
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <View style={styles.BudgetContainer}>
-            <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>Budget Remaining :</Text>
-            <Text style={[styles.price, MyTheme.typography.subtitle.sub_2]}>{formatBudget}</Text>
-            <View style={styles.content}>
-              <View style = {styles.outline}>
-                  <Text style={[{ color: MyTheme.colors.brown_3 }, MyTheme.typography.medium.medium_1]}>Spend</Text>
-                  <Text style={[{ color: MyTheme.colors.peach_3 }, MyTheme.typography.medium.medium_1]}>{formatSpend}</Text>
-              </View>
-              <View style = {styles.outline}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={[{ color: MyTheme.colors.brown_3, marginRight: 8 }, MyTheme.typography.medium.medium_1]}>Actual Budget</Text>
-                    <Pencil width={12} height={12}/>
-                  </View>
-                  <Text style={[{ color: MyTheme.colors.peach_3 }, MyTheme.typography.medium.medium_1]}>{formatActual}</Text>
-              </View>
+          <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>Budget Remaining :</Text>
+          <Text style={[styles.price, MyTheme.typography.subtitle.sub_2]}>{formatCurrency(budgetRemaining)}</Text>
+          <View style={styles.content}>
+            <View style={styles.outline}>
+              <Text style={[{ color: MyTheme.colors.brown_3 }, MyTheme.typography.medium.medium_1]}>Total Spend</Text>
+              <Text style={[{ color: MyTheme.colors.peach_3 }, MyTheme.typography.medium.medium_1]}>{formatCurrency(spend)}</Text>
             </View>
+            <View style={styles.outline}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[{ color: MyTheme.colors.brown_3, marginRight: 8 }, MyTheme.typography.medium.medium_1]}>Target Budget</Text>
+                <TouchableOpacity onPress={handlePress}>
+                  <Pencil width={12} height={12} />
+                </TouchableOpacity>
+              </View>
+              <Text style={[{ color: MyTheme.colors.peach_3 }, MyTheme.typography.medium.medium_1]}>{formatCurrency(target)}</Text>
+            </View>
+          </View>
         </View>
       </View>
-      <ScrollView>
-        {/* cashflow */}
-        {/* <View style={styles.cashflow}>
-          <Text style={[{ color: MyTheme.colors.neutral_2p }, MyTheme.typography.medium.medium_1]}>Category</Text>
-          <Text style={[{ color: MyTheme.colors.neutral_2p }, MyTheme.typography.medium.medium_1]}>Actual Spend</Text>
-        </View> */}
-      </ScrollView>
-      <View style={{ marginBottom: 24 }}>
-        <CustomButton
-          title="Add Category"
-          size="block-round"
-          buttonColor={MyTheme.colors.brown_2}
-          textColor={MyTheme.colors.white}
-          onPress={handlePress}
-        />
-      </View>
+      <CashFlow />
+      <ModalTarget
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        oldTarget={target}
+        onAddTarget={handleAddTarget}
+        newTarget={newTarget}
+        setNewTarget={setNewTarget}
+      />
     </View>
   );
 };
@@ -96,11 +103,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 8
   },
-  cashflow: {
-    flexDirection: 'row',
-    marginTop: 32,
-    marginLeft: 32,
-  }
 });
 
 export default BudgetPlanner;
