@@ -29,7 +29,7 @@ const data = [
 const OrderConfirmationPage = () => {
   return (
     <View style={styles.container} className='mt-12'>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.content}>
         <View className='flex-row items-center rounded-md p-4 mb-8' style={MyTheme.shadows.shadow_1} >
           <Image source={{ uri: data[0].image }} className='h-14 w-14 rounded-md mr-4' />
           <View className='flex-1'>
@@ -52,15 +52,16 @@ const OrderConfirmationPage = () => {
             <Text style={[MyTheme.typography.medium.medium_2, {color:MyTheme.colors.neutral_1}]}>{data[0].date}</Text>
           </View>
         </View>
-        <View style={styles.actions}>
-          <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_2}]}>Chat</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.orderButton} onPress={() => console.log('Order Pressed')}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Order</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+      
+      <View style={styles.actions}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
+          <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_2}]}>Chat</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.orderButton} onPress={() => console.log('Order Pressed')}>
+          <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Order</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
