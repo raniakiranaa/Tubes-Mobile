@@ -121,8 +121,12 @@ function TabNavigator({ isAdmin }) {
             component={Profile}
             options={{
               tabBarLabel: 'Profile',
-              // header: () => <CustomAppbar title="Profile" isBackButton={false} isAction={false} />,
-              header: () => <CustomHeader />
+              header: () => (
+                <>
+                  <CustomHeader />
+                  <CustomAppbar title="Profile" isBackButton={false} isAction={false} isTransparent={true}/>
+                </>
+              ),
             }}
           />
         </>
