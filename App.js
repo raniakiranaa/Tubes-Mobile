@@ -41,7 +41,7 @@ export default function App() {
   }
 
   return (
-    // <BottomNavbar />
+    <BottomNavbar />
     // <VendorScreen />
     // <Login />
     // <Navigation />
@@ -50,7 +50,7 @@ export default function App() {
     // <VendorDetailPage />
     // <ProductDetailPage />
     // <OrderConfirmationPage />
-    <SavedVendorPage />
+    // <SavedVendorPage />
   );
 }
 

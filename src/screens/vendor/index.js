@@ -1,11 +1,64 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
 import { SmallCard } from '../../components/shares/Card';
 import SearchIcon from '../../../assets/icons/Search.svg';
 
 const { width: screenWidth } = Dimensions.get('window');
+
+const data = [
+  {
+    id: '1',
+    image: 'https://via.placeholder.com/150',
+    title: 'JW Marriott Surabaya',
+    type: 'Venue',
+    rating: '4.8',
+  },
+  {
+    id: '2',
+    image: 'https://via.placeholder.com/150',
+    title: 'Vasa Hotel Surabaya',
+    type: 'Venue',
+    rating: '4.5',
+  },
+  {
+    id: '3',
+    image: 'https://via.placeholder.com/150',
+    title: 'Novotel Surabaya',
+    type: 'Venue',
+    rating: '4.3',
+  },
+  {
+    id: '4',
+    image: 'https://via.placeholder.com/150',
+    title: 'The Alana Surabaya',
+    type: 'Venue',
+    rating: '4.2',
+  },
+  {
+    id: '5',
+    image: 'https://via.placeholder.com/150',
+    title: 'Sonokembang',
+    type: 'Catering',
+    rating: '5.0',
+  },
+  {
+    id: '6',
+    image: 'https://via.placeholder.com/150',
+    title: 'Jatiroso',
+    type: 'Catering',
+    rating: '4.6',
+  },
+  {
+    id: '7',
+    image: 'https://via.placeholder.com/150',
+    title: 'Katering Surya',
+    type: 'Catering',
+    rating: '4.5',
+  }
+];
+
 
 const VendorPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -135,19 +188,28 @@ const VendorPage = () => {
       <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]} className='mt-1 px-5'>
         Venue
       </Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardsContainer} contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}>
-        <SmallCard image={{ uri: 'https://via.placeholder.com/150' }} title="JW Marriott Surabaya" rating="4.8" />
-        <SmallCard image={{ uri: 'https://via.placeholder.com/150' }} title="Vasa Hotel Surabaya" rating="4.5" />
-        <SmallCard image={{ uri: 'https://via.placeholder.com/150' }} title="Vasa Hotel Surabaya" rating="4.5" />
-      </ScrollView>
+      <FlatList
+        data={data.filter(item => item.type === 'Venue')}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.title} rating={item.rating} />}
+        keyExtractor={item => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.cardsContainer}
+        contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
+      />
 
       <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]} className='mt-1 px-5'>
         Catering
       </Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardsContainer} contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}>
-        <SmallCard image={{ uri: 'https://via.placeholder.com/150' }} title="Sonokembang" rating="5.0" />
-        <SmallCard image={{ uri: 'https://via.placeholder.com/150' }} title="Jatiroso" rating="4.6" />
-      </ScrollView>
+      <FlatList
+        data={data.filter(item => item.type === 'Catering')}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.title} rating={item.rating} />}
+        keyExtractor={item => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.cardsContainer}
+        contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
+      />
     </ScrollView>
   );
 };
@@ -158,7 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainer: {
-    paddingBottom: 72,
+    paddingBottom: Platform.OS === 'ios' ? 104 : 72,
   },
   inputWrapper: {
     flexDirection: 'row',

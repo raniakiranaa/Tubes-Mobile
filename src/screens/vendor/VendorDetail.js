@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList, Platform } from 'react-native';
 import MyTheme from '../../config/theme';
 import { BigVendorCard } from '../../components/shares/Card';
 import ReviewItem from '../../components/shares/Item/ReviewItem';
@@ -9,57 +9,95 @@ import SaveIcon from '../../../assets/icons/Vendor-save.svg';
 const { width: screenWidth } = Dimensions.get('window');
 
 const VendorDetailPage = () => {
-  const reviews = [
+  const data = [
     {
       id: '1',
-      name: 'John Doe',
-      date: '31 Mar 2024',
-      score: '4.5',
-      comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
-    },
-    {
-      id: '2',
-      name: 'Jane Doe',
-      date: '31 Mar 2024',
-      score: '4.5',
-      comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
-    },
-    {
-      id: '3',
-      name: 'John Doe',
-      date: '31 Mar 2024',
-      score: '4.5',
-      comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
-    },
-    {
-      id: '4',
-      name: 'Jane Doe',
-      date: '31 Mar 2024',
-      score: '4.5',
-      comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
-    },
-    {
-      id: '5',
-      name: 'John Doe',
-      date: '31 Mar 2024',
-      score: '4.5',
-      comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+      image: 'https://via.placeholder.com/150',
+      name: 'JW Marriott Surabaya',
+      type: 'Venue',
+      location: 'Surabaya, Jawa Timur',
+      rating: '4.8',
+      product: [
+        {
+          id: '1',
+          image: 'https://via.placeholder.com/150',
+          title: 'Royal Ballroom Package',
+          subtitle: 'IDR 300,000,000',
+          pax: '330 pax',
+        },
+        {
+          id: '2',
+          image: 'https://via.placeholder.com/150',
+          title: 'Nusantara Package',
+          subtitle: 'IDR 88,800,000',
+          pax: '200 pax',
+        },
+      ],
+      about: 'JW Marriott Surabaya\'s wedding package will have it all covered for you, to ensure that your once-in-a-lifetime dream comes true. Leave it to our team of dedicated and experienced wedding planners to make your special day memorable for you and your guests. The Royal Ballroom offers a unique pillar-less high ceiling that can host up to 60 tables.',
+      services: ['Venue', 'Catering'],
+      blog: [
+        {
+          id: '1',
+          image: 'https://via.placeholder.com/150',
+          title: 'Top 3 Honeymoon Destination',
+          subtitle: 'Explore our top 3 honeymoon picks!',
+          date: '14 Feb 2024',
+          location: 'JW Marriott Surabaya',
+        },
+      ],
+      review: [
+        {
+          id: '1',
+          name: 'John Doe',
+          date: '31 Mar 2024',
+          score: '4.5',
+          comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+        },
+        {
+          id: '2',
+          name: 'Jane Doe',
+          date: '31 Mar 2024',
+          score: '4.5',
+          comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+        },
+        {
+          id: '3',
+          name: 'John Doe',
+          date: '31 Mar 2024',
+          score: '4.5',
+          comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+        },
+        {
+          id: '4',
+          name: 'Jane Doe',
+          date: '31 Mar 2024',
+          score: '4.5',
+          comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+        },
+        {
+          id: '5',
+          name: 'John Doe',
+          date: '31 Mar 2024',
+          score: '4.5',
+          comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at odio nec ex ultricies interdum.',
+        },
+      ],
     },
   ];
 
-  const totalRating = reviews.reduce((acc, review) => acc + parseFloat(review.score), 0);
-  const averageRating = totalRating / reviews.length;
-  const totalReviews = reviews.length;
+  const totalRating = data[0].review.reduce((acc, review) => acc + parseFloat(review.score), 0);
+  const averageRating = totalRating / data[0].review.length;
+  const totalReviews = data[0].review.length;
 
   const renderHeader = () => (
-    <View>
+    <View className='mt-12'>
       <View style={styles.vendorInfo}>
-        <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.vendorImage} className='mb-1' />
-        <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>JW Marriott Surabaya</Text>
-        <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.pink_2 }]} className='mb-2'>Venue<Text style={{ color: MyTheme.colors.black }}> • Surabaya, Jawa Timur</Text></Text>
+        <Image source={{ uri: data[0].image }} style={styles.vendorImage} />
+        <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>{data[0].name}</Text>
+        <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.pink_2 }]} className='mb-2'>Venue<Text style={{ color: MyTheme.colors.black }}> • {data[0].location}</Text></Text>
         <View style={styles.ratingContainer}>
           <Image source={require('../../../assets/icons/star.png')} style={{ height: 11, width: 11, marginLeft: 8 }} />
-          <Text style={MyTheme.typography.body.body_3} className='pl-0.5 pr-2 pt-0.5'>4.8</Text>
+          <Text style={MyTheme.typography.body.body_3} className='pl-0.5 pr-2 pt-0.5'>{data[0].rating}</Text>
         </View>
         <View style={styles.actionButtons}>
           <TouchableOpacity style={styles.saveButton}>
@@ -80,29 +118,16 @@ const VendorDetailPage = () => {
       </View>
       <FlatList
         horizontal
-        data={[
-          {
-            image: { uri: 'https://via.placeholder.com/150' },
-            title: "Royal Ballroom Package",
-            subtitle: "IDR 300,000,000",
-            pax: "330 pax"
-          },
-          {
-            image: { uri: 'https://via.placeholder.com/150' },
-            title: "Nusantara Package",
-            subtitle: "IDR 88,800,000",
-            pax: "200 pax"
-          }
-        ]}
+        data={data[0].product}
         renderItem={({ item }) => (
           <BigVendorCard
-            image={item.image}
+            image={{ uri: item.image }}
             title={item.title}
             subtitle={item.subtitle}
             pax={item.pax}
           />
         )}
-        keyExtractor={(_, index) => index.toString()}
+        keyExtractor={item => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
       />
@@ -110,27 +135,26 @@ const VendorDetailPage = () => {
         <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.neutral_1 }]}>About</Text>
         <Text style={[MyTheme.typography.medium.medium_1, { color: MyTheme.colors.brown_2 }]} className='mb-2.5'>Services</Text>
         <View style={styles.servicesContainer}>
-          <View style={styles.serviceTag}>
-            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_2 }]}>Venue</Text>
-          </View>
-          <View style={styles.serviceTag}>
-            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_2 }]}>Catering</Text>
-          </View>
+          {data[0].services.map((service, index) => (
+            <View key={index} style={styles.serviceTag}>
+              <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_2 }]}>{service}</Text>
+            </View>
+          ))}
         </View>
         <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]}>
-          JW Marriott Surabaya's wedding package will have it all covered for you, to ensure that your once-in-a-lifetime dream comes true.
-          Leave it to our team of dedicated and experienced wedding planners to make your special day memorable for you and your guests.
-          The Royal Ballroom offers a unique pillar-less high ceiling that can host up to 60 tables.
+          {data[0].about}
         </Text>
       </View>
       <View style={styles.blogSection}>
         <Text style={[MyTheme.typography.medium.medium_1, { color: MyTheme.colors.brown_2 }]} className='mb-2.5'>Blog</Text>
         <View className='flex-row items-center p-2' style={ MyTheme.shadows.shadow_1 }>
-          <Image source={{ uri: 'https://via.placeholder.com/150' }} className='h-11 w-11' />
+          <Image source={{ uri: data[0].blog[0].image }} style={{ height: 50, width: 50 }} />
           <View style={styles.blogCard}>
-            <Text style={[MyTheme.typography.subtitle.sub_4, { color: MyTheme.colors.black }]}>Top 3 Honeymoon Destination</Text>
-            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_3 }]}>Explore our top 3 honeymoon picks!</Text>
-            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1, marginTop: 3 }]}>14 Feb 2024  —  JW Marriott Surabaya</Text>
+            <Text style={[MyTheme.typography.subtitle.sub_4, { color: MyTheme.colors.black }]}>{data[0].blog[0].title}</Text>
+            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.brown_3 }]}>{data[0].blog[0].subtitle}</Text>
+            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1, marginTop: 3 }]}>
+              {data[0].blog[0].date}  —  {data[0].blog[0].location}
+            </Text>
           </View>
         </View>
       </View>
@@ -154,12 +178,12 @@ const VendorDetailPage = () => {
 
   return (
     <FlatList
-      style={styles.container}
+      style={styles.list}
       ListHeaderComponent={renderHeader}
-      data={reviews}
+      data={data[0].review}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={item => item.id}
-      className = 'mb-2'
+      contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 36 : 4 }}
     />
   );
 };
@@ -239,11 +263,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
   },
-  // viewAllButton: {
-  //   position: 'absolute',
-  //   right: 20,
-  //   top: 10,
-  // },
   viewAllText: {
     color: MyTheme.colors.brown_2,
   },
@@ -303,6 +322,10 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 14,
     color: MyTheme.colors.neutral_1,
+  },
+  list: {
+    flex: 1,
+    backgroundColor: MyTheme.colors.white,
   },
 });
 

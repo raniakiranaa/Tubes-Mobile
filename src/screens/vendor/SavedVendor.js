@@ -1,6 +1,6 @@
-import React from 'react';
-import { ScrollView, View, TextInput, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import MyTheme from '../../config/theme'; 
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, FlatList } from 'react-native';
+import MyTheme from '../../config/theme';
 import SearchIcon from '../../../assets/icons/Search.svg';
 import { BigSearchCard } from '../../components/shares/Card'; // Ensure this is correctly imported
 
@@ -24,36 +24,41 @@ const vendors = [
 ];
 
 const SavedVendorPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const renderVendorItem = ({ item }) => (
+    <View style={styles.vendorItem}>
+      <BigSearchCard
+        image={item.image}
+        title={item.name}
+        type={item.category}
+        location={item.location}
+        rating={item.rating}
+      />
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} className='mt-12'>
-      <View className='flex-row items-center rounded-lg px-2.5 mb-6' style={{backgroundColor: "#F2F4F5"}}>
-        <SearchIcon style={{marginRight: 10}} />
+    <View style={styles.container}>
+      <View style={styles.searchBar}>
+        <SearchIcon style={styles.searchIcon} />
         <TextInput
-          className='flex-1 h-10 w-full'
-          style={MyTheme.typography.body.body_1}
+          style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor={MyTheme.colors.neutral_3}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
       </View>
 
       <FlatList
-        data={vendors}
+        data={vendors.filter(vendor => vendor.name.toLowerCase().includes(searchQuery.toLowerCase()))}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View className='mb-2.5'>
-            <BigSearchCard
-              image={item.image}
-              title={item.name}
-              type={item.category}
-              location={item.location}
-              rating={item.rating}
-            />
-          </View>
-        )}
+        renderItem={renderVendorItem}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -63,13 +68,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
-  contentContainer: {
+  searchBar: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#F2F4F5',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginTop: 68,
+    marginBottom: 24,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    ...MyTheme.typography.body.body_1,
   },
   listContent: {
     flexGrow: 1,
     alignItems: 'center',
     paddingBottom: 20,
+  },
+  vendorItem: {
+    marginBottom: 10,
   },
 });
 
