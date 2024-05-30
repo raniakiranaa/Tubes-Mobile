@@ -8,6 +8,7 @@ import { HeaderHome } from '../../components/shares/Nav/HeaderHome.js';
 import NotifIcon from '../../../assets/icons/NotifIcon/index.js'; 
 import PromoCarousel from './PromoCarousel.js';
 import BlogCarousel from './blogCarousel.js';
+import VendorCarousel from '../vendor/VendorCarousel.js';
 
 const HomeScreen = () => {
   const navi = useNavigation();
@@ -68,7 +69,7 @@ const HomeScreen = () => {
               <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
             </View>
             <View style={styles.catContainer}>
-              <BlogCarousel />
+              <VendorCarousel />
             </View>
           </View>
         </View>
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    paddingBottom: 60,
   },
   container: {
     flex: 1,
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   promoContainer: {
-    marginTop: 10,
+    marginTop: 30,
     marginHorizontal: 10,
     width: '100%',
   },
@@ -165,6 +167,9 @@ const styles = StyleSheet.create({
   topTitle: {
     color: MyTheme.colors.neutral_1,
   },
+  catContainer: {
+
+  }
 });
 
 export default HomeScreen;

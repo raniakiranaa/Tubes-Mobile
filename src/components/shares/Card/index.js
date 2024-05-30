@@ -30,8 +30,14 @@ export const BigHomeCard = ({ image, title, subtitle, foot, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress} style={styles.bigHomeContainer}>
             <Image source={image} style={styles.bigHomeImage} />
-            <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>{ title }</Text>
-            <Text style={[styles.subtitle, MyTheme.typography.subtitle.body_3]}>{ subtitle }</Text>
+            <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+            >{ title }</Text>
+            <Text style={[styles.subtitle, MyTheme.typography.subtitle.body_3]}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+            >{ subtitle }</Text>
             <Text style={[styles.foot, MyTheme.typography.subtitle.body_3]}>{ foot }</Text>
         </TouchableOpacity>
     );
@@ -70,16 +76,19 @@ export const BigVendorCard = ({ image, title, subtitle, pax }) => {
     );
 }
 
-export const SmallCard = ({ image, title, rating }) => {
+export const SmallCard = ({ image, title, rating, onPress }) => {
     return (
-        <View style={styles.smallContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.smallContainer}>
             <Image source={image} style={styles.bigSearchImage} />
-            <Text style={[styles.titleSmall, MyTheme.typography.subtitle.sub_3]}>{title}</Text>
+            <Text style={[styles.titleSmall, MyTheme.typography.subtitle.sub_3]}
+                numberOfLines={1}
+                ellipsizeMode='tail'
+            >{title}</Text>
             <View style={styles.ratingSmallContainer}>
                 <Image style={styles.star} source={star}/>
                 <Text style={[styles.ratingText, MyTheme.typography.subtitle.body_3,]}>{rating}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -104,6 +113,7 @@ const styles = StyleSheet.create({
         ...MyTheme.shadows.shadow_1,
         borderRadius: 10,
         backgroundColor: MyTheme.colors.white,
+        paddingBottom: 5,
         marginRight: 20,
     },
     bigHomeImage: {
@@ -115,9 +125,10 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'left',
         alignSelf: 'stretch',
-        paddingLeft: scalePadding,
+        paddingHorizontal: scalePadding,
         paddingTop: scalePadding * 0.8, 
         fontSize: scaleFontSize * 1.4,
+        overflow: 'hidden',
     },
     subtitle: {
         textAlign: 'left',
@@ -195,25 +206,26 @@ const styles = StyleSheet.create({
         color: MyTheme.colors.pink_2
     },
     smallContainer: {
-        width: containerWidth,
-        height: containerHeightSmall,
+        width: containerWidth * 0.6,
+        height: containerHeightSmall * 0.6,
         flexDirection: 'column',
         alignItems: 'left',
         ...MyTheme.shadows.shadow_1,
         borderRadius: 10,
-        backgroundColor: MyTheme.colors.white
+        backgroundColor: MyTheme.colors.white,
+        marginRight: 20,
     },
     ratingSmallContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 0.22,
+        borderWidth: 0.4,
         borderColor: MyTheme.colors.neutral_300,
-        paddingTop: scalePadding * 0.2,
-        paddingBottom: scalePadding * 0.2,
-        paddingLeft: scalePadding * 0.4,
-        paddingRight: scalePadding * 0.4,
+        paddingVertical: scalePadding * 0.2,  // Hanya padding vertikal
+        paddingHorizontal: scalePadding * 0.4,
         borderRadius: 12,
-        marginLeft: scalePadding,
+        marginHorizontal: scalePadding,
+        alignSelf: 'flex-start',  // Menyesuaikan lebar container berdasarkan konten
+        width: 'auto',
     },
     titleSmall: {
         textAlign: 'left',
@@ -222,6 +234,7 @@ const styles = StyleSheet.create({
         paddingTop: scalePadding * 0.8, 
         paddingBottom: scalePadding * 0.2,
         fontSize: scaleFontSize * 1.4,
+        overflow: 'hidden',
     },
 });
 
