@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { CustomButton } from '../../components/shares/Buttons';
 import MyTheme from '../../config/theme.js';
@@ -13,6 +14,12 @@ const MyPlan = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategory, setNewCategory] = useState('');
   const [categories, setCategories] = useState([{ id: 1, name: 'Pre-Wedding' }]);
+
+  const navi = useNavigation();
+  const handleButtonPress = () => {
+    console.log("Button Pressed");
+    navi.navigate("done");
+  };
 
   const handlePress = () => {
     setModalVisible(true);
@@ -33,7 +40,6 @@ const MyPlan = () => {
           <CustomButton
             title="To-Do"
             textColor={MyTheme.colors.brown_2}
-            onPress={handlePress}
             type="outline"
             buttonColor={MyTheme.colors.cream_2}
             outlineColor={MyTheme.colors.brown_2}
@@ -45,7 +51,7 @@ const MyPlan = () => {
           <CustomButton
             title="Done"
             textColor={MyTheme.colors.neutral_3}
-            onPress={handlePress}
+            onPress={handleButtonPress}
             type="outline"
             buttonColor={MyTheme.colors.neutral_300}
             outlineColor={MyTheme.colors.neutral_3}

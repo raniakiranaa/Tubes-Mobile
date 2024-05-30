@@ -8,6 +8,9 @@ import Register from '../screens/register';
 import { HeaderStart } from '../components/shares/Nav/HeaderStart';
 import MyTheme from '../config/theme';
 import MyPlan from '../screens/myplan'
+import GuestManager from '../screens/guestmanager';
+import BudgetPlanner from '../screens/budgetplanner';
+import Done from '../screens/done'
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +42,13 @@ export default function Navigation() {
                 <Stack.Screen 
                     name="MyPlan" 
                     component={MyPlan} 
+                    options={{
+                        header: () => <CustomHeader />
+                    }}  
+                />
+                <Stack.Screen 
+                    name="done" 
+                    component={Done} 
                     options={{
                         header: () => <CustomHeader />
                     }}  

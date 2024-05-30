@@ -17,7 +17,7 @@ const ModalCategory = ({ visible, onClose, onAddCategory, newCategory, setNewCat
                         <Cross fillClassName={MyTheme.colors.neutral_2p} width={20} height={20}/>
                     </TouchableOpacity>
                     <View style={{ alignItems: 'center', marginBottom: 35 }}>
-                        <Text style={[MyTheme.typography.subtitle.sub_2]}>Create Category</Text>
+                        <Text style={[MyTheme.typography.subtitle.sub_2]}>Create New Category</Text>
                     </View>
                     <View style={{ paddingHorizontal: 5 }}>
                         <TextInputIcon
