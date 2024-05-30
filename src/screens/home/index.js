@@ -7,13 +7,10 @@ import SearchIcon from '../../../assets/icons/Search/index.js';
 import { HeaderHome } from '../../components/shares/Nav/HeaderHome.js';
 import NotifIcon from '../../../assets/icons/NotifIcon/index.js'; 
 import PromoCarousel from './PromoCarousel.js';
+import BlogCarousel from './blogCarousel.js';
 
 const HomeScreen = () => {
   const navi = useNavigation();
-  const handlePress = () => {
-    console.log("Button Pressed");
-    navi.navigate("Login");
-  };
 
   return (
     <ScrollView
@@ -30,7 +27,8 @@ const HomeScreen = () => {
           </View>
           <View style={styles.sCardContainer}>
             <View style={[styles.searchCard, MyTheme.shadows.shadow_1]}>
-              <Text style={[styles.outerText, MyTheme.typography.medium.medium_1]}>Ready to 
+              <Text style={[MyTheme.typography.medium.medium_1]}>
+                Ready to 
                 <Text style={styles.innerText}> uncover </Text> 
                 your 
                 <Text style={styles.innerText}> ideal vendors </Text>
@@ -46,7 +44,7 @@ const HomeScreen = () => {
                     type="search"
                     mode="text"
                     fontSize={MyTheme.typography.body.body_1}
-                    iconProps={{ width: 20, height: 20}}
+                    iconProps={{ width: 20, height: 20 }}
                   />
               </View>
             </View>
@@ -61,6 +59,17 @@ const HomeScreen = () => {
             <View style={styles.blogTitleContainer}>
               <Text style={[styles.blogTitle, MyTheme.typography.subtitle.sub_2]}>Highlights For You</Text>
             </View>
+            <View style={styles.bcContainer}>
+              <BlogCarousel />
+            </View>
+          </View>
+          <View style={styles.topContainer}>
+            <View style={styles.topTitleContainer}>
+              <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
+            </View>
+            <View style={styles.catContainer}>
+              <BlogCarousel />
+            </View>
           </View>
         </View>
       </View>
@@ -70,17 +79,16 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   headerContainer: {
     width: '100%',
     position: 'relative',
-    alignItems: 'center',
     zIndex: 2,
   },
   notifContainer: {
@@ -125,16 +133,36 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   contentContainer: {
-    
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   promoContainer: {
     marginTop: 10,
+    marginHorizontal: 10,
+    width: '100%',
   },
   blogContainer: {
     marginTop: 10,
-    backgroundColor: MyTheme.colors.danger,
-  },  
+    width: '100%',
+  },
+  blogTitleContainer: {
+    paddingHorizontal: 20,
+  },
   blogTitle: {
+    color: MyTheme.colors.neutral_1,
+  },
+  bcContainer: {
+    marginTop: 10,
+  },
+  topContainer: {
+    marginTop: 20,
+    width: '100%',
+  },
+  topTitleContainer: {
+    paddingHorizontal: 20,
+  },
+  topTitle: {
     color: MyTheme.colors.neutral_1,
   },
 });

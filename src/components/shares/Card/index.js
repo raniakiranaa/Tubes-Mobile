@@ -26,14 +26,14 @@ export const CarouselCard = ({ image,onPress }) => {
     );
 }
 
-export const BigHomeCard = ({ image, title, subtitle, foot }) => {
+export const BigHomeCard = ({ image, title, subtitle, foot, onPress }) => {
     return (
-        <View style={styles.bigHomeContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.bigHomeContainer}>
             <Image source={image} style={styles.bigHomeImage} />
             <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>{ title }</Text>
             <Text style={[styles.subtitle, MyTheme.typography.subtitle.body_3]}>{ subtitle }</Text>
             <Text style={[styles.foot, MyTheme.typography.subtitle.body_3]}>{ foot }</Text>
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         ...MyTheme.shadows.shadow_1,
         borderRadius: 10,
-        backgroundColor: MyTheme.colors.white
+        backgroundColor: MyTheme.colors.white,
+        marginRight: 20,
     },
     bigHomeImage: {
         width: '100%',

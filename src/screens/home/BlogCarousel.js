@@ -1,19 +1,19 @@
 import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import { CarouselCard } from '../../components/shares/Card';
+import { BigHomeCard, CarouselCard } from '../../components/shares/Card';
 import { useNavigation } from '@react-navigation/native';
 
 const data = [
-  { id: 1, img: require('../../../assets/images/promo_1.png') },
-  { id: 2, img: require('../../../assets/images/promo_2.png') },
-  { id: 3, img: require('../../../assets/images/promo_3.png') },
+  { id: 1, img: require('../../../assets/images/blog_1.png'), title: "Local Pride : Traditional Weddings", subtitle:"Discover 10 recommendations for traditional weddings", foot:"31 Mar 2024"},
+  { id: 2, img: require('../../../assets/images/blog_2.png'), title: "Do’s and Don’ts : Wedding Makeup", subtitle:"Tips and pitfalls to ensure perfect wedding makeup", foot:"16 Feb 2024" },
+  { id: 3, img: require('../../../assets/images/blog_3.png'),  title: "Top 3 Honeymoon Destination", subtitle:"Explore our top 3 honeymoon picks!", foot:"14 Feb 2024" },
 ];
 
 const BlogCarousel = () => {
   const navigation = useNavigation();
 
   const handleCardPress = (id) => {
-    navigation.navigate('DetailPromo', { id });
+    navigation.navigate('DetailBlog', { id });
   };
 
   return (
@@ -22,8 +22,11 @@ const BlogCarousel = () => {
         style={styles.cardContainer}
         data={data}
         renderItem={({ item }) => (
-          <CarouselCard 
+          <BigHomeCard 
             image={item.img}
+            title={item.title}
+            subtitle={item.subtitle}
+            foot={item.foot}
             onPress={() => handleCardPress(item.id)}
           />
         )}
@@ -38,14 +41,13 @@ const BlogCarousel = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
     paddingHorizontal: 10,
   },
   cardContainer: {
     paddingHorizontal: 10,
   },
   contentContainer: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   },
 });
 

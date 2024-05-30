@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   cardContainer: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   },
   contentContainer: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   },
 });
 

@@ -28,9 +28,10 @@ import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
 import HomeScreen from '../../../screens/home/index.js';
-import DetailPromo from '../../../screens/promo/index.js';
+import DetailPromo from '../../../screens/promo/detailPromo.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
+import DetailBlog from '../../../screens/blog/detailBlog.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -206,6 +207,11 @@ export default function AppNavigator({ isAdmin }) {
         <Stack.Screen 
                     name="DetailPromo" 
                     component={DetailPromo} 
+                    options={{ header: () => null }} 
+                />
+        <Stack.Screen 
+                    name="DetailBlog" 
+                    component={DetailBlog} 
                     options={{ header: () => null }} 
                 />
       </Stack.Navigator>
