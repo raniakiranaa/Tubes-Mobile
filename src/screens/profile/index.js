@@ -119,7 +119,9 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
     },
     imgCust : {
         width: 100,
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     custContainer: {
-        paddingTop : 10,
+        marginTop : 60,
         alignItems: 'center'
     },
     nameCust: {

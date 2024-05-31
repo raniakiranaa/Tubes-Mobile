@@ -138,6 +138,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 10,
     marginBottom: 20,
+    padding: 16,
+    ...MyTheme.shadows.shadow_1,
   },
   packageImage: {
     width: 55,
