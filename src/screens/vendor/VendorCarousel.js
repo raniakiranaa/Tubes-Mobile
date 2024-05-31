@@ -60,10 +60,6 @@ const data = [
 const VendorCarousel = () => {
   const navigation = useNavigation();
 
-  const handleCardPress = (id) => {
-    navigation.navigate('DetailVendor', { id });
-  };
-
   return (
     <View style={styles.container}>
       <Text style={[MyTheme.typography.subtitle.sub_3, styles.catTitle]}>
@@ -77,7 +73,6 @@ const VendorCarousel = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
-        onPress={() => handleCardPress(item.id)}
       />
 
       <Text style={[MyTheme.typography.subtitle.sub_3, , styles.catTitle]}>

@@ -4,6 +4,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
 import { SmallCard } from '../../components/shares/Card';
 import SearchIcon from '../../../assets/icons/Search.svg';
+import VendorCarousel from './VendorCarousel';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -181,7 +182,7 @@ const VendorPage = () => {
         </View>
       </ScrollView>
 
-      <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.neutral_1 }]} className='mt-2 px-5'>
+      {/* <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.neutral_1 }]} className='mt-2 px-5'>
         Top-rated by other Eveey
       </Text>
 
@@ -209,7 +210,15 @@ const VendorPage = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
-      />
+      /> */}
+      <View style={styles.topContainer}>
+            <View style={styles.topTitleContainer}>
+              <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
+            </View>
+            <View style={styles.catContainer}>
+              <VendorCarousel />
+            </View>
+          </View>
     </ScrollView>
   );
 };
@@ -289,6 +298,19 @@ const styles = StyleSheet.create({
   cardsContainer: {
     paddingBottom: 20,
   },
+  topContainer: {
+    marginTop: 20,
+    width: '100%',
+  },
+  topTitleContainer: {
+    paddingHorizontal: 20,
+  },
+  topTitle: {
+    color: MyTheme.colors.neutral_1,
+  },
+  catContainer: {
+
+  }
 });
 
 export default VendorPage;

@@ -7,7 +7,7 @@ import SearchIcon from '../../../assets/icons/Search/index.js';
 import { HeaderHome } from '../../components/shares/Nav/HeaderHome.js';
 import NotifIcon from '../../../assets/icons/NotifIcon/index.js'; 
 import PromoCarousel from './PromoCarousel.js';
-import BlogCarousel from './blogCarousel.js';
+import BlogCarousel from './BlogCarousel.js';
 import VendorCarousel from '../vendor/VendorCarousel.js';
 
 const HomeScreen = () => {
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'flex-start',
+    backgroundColor: '#fff'
   },
   headerContainer: {
     width: '100%',

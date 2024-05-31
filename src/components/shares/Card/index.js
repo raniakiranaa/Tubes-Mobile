@@ -4,6 +4,20 @@ import MyTheme from '../../../config/theme';
 import { shadow } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
+
+const { width: screenWidth } = Dimensions.get('window');
+const aspectRatio = 288 / 193; // original dimensions
+const containerWidth = screenWidth * 0.8; 
+const containerHeight = containerWidth / aspectRatio;
+
+const aspectRatioSearch = 330 / 182;
+const containerHeightSearch = containerWidth / aspectRatioSearch;
+
+const aspectRatioSmall = 175 / 182;
+const containerHeightSmall = containerWidth / aspectRatioSmall;
+
+const scalePadding = screenWidth * 0.03; 
+const scaleFontSize = screenWidth * 0.04; 
 const star = require('../../../../assets/icons/star.png');
 
 export const CarouselCard = ({ image,onPress }) => {
@@ -72,9 +86,14 @@ export const BigVendorCard = ({ image, title, subtitle, pax }) => {
     );
 }
 
-export const SmallCard = ({ image, title, rating, onPress }) => {
+export const SmallCard = ({ image, title, rating }) => {
+    const navigation = useNavigation();
+    const handleCardPress = () => {
+        navigation.navigate('VendorDetail');
+      };
+
     return (
-        <TouchableOpacity onPress={onPress} style={styles.smallContainer}>
+        <TouchableOpacity onPress={handleCardPress} style={styles.smallContainer}>
             <Image source={image} style={styles.bigSearchImage} />
             <Text style={[styles.titleSmall, MyTheme.typography.subtitle.sub_3]}
                 numberOfLines={1}
@@ -87,6 +106,25 @@ export const SmallCard = ({ image, title, rating, onPress }) => {
         </TouchableOpacity>
     );
 }
+
+// export const SmallCard = ({ image, title, rating }) => {
+//     const navigation = useNavigation();
+//     const handlePress = () => {
+//         navigation.navigate('VendorDetail');
+//     }
+//     return (
+//         <TouchableOpacity onPress={handlePress}>
+//             <View className='h-44 w-44 flex-column items-left border-lg bg-white mr-3' style={ MyTheme.shadows.shadow_1}>
+//                 <Image source={image} className='h-2/3 w-full rounded-t-lg' />
+//                 <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2 pb-0.5'>{title}</Text>
+//                 <View className='w-11 flex-row items-center border rounded-full py-0.5 px-1.5 mx-2' style={{borderColor: MyTheme.colors.neutral_300}}>
+//                     <Image className='h-3 w-3' source={star}/>
+//                     <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]} className='ml-0.5' >{rating}</Text>
+//                 </View>
+//             </View>
+//         </TouchableOpacity>
+//     );
+// }
 
 const styles = StyleSheet.create({
     carouselContainer: {
