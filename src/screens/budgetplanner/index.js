@@ -4,6 +4,8 @@ import MyTheme from '../../config/theme.js';
 import Pencil from '../../../assets/icons/Pencil/index.js';
 import { CashFlow } from '../../components/private/budget/CashFlow.js';
 import ModalTarget from '../../components/private/budget/ModalTarget.js';
+import { Provider as PaperProvider } from 'react-native-paper';
+import TableTry from '../../components/private/budget/TableTry.js';
 
 const BudgetPlanner = () => {
   const [spend, setSpend] = useState(0);
@@ -31,6 +33,7 @@ const BudgetPlanner = () => {
 
   return (
     <View style={styles.container}>
+      <View className="mt-12">
       <View style={{ alignItems: 'center' }}>
         <View style={styles.BudgetContainer}>
           <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}>Budget Remaining :</Text>
@@ -53,6 +56,9 @@ const BudgetPlanner = () => {
         </View>
       </View>
       <CashFlow />
+      {/* <PaperProvider>
+      <TableTry/>
+      </PaperProvider> */}
       <ModalTarget
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -61,6 +67,7 @@ const BudgetPlanner = () => {
         newTarget={newTarget}
         setNewTarget={setNewTarget}
       />
+      </View>
     </View>
   );
 };

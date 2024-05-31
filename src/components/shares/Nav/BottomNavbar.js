@@ -27,9 +27,11 @@ import TopNavbar from './TopNavbar.js';
 import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
-import MyPlan from '../../../screens/myplan/index.js';
 import HomeScreen from '../../../screens/home/index.js';
 import DetailPromo from '../../../screens/promo/detailPromo.js';
+import BudgetPlanner from '../../../screens/budgetplanner/index.js';
+import ToDoList from '../../../screens/myplan/index.js';
+import DoneList from '../../../screens/done/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
 import VendorDetailPage from '../../../screens/vendor/VendorDetail.js';
@@ -37,6 +39,7 @@ import ProductDetailPage from '../../../screens/vendor/ProductDetail.js';
 import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
 import DetailBlog from '../../../screens/blog/detailBlog.js';
+import GuestManager from '../../../screens/guestmanager/index.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -115,13 +118,13 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="MyPlan"
-            component={MyPlan}
+            component={MyPlanStack}
             options={{
               tabBarLabel: 'My Plan',
               header: () => (
                 <>
                   <CustomHeader />
-                  <CustomAppbar title="MyPlan" isBackButton={false} isAction={false} isTransparent={true}/>
+                  <CustomAppbar title="My Plan" isBackButton={false} isAction={false} isTransparent={true}/>
                 </>
               ),
             }}
@@ -272,6 +275,33 @@ export default function AppNavigator({ isAdmin }) {
             tabBarStyle: { display: 'none' },
           }}
         />
+        <Stack.Screen
+          name="BudgetPlanner"
+          component={BudgetPlanner}
+          options={{
+            header: () => (
+              <>
+                <CustomHeader />
+                <CustomAppbar title="Budget Planner" isBackButton={true} isAction={false} isTransparent={true}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+        <Stack.Screen
+          name="GuestManager"
+          component={GuestManager}
+          options={{
+            header: () => (
+              <>
+                <CustomHeader />
+                <CustomAppbar title="Guest Manager" isBackButton={true} isAction={false} isTransparent={true}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
+
         <Stack.Screen 
                     name="DetailPromo" 
                     component={DetailPromo} 
@@ -284,6 +314,21 @@ export default function AppNavigator({ isAdmin }) {
                 />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+function MyPlanStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ToDoList"
+        component={ToDoList}
+      />
+      <Stack.Screen
+        name="DoneList"
+        component={DoneList}
+      />
+    </Stack.Navigator>
   );
 }
 

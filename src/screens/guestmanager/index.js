@@ -19,39 +19,41 @@ const GuestManager = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{alignItems: 'center'}}>
-        <Text style={MyTheme.typography.subtitle.sub_2}>
-            {guestCount}
-            {guestCount > 1 ? ' Guests' : ' Guest'}
-        </Text>
-        <View style={{flexDirection: 'row', marginTop: 8, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 12}, MyTheme.typography.body.body_2]}>Deadline :</Text>
-            <View style={styles.outline}>
-                <Text style={[{color: MyTheme.colors.brown_2}, MyTheme.typography.body.body_2]}>{deadline}</Text>
-            </View>
-            <Pencil width={20} height={20}/>
+      <View className="mt-12">
+        <View style={{alignItems: 'center'}}>
+          <Text style={MyTheme.typography.subtitle.sub_2}>
+              {guestCount}
+              {guestCount > 1 ? ' Guests' : ' Guest'}
+          </Text>
+          <View style={{flexDirection: 'row', marginTop: 8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 12}, MyTheme.typography.body.body_2]}>Deadline :</Text>
+              <View style={styles.outline}>
+                  <Text style={[{color: MyTheme.colors.brown_2}, MyTheme.typography.body.body_2]}>{deadline}</Text>
+              </View>
+              <Pencil width={20} height={20}/>
+          </View>
         </View>
-      </View>
-      <View style={{ flexDirection: 'row', marginTop: 18, alignItems: 'center', justifyContent: 'center' }}>
-        <Yes width={15} height={15}/>
-        <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_2]}> : {yes} </Text>
-        <No width={15} height={15}/>
-        <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_2]}> : {no} </Text>
-        <None width={15} height={15}/>
-        <Text style={[{color: MyTheme.colors.neutral_2p}, MyTheme.typography.body.body_2]}> : {none} </Text>
-      </View>
-      <ScrollView style={styles.guest}>
-        {/* guest list */}
-        <Guest/>
-      </ScrollView>
-      <View style={{ marginBottom: 24 }}>
-        <CustomButton
-          title="Add Guest"
-          size="block-round"
-          buttonColor={MyTheme.colors.brown_2}
-          textColor={MyTheme.colors.white}
-          onPress={handlePress}
-        />
+        <View style={{ flexDirection: 'row', marginTop: 18, alignItems: 'center', justifyContent: 'center' }}>
+          <Yes width={15} height={15}/>
+          <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_2]}> : {yes} </Text>
+          <No width={15} height={15}/>
+          <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_2]}> : {no} </Text>
+          <None width={15} height={15}/>
+          <Text style={[{color: MyTheme.colors.neutral_2p}, MyTheme.typography.body.body_2]}> : {none} </Text>
+        </View>
+        <ScrollView style={styles.guest}>
+          {/* guest list */}
+          <Guest/>
+        </ScrollView>
+        <View style={{ marginBottom: 24 }}>
+          <CustomButton
+            title="Add Guest"
+            size="block-round"
+            buttonColor={MyTheme.colors.brown_2}
+            textColor={MyTheme.colors.white}
+            onPress={handlePress}
+          />
+        </View>
       </View>
     </View>
   );
