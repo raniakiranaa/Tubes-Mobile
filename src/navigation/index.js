@@ -49,20 +49,6 @@ export default function Navigation() {
                         header: () => <CustomHeader />
                     }}  
                 />
-                <Stack.Screen 
-                    name="MyPlan" 
-                    component={MyPlan} 
-                    options={{
-                        header: () => <CustomHeader />
-                    }}  
-                />
-                <Stack.Screen 
-                    name="done" 
-                    component={Done} 
-                    options={{
-                        header: () => <CustomHeader />
-                    }}  
-                />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -118,7 +118,12 @@ function TabNavigator({ isAdmin }) {
             component={MyPlan}
             options={{
               tabBarLabel: 'My Plan',
-              header: () => <CustomAppbar title="My Plan" isBackButton={false} isAction={false} />,
+              header: () => (
+                <>
+                  <CustomHeader />
+                  <CustomAppbar title="MyPlan" isBackButton={false} isAction={false} isTransparent={true}/>
+                </>
+              ),
             }}
           />
           <Tab.Screen

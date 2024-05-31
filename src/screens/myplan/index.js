@@ -39,55 +39,57 @@ const MyPlan = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.listContainer}>
-        <View>
+      <View className='mt-12'>
+        <View style={styles.listContainer}>
+          <View>
+            <CustomButton
+              title="To-Do"
+              textColor={MyTheme.colors.brown_2}
+              type="outline"
+              buttonColor={MyTheme.colors.cream_2}
+              outlineColor={MyTheme.colors.brown_2}
+              fontSize={scaleFontSize}
+              style={styles.button}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title="Done"
+              textColor={MyTheme.colors.neutral_3}
+              onPress={handleButtonPress}
+              type="outline"
+              buttonColor={MyTheme.colors.neutral_300}
+              outlineColor={MyTheme.colors.neutral_3}
+              fontSize={scaleFontSize}
+            />
+          </View>
+        </View>
+        <View style={styles.pad}>
+          {categories.map(category => (
+            <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>
+          ))}
+        </View>
+        <View style={styles.padTask}>
           <CustomButton
-            title="To-Do"
+            title="Add Category"
+            type="icon"
+            iconSource={PlusCircle}
             textColor={MyTheme.colors.brown_2}
-            type="outline"
+            onPress={handlePress}
+            size="block-square"
             buttonColor={MyTheme.colors.cream_2}
-            outlineColor={MyTheme.colors.brown_2}
-            fontSize={scaleFontSize}
-            style={styles.button}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            title="Done"
-            textColor={MyTheme.colors.neutral_3}
-            onPress={handleButtonPress}
-            type="outline"
-            buttonColor={MyTheme.colors.neutral_300}
-            outlineColor={MyTheme.colors.neutral_3}
             fontSize={scaleFontSize}
           />
         </View>
-      </View>
-      <View style={styles.pad}>
-        {categories.map(category => (
-          <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>
-        ))}
-      </View>
-      <View style={styles.padTask}>
-        <CustomButton
-          title="Add Category"
-          type="icon"
-          iconSource={PlusCircle}
-          textColor={MyTheme.colors.brown_2}
-          onPress={handlePress}
-          size="block-square"
-          buttonColor={MyTheme.colors.cream_2}
-          fontSize={scaleFontSize}
+
+        <ModalCategory
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onAddCategory={handleAddCategory}
+          newCategory={newCategory}
+          setNewCategory={setNewCategory}
         />
       </View>
-
-      <ModalCategory
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onAddCategory={handleAddCategory}
-        newCategory={newCategory}
-        setNewCategory={setNewCategory}
-      />
     </ScrollView>
   );
 };
