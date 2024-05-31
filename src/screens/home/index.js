@@ -11,7 +11,7 @@ const HomeScreen = ({ navigation }) => {
   const navi = useNavigation();
   const handlePress = () => {
     console.log("Button Pressed");
-    navi.navigate("Login");
+    navi.navigate("MyPlan");
   };
 
   return (
@@ -44,7 +44,17 @@ const HomeScreen = ({ navigation }) => {
             buttonColor={MyTheme.colors.brown_2}
             iconProps={{ width: 24, height: 24, fillColor: MyTheme.colors.white, strokeColor: MyTheme.colors.white }}
           />
-          <TextInputIcon 
+          <CustomButton 
+        title = "MyPlan"
+        textColor = {MyTheme.colors.pink_2}
+        onPress = {handlePress}
+        size = "large-square"
+        type = "outline"
+        buttonColor = { MyTheme.colors.white }
+        outlineColor = {MyTheme.colors.pink_2}
+        fontSize = {14}
+      />
+      <TextInputIcon 
             iconSource={UnameIcon}
             placeholder="Profile"
             type="password"
