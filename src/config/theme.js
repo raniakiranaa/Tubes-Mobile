@@ -8,6 +8,10 @@ const MyTheme = {
         pink_2: '#F19E93',
         pink_3: '#F8BBB2',
 
+        peach_1: '#DBAA7C',
+        peach_2: '#C55269',
+        peach_3: '#E190A0',
+
         cream_1: '#F0EDE4',
         cream_2: '#F5F2E8',
         cream_3: '#FAF8F4',
@@ -22,6 +26,7 @@ const MyTheme = {
         neutral_4: '#D7D7D7',
         neutral_300: '#E1E1E1',
         neutral_search: '#F2F4F5',
+        neutral_5: 'E3E5E5',
 
         black: '#000000',
         white: '#FFFFFF'

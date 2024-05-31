@@ -7,14 +7,14 @@ import MyTheme from '../../../config/theme';
 export const CustomButton = (props) => {
     const blockWidth = SCREEN_WIDTH * 0.87;
     const largeWidth = SCREEN_WIDTH * 0.4;
-    const smallWidth = SCREEN_WIDTH * 0.25;
+    const smallWidth = SCREEN_WIDTH * 0.3;
 
     const getButtonStyle = () => {
         switch (props.size) {
             case "block-round":
                 return { width: blockWidth, height: 44, borderRadius: 48 };
             case "block-square":
-                return { width: blockWidth, height: 44, borderRadius: 10 };
+                return { width: blockWidth, height: 64, borderRadius: 10 };
             case "large-round":
                 return { width: largeWidth, height: 44, borderRadius: 48 };
             case "large-square":
@@ -39,6 +39,7 @@ export const CustomButton = (props) => {
     return (
         <View style={styles.buttonContainer}>
             <Button
+                className="flex justify-center"
                 icon={props.iconSource ? () => <props.iconSource {...props.iconProps} /> : null}
                 mode={mode}
                 style={buttonStyles}
@@ -59,5 +60,6 @@ const styles = StyleSheet.create({
     textContainer: {
         alignItems: 'center',
         flexDirection: 'row',
+        textAlign: 'center'
     }
 });
