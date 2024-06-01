@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: MyTheme.colors.white,
         marginVertical: 10,
-        marginHorizontal: 10,
+        marginRight: 10,
     },
     ratingSmallContainer: {
         flexDirection: 'row',
