@@ -31,8 +31,14 @@ const GuestManager = () => {
     return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  const handlePress = () => {
-    console.log("Button Pressed");
+  const handleButtonPress = () => {
+    setModalGuestVisible(true);
+  };
+
+  const handleAddGuest = () => {
+    setGuestCount(guestCount + 1);
+    //
+    setModalGuestVisible(false);
   };
 
   return (
@@ -67,13 +73,14 @@ const GuestManager = () => {
           {/* guest list */}
           <Guest/>
         </ScrollView>
+      </View>
         <View style={styles.modalButton}>
           <CustomButton
             title="Add Guest"
             size="block-round"
             buttonColor={MyTheme.colors.brown_2}
             textColor={MyTheme.colors.white}
-            onPress={handlePress}
+            onPress={handleButtonPress}
           />
         </View>
         <ModalDate
@@ -82,7 +89,11 @@ const GuestManager = () => {
           oldTarget={deadline.toISOString()}
           onAddTarget={handleAddDate}
         />
-      </View>
+        <ModalGuest
+          visible={modalGuestVisible}
+          onClose={() => setModalGuestVisible(false)}
+          onAddGuest={handleAddGuest}
+        />
     </View>
   );
 };
@@ -95,12 +106,11 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 0,
     left: 0,
     right: 0,
     padding: 20,
     backgroundColor: 'white',
-    alignItems: 'center',
   },
   outline: {
     borderWidth: 0.5,
@@ -111,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 218, 194, 0.25)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 2
+    marginRight: 4
   },
   guest: {
     marginTop: 42,
