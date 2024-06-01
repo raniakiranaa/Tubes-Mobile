@@ -101,7 +101,7 @@ export const SmallCard = ({ image, title, rating }) => {
             >{title}</Text>
             <View style={styles.ratingSmallContainer}>
                 <Image style={styles.star} source={star}/>
-                <Text style={[styles.ratingText, MyTheme.typography.subtitle.body_3,]}>{rating}</Text>
+                <Text style={[styles.ratingText, MyTheme.typography.body.body_3,]}>{rating}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -148,7 +148,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: MyTheme.colors.white,
         paddingBottom: 5,
-        marginRight: 20,
+        marginVertical: 10,
+        marginHorizontal: 10,
     },
     bigHomeImage: {
         width: '100%',
@@ -247,7 +248,8 @@ const styles = StyleSheet.create({
         ...MyTheme.shadows.shadow_1,
         borderRadius: 10,
         backgroundColor: MyTheme.colors.white,
-        marginRight: 20,
+        marginVertical: 10,
+        marginHorizontal: 10,
     },
     ratingSmallContainer: {
         flexDirection: 'row',
