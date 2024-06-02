@@ -25,7 +25,7 @@ export const Budget = (props) => {
                 <TouchableOpacity style={{ marginRight: 8, marginLeft: 12 }}>
                     <Pencil width={20} height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={props.onDelete}>
                     <Trash width={20} height={20} strokeClassName='#E04B4B' />
                 </TouchableOpacity>
             </View>

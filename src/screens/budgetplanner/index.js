@@ -44,6 +44,10 @@ const BudgetPlanner = () => {
     setModalBudgetVisible(false);
   };
 
+  const handleDeleteCategory = (categoryName) => {
+    setCategoryList(prevCategoryList => prevCategoryList.filter(category => category.name !== categoryName));
+  };
+
   return (
     <View style={styles.container}>
       <View className="mt-12">
@@ -78,6 +82,7 @@ const BudgetPlanner = () => {
               key = {index}
               name = {category.name}
               targetCat = {formatCurrency(category.targetCat)}
+              onDelete={() => handleDeleteCategory(category.name)}
             />
           ))}
         </ScrollView>
