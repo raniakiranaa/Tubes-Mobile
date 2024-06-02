@@ -15,7 +15,7 @@ const GuestManager = () => {
   const [no, setNo] = useState(0)
   const [none, setNone] = useState(0)
 
-  const [deadline, setDeadline] = useState(new Date('2024-09-13'));
+  const [deadline, setDeadline] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalGuestVisible, setModalGuestVisible] = useState(false);
 
@@ -30,8 +30,8 @@ const GuestManager = () => {
   };
 
   const formatDate = (date) => {
-    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-  };
+    return date ? date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No deadline set';
+  }
 
   const handleButtonPress = () => {
     setModalGuestVisible(true);
@@ -41,13 +41,39 @@ const GuestManager = () => {
     const newGuest = { name, role, status: 'None' };
     setGuestList([...guestList, newGuest]);
     setGuestCount(guestCount + 1);
+    setNone(none + 1);
     setModalGuestVisible(false);
   };
 
-  const handleRemoveGuest = (name) => {
+  const handleRemoveGuest = (name, status) => {
     const updatedGuestList = guestList.filter(guest => guest.name !== name);
     setGuestList(updatedGuestList);
     setGuestCount(updatedGuestList.length);
+    updateStatusCount(status, 'decrease');
+  };
+
+  const updateStatusCount = (status, operation) => {
+    if (operation === 'increase') {
+      if (status === 'Yes') setYes(yes + 1);
+      if (status === 'No') setNo(no + 1);
+      if (status === 'None') setNone(none + 1);
+    } else if (operation === 'decrease') {
+      if (status === 'Yes') setYes(yes - 1);
+      if (status === 'No') setNo(no - 1);
+      if (status === 'None') setNone(none - 1);
+    }
+  };
+
+  const handleChangeStatus = (name, newStatus) => {
+    const updatedGuestList = guestList.map(guest => {
+      if (guest.name === name) {
+        updateStatusCount(guest.status, 'decrease');
+        updateStatusCount(newStatus, 'increase');
+        return { ...guest, status: newStatus };
+      }
+      return guest;
+    });
+    setGuestList(updatedGuestList);
   };
 
   return (
@@ -61,7 +87,7 @@ const GuestManager = () => {
           <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 12 }, MyTheme.typography.body.body_1]}>Deadline :</Text>
             <View style={styles.outline}>
-              <Text style={[{ color: MyTheme.colors.brown_2 }, MyTheme.typography.body.body_1]}>
+            <Text style={[{ color: deadline ? MyTheme.colors.brown_2 : MyTheme.colors.neutral_2p }, MyTheme.typography.body.body_1]}>
                 {formatDate(deadline)}
               </Text>
             </View>
@@ -75,12 +101,19 @@ const GuestManager = () => {
           <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 120 }, MyTheme.typography.body.body_1]}> : {yes} </Text>
           <No width={20} height={20}/>
           <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 120 }, MyTheme.typography.body.body_1]}> : {no} </Text>
-          <None width={20} height={20}/>
+          <None width={21} height={21}/>
           <Text style={[{ color: MyTheme.colors.neutral_2p }, MyTheme.typography.body.body_1]}> : {none} </Text>
         </View>
-        <ScrollView style={styles.guest}>
+        <ScrollView style={styles.guest} contentContainerStyle={{ paddingBottom: 120 }}>
           {guestList.map((guest, index) => (
-            <Guest key={index} name={guest.name} role={guest.role} onRemove={() => handleRemoveGuest(guest.name)} />
+            <Guest 
+              key={index} 
+              name={guest.name} 
+              role={guest.role} 
+              status={guest.status}
+              onRemove={() => handleRemoveGuest(guest.name, guest.status)}
+              onChangeStatus={(newStatus) => handleChangeStatus(guest.name, newStatus)}
+            />
           ))}
         </ScrollView>
       </View>
@@ -96,7 +129,7 @@ const GuestManager = () => {
       <ModalDate
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        oldTarget={deadline.toISOString()}
+        oldTarget={deadline ? deadline.toISOString() : null}
         onAddTarget={handleAddDate}
       />
       <ModalGuest
@@ -138,9 +171,9 @@ const styles = StyleSheet.create({
   guest: {
     marginTop: 42,
     marginHorizontal: 8,
-    marginBottom: 10
+    marginBottom: 42,
   }
-  
+
 });
 
 export default GuestManager;

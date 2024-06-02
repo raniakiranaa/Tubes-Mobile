@@ -10,8 +10,6 @@ const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setNewGuest }) => 
 
     useEffect(() => {
         if (!visible) {
-            setSelectedRole('Bride/Groom Side');
-            setRoleSelected(false);
             setDropdownVisible(false);
         }
     }, [visible]);
@@ -27,10 +25,12 @@ const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setNewGuest }) => 
     };
 
     const handleAddGuest = () => {
-        onAddGuest(newGuest, selectedRole);
-        setNewGuest('');
-        setSelectedRole('Bride/Groom Side');
-        setRoleSelected(false);
+        if (newGuest && selectedRole) {
+            onAddGuest(newGuest, selectedRole);
+            setNewGuest('');
+            setSelectedRole('Bride/Groom Side');
+            setRoleSelected(false);
+        }
     };
 
     return (
