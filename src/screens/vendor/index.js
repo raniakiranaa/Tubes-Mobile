@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
 import SearchIcon from '../../../assets/icons/Search.svg';
 import VendorCarousel from './VendorCarousel';
 import { useNavigation } from '@react-navigation/native';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -60,13 +62,28 @@ const data = [
   }
 ];
 
+const getVendorData = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'vendor'));
+    querySnapshot.forEach(doc => {
+      console.log(doc.id, ' => ', doc.data());
+    });
+  } catch (error) {
+    console.error('Error getting documents: ', error);
+  }
+};
+
 
 const VendorPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
-
   const navigation = useNavigation();
+
+  useEffect(() => {
+    getVendorData();
+  }, []);
+
   const searchVendor = () => {
     navigation.navigate('VendorSearch');
   };
