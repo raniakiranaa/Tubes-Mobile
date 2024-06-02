@@ -6,7 +6,11 @@ import Pencil from '../../../../assets/icons/Pencil/index.js'
 
 export const Budget = (props) => {
     const [totalTransaction, setTotalTransaction] = useState(0)
-    const [actualSpend, setActualSpend] = useState('Rp400.000.000')
+    const [actualSpend, setActualSpend] = useState(0)
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+    };
  
     return (
         <View style={styles.container}>
@@ -19,10 +23,10 @@ export const Budget = (props) => {
                 </Text>
             </View>
             <View style={styles.spend}>
-                <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.brown_2, marginTop: 21, textAlign: 'center' }]}>{actualSpend}</Text>
+                <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.brown_2, marginTop: 21, textAlign: 'center' }]}>{formatCurrency(actualSpend)}</Text>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 19 }}>
-                <TouchableOpacity style={{ marginRight: 8, marginLeft: 12 }}>
+                <TouchableOpacity style={{ marginRight: 8, marginLeft: 12 }} onPress={props.onEdit}>
                     <Pencil width={20} height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={props.onDelete}>

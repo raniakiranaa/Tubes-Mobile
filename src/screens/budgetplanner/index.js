@@ -4,6 +4,7 @@ import MyTheme from '../../config/theme.js';
 import Pencil from '../../../assets/icons/Pencil/index.js';
 import ModalTarget from '../../components/private/budget/ModalTarget.js';
 import ModalBudget from '../../components/private/budget/ModalBudget.js';
+import ModalEdit from '../../components/private/budget/ModalEdit.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import { Budget } from '../../components/private/budget/index.js'
 
@@ -15,6 +16,8 @@ const BudgetPlanner = () => {
 
   const [categoryList, setCategoryList] = useState([]);
   const [newCategory, setNewCategory] = useState('')
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [newCategoryTarget, setNewCategoryTarget] = useState('');
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
@@ -22,7 +25,9 @@ const BudgetPlanner = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalBudgetVisible, setModalBudgetVisible] = useState(false);
+  const [modalEditVisible, setModalEditVisible] = useState(false);
 
+  // target budget
   const handlePress = () => {
     setModalVisible(true);
   };
@@ -35,6 +40,7 @@ const BudgetPlanner = () => {
     setModalVisible(false);
   };
 
+  // add category button
   const handleButtonPress = () => {
     setModalBudgetVisible(true);
   };
@@ -46,6 +52,27 @@ const BudgetPlanner = () => {
 
   const handleDeleteCategory = (categoryName) => {
     setCategoryList(prevCategoryList => prevCategoryList.filter(category => category.name !== categoryName));
+  };
+
+  // pencil edit button
+  const handleEditPress = (category) => {
+    setEditingCategory(category);
+    setNewCategoryTarget(category.targetCat.toString());
+    setModalEditVisible(true);
+  };
+
+  const handleEditCategory = () => {
+    const parsedTarget = parseInt(newCategoryTarget.replace(/,/g, ''), 10);
+    if (!isNaN(parsedTarget)) {
+      setCategoryList(prevCategoryList =>
+        prevCategoryList.map(category =>
+          category.name === editingCategory.name ? { ...category, targetCat: parsedTarget } : category
+        )
+      );
+    }
+    setModalEditVisible(false);
+    setEditingCategory(null);
+    setNewCategoryTarget('');
   };
 
   return (
@@ -83,6 +110,7 @@ const BudgetPlanner = () => {
               name = {category.name}
               targetCat = {formatCurrency(category.targetCat)}
               onDelete={() => handleDeleteCategory(category.name)}
+              onEdit={() => handleEditPress(category)}
             />
           ))}
         </ScrollView>
@@ -111,7 +139,15 @@ const BudgetPlanner = () => {
           newCategory={newCategory}
           setNewCategory={setNewCategory}
           categoryList={categoryList}
-      />
+        />
+        <ModalEdit
+          visible={modalEditVisible}
+          onClose={() => setModalEditVisible(false)}
+          oldCategory={editingCategory}
+          onEditCategory={handleEditCategory}
+          newCategoryTarget={newCategoryTarget}
+          setNewCategoryTarget={setNewCategoryTarget}
+        />
     </View>
   );
 };
