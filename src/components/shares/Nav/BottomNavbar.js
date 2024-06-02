@@ -37,6 +37,7 @@ import ProductDetailPage from '../../../screens/vendor/ProductDetail.js';
 import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
 import DetailBlog from '../../../screens/blog/detailBlog.js';
+import Blog from '../../../screens/blog/index.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -275,13 +276,36 @@ export default function AppNavigator({ isAdmin }) {
         <Stack.Screen 
                     name="DetailPromo" 
                     component={DetailPromo} 
-                    options={{ header: () => null }} 
+                    options={{ header: () => (
+                      <>
+                        <CustomAppbar title="" isBackButton={true} isAction={false} isTransparent={false}/>
+                      </>
+                    ),
+                    tabBarStyle: { display: 'none' }, }} 
                 />
         <Stack.Screen 
                     name="DetailBlog" 
                     component={DetailBlog} 
-                    options={{ header: () => null }} 
+                    options={{ header: () => (
+                      <>
+                        <CustomAppbar title="Blog" isBackButton={true} isAction={false} isTransparent={false}/>
+                      </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                  }} 
                 />
+        <Stack.Screen
+          name="Blog"
+          component={Blog}
+          options={{
+            header: () => (
+              <>
+                <CustomAppbar title="Blog" isBackButton={true} isAction={false} isTransparent={false}/>
+              </>
+            ),
+            tabBarStyle: { display: 'none' },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

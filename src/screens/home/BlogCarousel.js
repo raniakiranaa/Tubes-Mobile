@@ -9,7 +9,7 @@ const data = [
   { id: 3, img: require('../../../assets/images/blog_3.png'),  title: "Top 3 Honeymoon Destination", subtitle:"Explore our top 3 honeymoon picks!", foot:"14 Feb 2024" },
 ];
 
-const BlogCarousel = () => {
+const BlogCarousel = ({ orientation = 'horizontal' }) => {
   const navigation = useNavigation();
 
   const handleCardPress = (id) => {
@@ -31,7 +31,7 @@ const BlogCarousel = () => {
           />
         )}
         keyExtractor={(item) => item.id.toString()}
-        horizontal
+        horizontal={orientation === 'horizontal'}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.contentContainer}
       />
