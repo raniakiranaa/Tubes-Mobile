@@ -15,6 +15,8 @@ import OrderConfirmationPage from '../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../screens/vendor/SavedVendor.js';
 import VendorSearchPage from '../screens/vendor/VendorSearch.js';
 import DetailBlog from '../screens/blog/detailBlog.js';
+import BudgetPlanner from '../screens/budgetplanner/index.js';
+import GuestManager from '../screens/guestmanager/index.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -140,6 +142,32 @@ export default function Navigation({ isAdmin }) {
                     options={{
                         header: () => <CustomHeader />
                     }}  
+                />
+                <Stack.Screen
+                    name="BudgetPlanner"
+                    component={BudgetPlanner}
+                    options={{
+                        header: () => (
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Budget Planner" isBackButton={true} isAction={false} isTransparent={true}/>
+                        </>
+                        ),
+                        tabBarStyle: { display: 'none' },
+                    }}
+                    />
+                <Stack.Screen
+                    name="GuestManager"
+                    component={GuestManager}
+                    options={{
+                        header: () => (
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Guest Manager" isBackButton={true} isAction={false} isTransparent={true}/>
+                        </>
+                        ),
+                        tabBarStyle: { display: 'none' },
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
