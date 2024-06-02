@@ -44,10 +44,10 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomNavbar />
+      {/* <BottomNavbar /> */}
     {/* <VendorScreen /> */}
     {/* <Login /> */}
-      {/* <Navigation /> */}
+      <Navigation />
     {/* <OrderDetail />
     <RatingReview /> */}
     </GestureHandlerRootView>

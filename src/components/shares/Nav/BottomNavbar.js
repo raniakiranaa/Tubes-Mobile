@@ -38,13 +38,14 @@ import VendorDetailPage from '../../../screens/vendor/VendorDetail.js';
 import ProductDetailPage from '../../../screens/vendor/ProductDetail.js';
 import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
+import VendorSearchPage from '../../../screens/vendor/VendorSearch.js';
 import DetailBlog from '../../../screens/blog/detailBlog.js';
 import GuestManager from '../../../screens/guestmanager/index.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function TabNavigator({ isAdmin }) {
+export default function TabNavigator({ isAdmin }) {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -164,7 +165,7 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="Orders"
-            component={OrdersScreen}
+            component={TopNavbar}
             options={{
               tabBarLabel: 'Orders',
               header: () => <CustomAppbar title="Orders" isBackButton={false} isAction={false} />,
