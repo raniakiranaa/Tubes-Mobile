@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
-import { SmallCard } from '../../components/shares/Card';
 import SearchIcon from '../../../assets/icons/Search.svg';
 import VendorCarousel from './VendorCarousel';
+import { useNavigation } from '@react-navigation/native';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -60,11 +62,31 @@ const data = [
   }
 ];
 
+const getVendorData = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'vendor'));
+    querySnapshot.forEach(doc => {
+      console.log(doc.id, ' => ', doc.data());
+    });
+  } catch (error) {
+    console.error('Error getting documents: ', error);
+  }
+};
+
 
 const VendorPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    getVendorData();
+  }, []);
+
+  const searchVendor = () => {
+    navigation.navigate('VendorSearch');
+  };
 
   const locationData = [
     { label: 'Surabaya', value: 'surabaya' },
@@ -139,7 +161,7 @@ const VendorPage = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.searchButton} >
+        <TouchableOpacity style={styles.searchButton} onPress={searchVendor}>
           <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>Search Vendor</Text>
         </TouchableOpacity>
       </View>
@@ -212,13 +234,13 @@ const VendorPage = () => {
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
       /> */}
       <View style={styles.topContainer}>
-            <View style={styles.topTitleContainer}>
-              <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
-            </View>
-            <View style={styles.catContainer}>
-              <VendorCarousel />
-            </View>
-          </View>
+        <View style={styles.topTitleContainer}>
+          <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
+        </View>
+        <View style={styles.catContainer}>
+          <VendorCarousel />
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -229,7 +251,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainer: {
-    paddingBottom: Platform.OS === 'ios' ? 104 : 72,
+    paddingBottom: Platform.OS === 'ios' ? 100 : 68,
   },
   inputWrapper: {
     flexDirection: 'row',

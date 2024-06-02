@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme';
-import CustomAppbar from '../../components/shares/Appbar/CustomAppbar';
 
 const OrderDetail = ({ navigation }) => {
   const order = {

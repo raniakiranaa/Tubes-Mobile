@@ -61,7 +61,7 @@ const VendorCarousel = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={[MyTheme.typography.subtitle.sub_3, styles.catTitle]}>
         Venue
       </Text>
@@ -92,16 +92,13 @@ const VendorCarousel = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 10,
-  },
   cardsContainer: {
     paddingBottom: 20,
   },
   catTitle: {
     color: MyTheme.colors.brown_2,
     marginVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   }
 });
 
