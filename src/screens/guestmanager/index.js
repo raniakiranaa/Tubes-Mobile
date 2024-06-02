@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet,  ScrollView, Touchable, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import Pencil from '../../../assets/icons/Pencil/index.js'
@@ -9,6 +9,7 @@ import ModalDate from '../../components/private/guest/ModalDate.js';
 import ModalGuest from '../../components/private/guest/ModalGuest.js'
 
 const GuestManager = () => {
+  const [guestList, setGuestList] = useState([]);
   const [guestCount, setGuestCount] = useState(0);
   const [yes, setYes] = useState(0)
   const [no, setNo] = useState(0)
@@ -16,8 +17,9 @@ const GuestManager = () => {
 
   const [deadline, setDeadline] = useState(new Date('2024-09-13'));
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalGuestVisible, setModalGuestVisible] = useState(false);
 
-  const [modalGuestVisible, setModalGuestVisible] = useState(false)
+  const [newGuest, setNewGuest] = useState('');
 
   const handleModalPress = () => {
     setModalVisible(true);
@@ -35,65 +37,75 @@ const GuestManager = () => {
     setModalGuestVisible(true);
   };
 
-  const handleAddGuest = () => {
+  const handleAddGuest = (name, role) => {
+    const newGuest = { name, role, status: 'None' };
+    setGuestList([...guestList, newGuest]);
     setGuestCount(guestCount + 1);
-    //
     setModalGuestVisible(false);
+  };
+
+  const handleRemoveGuest = (name) => {
+    const updatedGuestList = guestList.filter(guest => guest.name !== name);
+    setGuestList(updatedGuestList);
+    setGuestCount(updatedGuestList.length);
   };
 
   return (
     <View style={styles.container}>
       <View className="mt-12">
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Text style={MyTheme.typography.subtitle.sub_2}>
-              {guestCount}
-              {guestCount > 1 ? ' Guests' : ' Guest'}
+            {guestCount}
+            {guestCount > 1 ? ' Guests' : ' Guest'}
           </Text>
-          <View style={{flexDirection: 'row', marginTop: 8, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 12}, MyTheme.typography.body.body_1]}>Deadline :</Text>
-              <View style={styles.outline}>
-                  <Text style={[{ color: MyTheme.colors.brown_2 }, MyTheme.typography.body.body_1]}>
-                    {formatDate(deadline)}
-                  </Text>
-              </View>
-              <TouchableOpacity onPress={handleModalPress}>
-                  <Pencil width={20} height={20} />
-                </TouchableOpacity>
+          <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 12 }, MyTheme.typography.body.body_1]}>Deadline :</Text>
+            <View style={styles.outline}>
+              <Text style={[{ color: MyTheme.colors.brown_2 }, MyTheme.typography.body.body_1]}>
+                {formatDate(deadline)}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={handleModalPress}>
+              <Pencil width={20} height={20} />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 18, alignItems: 'center', justifyContent: 'center' }}>
           <Yes width={20} height={20}/>
-          <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_1]}> : {yes} </Text>
+          <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 120 }, MyTheme.typography.body.body_1]}> : {yes} </Text>
           <No width={20} height={20}/>
-          <Text style={[{color: MyTheme.colors.neutral_2p, marginRight: 120}, MyTheme.typography.body.body_1]}> : {no} </Text>
+          <Text style={[{ color: MyTheme.colors.neutral_2p, marginRight: 120 }, MyTheme.typography.body.body_1]}> : {no} </Text>
           <None width={20} height={20}/>
-          <Text style={[{color: MyTheme.colors.neutral_2p}, MyTheme.typography.body.body_1]}> : {none} </Text>
+          <Text style={[{ color: MyTheme.colors.neutral_2p }, MyTheme.typography.body.body_1]}> : {none} </Text>
         </View>
         <ScrollView style={styles.guest}>
-          {/* guest list */}
-          <Guest/>
+          {guestList.map((guest, index) => (
+            <Guest key={index} name={guest.name} role={guest.role} onRemove={() => handleRemoveGuest(guest.name)} />
+          ))}
         </ScrollView>
       </View>
-        <View style={styles.modalButton}>
-          <CustomButton
-            title="Add Guest"
-            size="block-round"
-            buttonColor={MyTheme.colors.brown_2}
-            textColor={MyTheme.colors.white}
-            onPress={handleButtonPress}
-          />
-        </View>
-        <ModalDate
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          oldTarget={deadline.toISOString()}
-          onAddTarget={handleAddDate}
+      <View style={styles.modalButton}>
+        <CustomButton
+          title="Add Guest"
+          size="block-round"
+          buttonColor={MyTheme.colors.brown_2}
+          textColor={MyTheme.colors.white}
+          onPress={handleButtonPress}
         />
-        <ModalGuest
-          visible={modalGuestVisible}
-          onClose={() => setModalGuestVisible(false)}
-          onAddGuest={handleAddGuest}
-        />
+      </View>
+      <ModalDate
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        oldTarget={deadline.toISOString()}
+        onAddTarget={handleAddDate}
+      />
+      <ModalGuest
+        visible={modalGuestVisible}
+        onClose={() => setModalGuestVisible(false)}
+        onAddGuest={handleAddGuest}
+        newGuest={newGuest}
+        setNewGuest={setNewGuest}
+      />
     </View>
   );
 };
@@ -128,7 +140,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginBottom: 10
   }
-
+  
 });
 
 export default GuestManager;

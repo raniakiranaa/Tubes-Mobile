@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'react-native';
 import MyTheme from '../../../config/theme.js';
 import { Cross } from '../../../../assets/icons/budget/index.js';
 
-const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setnewGuest }) => {
+const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setNewGuest }) => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedRole, setSelectedRole] = useState('Bride/Groom Side');
-    const [roleSelected, setRoleSelected] = useState(false); 
+    const [roleSelected, setRoleSelected] = useState(false);
+
+    useEffect(() => {
+        if (!visible) {
+            setSelectedRole('Bride/Groom Side');
+            setRoleSelected(false);
+            setDropdownVisible(false);
+        }
+    }, [visible]);
 
     const handleDropdownToggle = () => {
         setDropdownVisible(!dropdownVisible);
@@ -14,8 +22,15 @@ const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setnewGuest }) => 
 
     const handleRoleSelect = (role) => {
         setSelectedRole(role);
-        setRoleSelected(true); 
+        setRoleSelected(true);
         setDropdownVisible(false);
+    };
+
+    const handleAddGuest = () => {
+        onAddGuest(newGuest, selectedRole);
+        setNewGuest('');
+        setSelectedRole('Bride/Groom Side');
+        setRoleSelected(false);
     };
 
     return (
@@ -59,10 +74,10 @@ const ModalGuest = ({ visible, onClose, onAddGuest, newGuest, setnewGuest }) => 
                             placeholder="Guest Name"
                             style={[styles.textInput, MyTheme.typography.body.body_1]}
                             value={newGuest}
-                            onChangeText={setnewGuest}
+                            onChangeText={setNewGuest}
                         />
                         <View style={styles.modalButtons}>
-                            <TouchableOpacity style={styles.modalButton} onPress={onAddGuest}>
+                            <TouchableOpacity style={styles.modalButton} onPress={handleAddGuest}>
                                 <Text style={[{ color: MyTheme.colors.white }, MyTheme.typography.subtitle.sub_3]}>Add</Text>
                             </TouchableOpacity>
                         </View>
@@ -105,18 +120,18 @@ const styles = StyleSheet.create({
         borderColor: MyTheme.colors.neutral_3,
         borderRadius: 5,
         padding: 10,
-        zIndex: 10, 
+        zIndex: 10,
     },
     dropdownMenu: {
         position: 'absolute',
-        top: 40, 
+        top: 40,
         left: 0,
         width: '100%',
         borderWidth: 1,
         borderColor: MyTheme.colors.neutral_3,
         borderRadius: 5,
         backgroundColor: 'white',
-        zIndex: 20, 
+        zIndex: 20,
     },
     dropdownItem: {
         padding: 10,
