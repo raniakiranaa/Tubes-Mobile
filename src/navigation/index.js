@@ -5,7 +5,7 @@ import CustomAppbar from '../components/shares/Appbar/CustomAppbar.js';
 import { CustomHeader } from '../components/shares/Nav/CustomHeader.js';
 import Login from '../screens/Login';
 import Register from '../screens/register';
-import Done from '../screens/done'
+import Done from '../screens/done';
 import OrderDetail from '../screens/order/OrderDetail.js';
 import RatingReview from '../screens/order/RatingReview.js';
 import DetailPromo from '../screens/promo/detailPromo.js';
@@ -15,132 +15,159 @@ import OrderConfirmationPage from '../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../screens/vendor/SavedVendor.js';
 import VendorSearchPage from '../screens/vendor/VendorSearch.js';
 import DetailBlog from '../screens/blog/detailBlog.js';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { firebase_auth } from '../firebase/index.js';
 
 const Stack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator();
 
-export default function Navigation({ isAdmin }) {
+function AuthLayout({ isAdmin }) {
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: 'white' } }}>
-                {/* <Stack.Screen 
-                    name="Login" 
-                    component={Login} 
-                    options={{ header: () => null }} 
-                /> */}
-                {/* <Stack.Screen 
-                    name="Register" 
-                    component={Register} 
-                    options={{ header: () => null }} 
-                /> */}
-                <Stack.Screen
-                    name="Main"
-                    options={{ headerShown: false }}
-                    >
-                    {props => <TabNavigator {...props} isAdmin={isAdmin} />}
-                </Stack.Screen>
-                <Stack.Screen
+        <AuthStack.Navigator>
+            <AuthStack.Screen
+                name="Main"
+                options={{ headerShown: false }}
+            >
+                {props => <TabNavigator {...props} isAdmin={isAdmin} />}
+            </AuthStack.Screen>
+            <AuthStack.Screen
                 name="OrderDetail"
                 component={OrderDetail}
                 options={{
-                    // Navigate back to the previous screen by pressing the back button
                     header: () => (
-                    <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
+                        <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="RatingReview"
                 component={RatingReview}
                 options={{
                     header: () => (
-                    <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
+                        <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="VendorDetail"
                 component={VendorDetailPage}
                 options={{
                     header: () => (
-                    <>
-                        <CustomHeader />
-                        <CustomAppbar title="Vendor Detail" isBackButton={true} isAction={false} isTransparent={true}/>
-                    </>
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Vendor Detail" isBackButton={true} isAction={false} isTransparent={true} />
+                        </>
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="VendorSearch"
                 component={VendorSearchPage}
                 options={{
                     header: () => (
-                    <>
-                        <CustomHeader />
-                        <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={'Save'} isTransparent={true}/>
-                    </>
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Vendor" isBackButton={true} isAction={true} ActionIcon={'Save'} isTransparent={true} />
+                        </>
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="ProductDetail"
                 component={ProductDetailPage}
                 options={{
                     header: () => (
-                    <>
-                        <CustomHeader />
-                        <CustomAppbar title="Product Detail" isBackButton={true} isAction={false} isTransparent={true}/>
-                    </>
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Product Detail" isBackButton={true} isAction={false} isTransparent={true} />
+                        </>
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="OrderConfirmation"
                 component={OrderConfirmationPage}
                 options={{
                     header: () => (
-                    <>
-                        <CustomHeader />
-                        <CustomAppbar title="Order Confirmation" isBackButton={true} isAction={false} isTransparent={true}/>
-                    </>
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Order Confirmation" isBackButton={true} isAction={false} isTransparent={true} />
+                        </>
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen
+            />
+            <AuthStack.Screen
                 name="SavedVendor"
                 component={SavedVendorPage}
                 options={{
                     header: () => (
-                    <>
-                        <CustomHeader />
-                        <CustomAppbar title="Saved Vendor" isBackButton={true} isAction={false} isTransparent={true}/>
-                    </>
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Saved Vendor" isBackButton={true} isAction={false} isTransparent={true} />
+                        </>
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-                />
-                <Stack.Screen 
-                    name="DetailPromo" 
-                    component={DetailPromo} 
-                    options={{ header: () => null }} 
-                />
-                <Stack.Screen 
-                    name="DetailBlog" 
-                    component={DetailBlog} 
-                    options={{ header: () => null }} 
-                />
-                <Stack.Screen 
-                    name="done" 
-                    component={Done} 
-                    options={{
-                        header: () => <CustomHeader />
-                    }}  
-                />
+            />
+            <AuthStack.Screen
+                name="DetailPromo"
+                component={DetailPromo}
+                options={{ header: () => null }}
+            />
+            <AuthStack.Screen
+                name="DetailBlog"
+                component={DetailBlog}
+                options={{ header: () => null }}
+            />
+            <AuthStack.Screen
+                name="Done"
+                component={Done}
+                options={{
+                    header: () => <CustomHeader />
+                }}
+            />
+        </AuthStack.Navigator>
+    );
+}
+
+export default function Navigation({ isAdmin }) {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        onAuthStateChanged(firebase_auth, (user) => {
+            console.log('user', user);
+            setUser(user);
+        });
+    }, []);
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ contentStyle: { backgroundColor: 'white' } }}>
+                {user ? (
+                    <Stack.Screen name="Auth" options={{ headerShown: false }}>
+                        {props => <AuthLayout {...props} isAdmin={isAdmin} />}
+                    </Stack.Screen>
+                ) : (
+                    <>
+                        <Stack.Screen
+                            name="Login"
+                            component={Login}
+                            options={{ header: () => null }}
+                        />
+                        <Stack.Screen
+                            name="Register"
+                            component={Register}
+                            options={{ header: () => null }}
+                        />
+                    </>
+                )}
             </Stack.Navigator>
         </NavigationContainer>
     );
