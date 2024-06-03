@@ -1,87 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
-import { BigHomeCard, CarouselCard } from '../../components/shares/Card';
 import { useNavigation } from '@react-navigation/native';
 import MyTheme from '../../config/theme';
 import { SmallCard } from '../../components/shares/Card';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
-const data = [
-    {
-      id: '1',
-      image: 'https://via.placeholder.com/150',
-      title: 'JW Marriott Surabaya',
-      type: 'Venue',
-      rating: '4.8',
-    },
-    {
-      id: '2',
-      image: 'https://via.placeholder.com/150',
-      title: 'Vasa Hotel Surabaya',
-      type: 'Venue',
-      rating: '4.5',
-    },
-    {
-      id: '3',
-      image: 'https://via.placeholder.com/150',
-      title: 'Novotel Surabaya',
-      type: 'Venue',
-      rating: '4.3',
-    },
-    {
-      id: '4',
-      image: 'https://via.placeholder.com/150',
-      title: 'The Alana Surabaya',
-      type: 'Venue',
-      rating: '4.2',
-    },
-    {
-      id: '5',
-      image: 'https://via.placeholder.com/150',
-      title: 'Sonokembang',
-      type: 'Catering',
-      rating: '5.0',
-    },
-    {
-      id: '6',
-      image: 'https://via.placeholder.com/150',
-      title: 'Jatiroso',
-      type: 'Catering',
-      rating: '4.6',
-    },
-    {
-      id: '7',
-      image: 'https://via.placeholder.com/150',
-      title: 'Katering Surya',
-      type: 'Catering',
-      rating: '4.5',
+const getVendorData = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'vendor'));
+    
+    if (querySnapshot.empty) {
+      console.log('No matching documents.');
+      return [];
     }
-  ];
+
+    const vendorData = [];
+
+    querySnapshot.forEach(doc => {
+      vendorData.push({ id: doc.id, ...doc.data() }); // Ensure each item has a unique id
+    });
+
+    return vendorData;
+
+  } catch (error) {
+    console.error('Error getting documents: ', error);
+  }
+};
 
 const VendorCarousel = () => {
   const navigation = useNavigation();
+  const [vendorData, setVendorData] = useState([]);
+
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      const data = await getVendorData();
+      setVendorData(data);
+    };
+
+    fetchVendorData();
+  }, []);
 
   return (
     <View>
       <Text style={[MyTheme.typography.subtitle.sub_3, styles.catTitle]}>
         Venue
       </Text>
+
       <FlatList
-        data={data.filter(item => item.type === 'Venue')}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.title} rating={item.rating} />}
-        keyExtractor={item => item.id}
+        data={vendorData.filter(item => item.category.includes('Venue'))}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} />}
+        keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}
         contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
       />
 
-      <Text style={[MyTheme.typography.subtitle.sub_3, , styles.catTitle]}>
+      <Text style={[MyTheme.typography.subtitle.sub_3, styles.catTitle]}>
         Catering
       </Text>
+
       <FlatList
-        data={data.filter(item => item.type === 'Catering')}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.title} rating={item.rating} />}
-        keyExtractor={item => item.id}
+        data={vendorData.filter(item => item.category.includes('Catering'))}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} />}
+        keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}
