@@ -10,7 +10,7 @@ export const CustomHeader = () => {
     <View style={[styles.container, {height: navbarHeight}]}>
       <Image
         style={styles.logo}
-        source={require('../../../../assets/icons/Header.png')}
+        source={require('../../../../assets/images/Header.png')}
         resizeMode="contain"
       />
     </View>
@@ -19,19 +19,19 @@ export const CustomHeader = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // position: 'absolute',
-    // top: 0,
-    // left: 0,
-    // right: 0, 
-    // flex: 1,
-    // flexDirection: 'row',
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // height: '100%', 
-    width: SCREEN_WIDTH,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0, 
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%', 
+    // width: SCREEN_WIDTH,
+    // alignItems: 'center',
+    // justifyContent: 'center',
     zIndex: 0,
   }, logo: {
     height: '100%',

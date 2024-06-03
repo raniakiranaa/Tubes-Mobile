@@ -1,9 +1,8 @@
 import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import MyTheme from '../../../config/theme';
-import EyeIcon from '../../../../assets/icons/eye.svg';
-import EyeOffIcon from '../../../../assets/icons/eye-off.svg';
+import EyeIcon from '../../../../assets/icons/Eye/Eye';
+import EyeOffIcon from '../../../../assets/icons/Eye/Eye-off';
 
 export const TextInputIcon = (props) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -14,12 +13,22 @@ export const TextInputIcon = (props) => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
-    const IconComponent = props.iconComponent;
+    const IconComponent = props.iconSource;
 
     return (
-        <View style={[styles.container, { borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4 }]}>
+        <View
+            style={[
+                styles.container,
+                { 
+                    borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4,
+                    backgroundColor: props.type === 'search' ? MyTheme.colors.neutral_search : MyTheme.colors.white,
+                    height: props.type === 'search' ? 36 : 42,
+                    borderWidth: props.type === 'search' ? 0 : 2,
+                }
+            ]}
+        >
             {IconComponent && (
-                <IconComponent style={styles.iconStyle} />
+                <IconComponent {...props.iconProps} style={styles.iconStyle} />
             )}
             <TextInput 
                 style={[styles.input, props.fontSize]}
@@ -34,11 +43,13 @@ export const TextInputIcon = (props) => {
             />
             {props.type === 'password' && (
                 <TouchableOpacity onPress={togglePasswordVisibility}>
-                    {isPasswordVisible ? (
-                        <EyeOffIcon width={24} height={24} style={styles.eyeIcon} />
-                    ) : (
-                        <EyeIcon width={24} height={24} style={styles.eyeIcon} />
-                    )}
+                    <View style={styles.eyeIcon}>
+                        {isPasswordVisible ? (
+                            <EyeOffIcon width={20} height={20} />
+                        ) : (
+                            <EyeIcon width={20} height={20} />
+                        )}
+                    </View>
                 </TouchableOpacity>
             )}
         </View>
@@ -46,26 +57,24 @@ export const TextInputIcon = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flexDirection: "row",
         alignItems: "center",
-        height: 42,
-        marginHorizontal: 10,
-        backgroundColor: MyTheme.colors.white,
-        borderWidth: 2,
+        // marginHorizontal: 10,
         borderRadius: 8,
-        borderColor: MyTheme.colors.neutral_4,
+        paddingHorizontal: 8,
     },
-    input : {
+    input: {
         flex: 1,
-        marginRight: 12
+        marginRight: 12,
+        marginLeft: 4,
     },
-    iconStyle : {
+    iconStyle: {
         marginHorizontal: 8,
         width: 24,
-        height: 24
+        height: 24,
     },
-    eyeIcon : {
-        marginRight: 16
-    }
+    eyeIcon: {
+        marginRight: 6,
+    },
 });

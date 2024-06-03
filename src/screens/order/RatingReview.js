@@ -138,6 +138,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 10,
     marginBottom: 20,
+    padding: 16,
+    ...MyTheme.shadows.shadow_1,
   },
   packageImage: {
     width: 55,
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
   submitButton: {
     flex: 1,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 25,
     backgroundColor: MyTheme.colors.brown_2,
     justifyContent: 'center',
     alignItems: 'center',

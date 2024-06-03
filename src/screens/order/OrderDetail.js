@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme';
-import CustomAppbar from '../../components/shares/Appbar/CustomAppbar';
 
 const OrderDetail = ({ navigation }) => {
   const order = {
@@ -63,7 +62,7 @@ const OrderDetail = ({ navigation }) => {
 
       <View style={styles.actions}>
         <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
-          <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_1}]}>Chat</Text>
+          <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_2}]}>Chat</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancelButton} onPress={() => console.log('Cancel Pressed')}>
           <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Cancel</Text>
@@ -106,6 +105,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 10,
     marginBottom: 20,
+    padding: 16,
+    ...MyTheme.shadows.shadow_1
   },
   packageImage: {
     width: 55,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'MyTheme.colors.brown_1',
+    borderColor: MyTheme.colors.brown_2,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,

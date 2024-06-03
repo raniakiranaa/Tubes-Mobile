@@ -10,7 +10,7 @@ export const HeaderStart = () => {
       <View style={[styles.container, { height: navbarHeight }]}>
         <Image
           style={styles.img}
-          source={require('../../../../assets/icons/Header-intro.png')}
+          source={require('../../../../assets/images/Header-intro.png')}
           resizeMode="contain"
         />
       </View>
