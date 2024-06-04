@@ -16,9 +16,7 @@ const Login = () => {
   const nav = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // State for error message
-
-  const auth = firebase_auth;
+  // const [error, setError] = useState(null); // State for error message
 
   const handleRegis = () => {
     nav.navigate("Register");
@@ -28,33 +26,48 @@ const Login = () => {
     nav.navigate("#");
   }
 
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validation = () => {
+    let errors = '';
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return errors = 'Please enter a valid email address';
+    }
+
+    if( email === '' || password === '') {
+      return errors = 'Please fill in all fields!';
+    }
+
+    return errors;
   };
 
+  // const isValidEmail = (email) => {
+  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // };
+
   const handleLogin = async () => {
-    if (email === '' || password === '') {
+    const err = validation();
+    if(err != '') {
       Toast.show({
         type: 'error',
-        text1: 'Please fill in all fields',
+        text1: err,
       });
       return;
     }
-
-    if (!isValidEmail(email)) {
-      setError('Invalid email format');
-      return;
-    } 
     
-    setError(null); 
-  
+    const auth = firebase_auth;
+    
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+      Toast.show({
+        type: 'success',
+        text1: 'Login successful!',
+      });
     } catch (error) {
       Toast.show({
         type: 'error',
-        text1: 'Login failed! check your email/password ',
+        text1: 'Login failed!',
+        text2: 'check your email or password'
       });
       console.log(error.message);
     }
@@ -101,8 +114,6 @@ const Login = () => {
                     onChangeText={(text) => setEmail(text)}
                   />
                 </View>
-                {error && <Text style={styles.errorText}>{error}</Text>} 
-
                 <View style={styles.inputTextContainer}>
                   <TextInputIcon 
                     iconSource={PasswordIcon}

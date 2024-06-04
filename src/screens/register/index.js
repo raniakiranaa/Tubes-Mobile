@@ -30,20 +30,20 @@ const Register = () => {
   const validation = () => {
     let errors = '';
 
-    if(password !== cPassword) {
-      errors = 'Confirm password is not equal to password!';
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      return errors = 'Name can only contain alphabet';
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors = 'Please enter a valid email address';
+      return errors = 'Please enter a valid email address';
     }
 
-    if (!/^[a-zA-Z]+$/.test(name)) {
-      errors = 'Name can only contain alphabet';
-    }
+    if(password !== cPassword) {
+      return errors = 'Confirm password is not equal to password!';
+    }    
 
     if(name === '' || email === '' || password === '' || cPassword === '') {
-      errors = 'Please fill the form!';
+      return errors = 'Please fill in all fields!';
     }
 
     return errors;
