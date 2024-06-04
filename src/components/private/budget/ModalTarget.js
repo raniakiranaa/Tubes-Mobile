@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         width: 300,
         backgroundColor: 'white',
-        borderRadius: 10,
+        borderRadius: 15,
         padding: 20,
     },
     modalButtons: {
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 10,
         backgroundColor: MyTheme.colors.brown_2,
-        borderRadius: 5,
         alignItems: 'center',
         borderRadius: 48
     },

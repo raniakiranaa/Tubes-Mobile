@@ -1,22 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
+import { BigSearchCard } from '../../components/shares/Card';
 import SearchIcon from '../../../assets/icons/Search.svg';
-import VendorCarousel from './VendorCarousel';
-import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const VendorPage = () => {
+const data = [
+    {
+        id: '1',
+        name: 'JW Marriott Surabaya',
+        category: 'Venue',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.8,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '2',
+        name: 'Sonokembang',
+        category: 'Catering',
+        location: 'Surabaya, Jawa Timur',
+        rating: 5.0,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '3',
+        name: 'Vasa Hotel Surabaya',
+        category: 'Venue',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.5,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '4',
+        name: 'Novotel Surabaya',
+        category: 'Venue',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.3,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '5',
+        name: 'The Alana Surabaya',
+        category: 'Venue',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.2,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '6',
+        name: 'Jatiroso',
+        category: 'Catering',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.6,
+        image: 'https://via.placeholder.com/300',
+    },
+    {
+        id: '7',
+        name: 'Katering Surya',
+        category: 'Catering',
+        location: 'Surabaya, Jawa Timur',
+        rating: 4.5,
+        image: 'https://via.placeholder.com/300',
+    },
+];
+
+
+const VendorSearchPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
-  const navigation = useNavigation();
 
-  const searchVendor = () => {
-    navigation.navigate('VendorSearch');
-  };
+  const renderVendorItem = ({ item }) => (
+    <View style={styles.vendorItem}>
+      <BigSearchCard
+        image={item.image}
+        title={item.name}
+        type={item.category}
+        location={item.location}
+        rating={item.rating}
+      />
+    </View>
+  );
 
   const locationData = [
     { label: 'Surabaya', value: 'surabaya' },
@@ -34,8 +100,10 @@ const VendorPage = () => {
     { label: 'High', value: 'high' },
   ];
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} className='mt-12'>
+    <View style={styles.container} className='mt-12'>
       <View className='p-5'>
         <View style={styles.inputWrapper}>
           <SearchIcon style={styles.icon} />
@@ -44,6 +112,8 @@ const VendorPage = () => {
             style={MyTheme.typography.body.body_1}
             placeholder="Search"
             placeholderTextColor={MyTheme.colors.neutral_3}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </View>
 
@@ -91,58 +161,21 @@ const VendorPage = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.searchButton} onPress={searchVendor}>
+        <TouchableOpacity style={styles.searchButton} >
           <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>Search Vendor</Text>
         </TouchableOpacity>
+        
       </View>
 
-      <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.neutral_1 }]} className='mt-2 px-5'>
-        Categories
-      </Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer} contentContainerStyle={{ paddingRight: 40 }}>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Venue.png')} style={{ width: 63, height: 63, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='mr-2.5'>Venue</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Attire.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>Attire</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Catering.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>Catering</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Makeup.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>Makeup</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/MC.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>MC</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Invitation.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>Invitation</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Band.png')} style={{ width: 63, height: 63, marginLeft: 10, marginRight: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5 mr-2.5'>Band</Text>
-        </View>
-        <View className='flex-column items-center'>
-          <Image source={require('../../../assets/icons/Honeymoon.png')} style={{ width: 63, height: 63, marginLeft: 10 }} />
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_1 }]} className='ml-2.5'>Honeymoon</Text>
-        </View>
-      </ScrollView>
-
-      <View style={styles.topContainer}>
-        <View style={styles.topTitleContainer}>
-          <Text style={[styles.topTitle, MyTheme.typography.subtitle.sub_2]}>Top-rated by other Eveey</Text>
-        </View>
-        <View style={styles.catContainer}>
-          <VendorCarousel />
-        </View>
-      </View>
-    </ScrollView>
+      <FlatList
+        data={data.filter(vendor => vendor.name.toLowerCase().includes(searchQuery.toLowerCase()))}
+        keyExtractor={(item) => item.id}
+        renderItem={renderVendorItem}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+      />
+      
+    </View>
   );
 };
 
@@ -150,9 +183,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  contentContainer: {
-    paddingBottom: Platform.OS === 'ios' ? 100 : 68,
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -207,7 +237,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   searchButton: {
-    flex: 1,
     paddingVertical: 8,
     borderRadius: 25,
     backgroundColor: MyTheme.colors.brown_2,
@@ -218,22 +247,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
-  cardsContainer: {
+  listContent: {
+    flexGrow: 1,
+    alignItems: 'center',
     paddingBottom: 20,
   },
-  topContainer: {
-    marginTop: 20,
-    width: '100%',
+  vendorItem: {
+    marginBottom: 10,
   },
-  topTitleContainer: {
-    paddingHorizontal: 20,
-  },
-  topTitle: {
-    color: MyTheme.colors.neutral_1,
-  },
-  catContainer: {
-
-  }
 });
 
-export default VendorPage;
+export default VendorSearchPage;

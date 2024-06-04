@@ -27,22 +27,26 @@ import TopNavbar from './TopNavbar.js';
 import OrderDetail from '../../../screens/order/OrderDetail.js';
 import RatingReview from '../../../screens/order/RatingReview.js';
 import Profile from '../../../screens/profile/index.js';
-import MyPlan from '../../../screens/myplan/index.js';
 import HomeScreen from '../../../screens/home/index.js';
 import DetailPromo from '../../../screens/promo/detailPromo.js';
+import BudgetPlanner from '../../../screens/budgetplanner/index.js';
+import ToDoList from '../../../screens/myplan/index.js';
+import DoneList from '../../../screens/done/index.js';
 
 import { CarouselCard, BigHomeCard, BigSearchCard, BigVendorCard, SmallCard } from './../Card';
 import VendorDetailPage from '../../../screens/vendor/VendorDetail.js';
 import ProductDetailPage from '../../../screens/vendor/ProductDetail.js';
 import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js';
 import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
+import VendorSearchPage from '../../../screens/vendor/VendorSearch.js';
 import DetailBlog from '../../../screens/blog/detailBlog.js';
 import Blog from '../../../screens/blog/index.js';
+import GuestManager from '../../../screens/guestmanager/index.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function TabNavigator({ isAdmin }) {
+export default function TabNavigator({ isAdmin }) {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -116,13 +120,13 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="MyPlan"
-            component={MyPlan}
+            component={MyPlanStack}
             options={{
               tabBarLabel: 'My Plan',
               header: () => (
                 <>
                   <CustomHeader />
-                  <CustomAppbar title="MyPlan" isBackButton={false} isAction={false} isTransparent={true}/>
+                  <CustomAppbar title="My Plan" isBackButton={false} isAction={false} isTransparent={true}/>
                 </>
               ),
             }}
@@ -162,7 +166,7 @@ function TabNavigator({ isAdmin }) {
           />
           <Tab.Screen
             name="Orders"
-            component={OrdersScreen}
+            component={TopNavbar}
             options={{
               tabBarLabel: 'Orders',
               header: () => <CustomAppbar title="Orders" isBackButton={false} isAction={false} />,
@@ -190,160 +194,18 @@ function TabNavigator({ isAdmin }) {
   );
 }
 
-export default function AppNavigator({ isAdmin }) {
+function MyPlanStack() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Main"
-          options={{ headerShown: false }}
-        >
-          {props => <TabNavigator {...props} isAdmin={isAdmin} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="OrderDetail"
-          component={OrderDetail}
-          options={{
-            // Navigate back to the previous screen by pressing the back button
-            header: () => (
-              <CustomAppbar title="Order Detail" isBackButton={true} isAction={false} />
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen
-          name="RatingReview"
-          component={RatingReview}
-          options={{
-            header: () => (
-              <CustomAppbar title="Rating and Review" isBackButton={true} isAction={false} />
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen
-          name="VendorDetail"
-          component={VendorDetailPage}
-          options={{
-            header: () => (
-              <>
-                <CustomHeader />
-                <CustomAppbar title="Vendor Detail" isBackButton={true} isAction={false} isTransparent={true}/>
-              </>
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen
-          name="ProductDetail"
-          component={ProductDetailPage}
-          options={{
-            header: () => (
-              <>
-                <CustomHeader />
-                <CustomAppbar title="Product Detail" isBackButton={true} isAction={false} isTransparent={true}/>
-              </>
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen
-          name="OrderConfirmation"
-          component={OrderConfirmationPage}
-          options={{
-            header: () => (
-              <>
-                <CustomHeader />
-                <CustomAppbar title="Order Confirmation" isBackButton={true} isAction={false} isTransparent={true}/>
-              </>
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen
-          name="SavedVendor"
-          component={SavedVendorPage}
-          options={{
-            header: () => (
-              <>
-                <CustomHeader />
-                <CustomAppbar title="Saved Vendor" isBackButton={true} isAction={false} isTransparent={true}/>
-              </>
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-        <Stack.Screen 
-                    name="DetailPromo" 
-                    component={DetailPromo} 
-                    options={{ header: () => (
-                      <>
-                        <CustomAppbar title="" isBackButton={true} isAction={false} isTransparent={false}/>
-                      </>
-                    ),
-                    tabBarStyle: { display: 'none' }, }} 
-                />
-        <Stack.Screen 
-                    name="DetailBlog" 
-                    component={DetailBlog} 
-                    options={{ header: () => (
-                      <>
-                        <CustomAppbar title="Blog" isBackButton={true} isAction={false} isTransparent={false}/>
-                      </>
-                    ),
-                    tabBarStyle: { display: 'none' },
-                  }} 
-                />
-        <Stack.Screen
-          name="Blog"
-          component={Blog}
-          options={{
-            header: () => (
-              <>
-                <CustomAppbar title="Blog" isBackButton={true} isAction={false} isTransparent={false}/>
-              </>
-            ),
-            tabBarStyle: { display: 'none' },
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-// function HomeScreen() {
-//   const Poster = require('../../../../assets/icons/Poster.png');
-//   return (
-//     <View style={styles.container}>
-//       {/* <Text variant="headlineMedium">Home!</Text> */}
-//       {/* <CarouselCard image={Poster}/> */}
-//       {/* <BigHomeCard image={Poster} title="Local Pride : Traditional Weddings" subtitle="Discover 10 recommendations for traditional weddings" foot="31 Mar 2024 - Mimi Fashion"/> */}
-//       {/* <BigSearchCard image={Poster} title="JW Marriott Surabaya" type="Venue" location="Surabaya, Jawa Timur" price="IDR" rating="4.5"/> */}
-//       {/* <BigVendorCard image={Poster} title="Royal Ballroom Package" subtitle="IDR 300,000,000" pax="330 pax"/> */}
-//       {/* <SmallCard image={Poster} title="JW Marriott Surabaya" rating="4.8"/> */}
-//     </View>
-//   );
-// }
-
-function OrdersScreen() {
-  return (
-    <TopNavbar />
-  );
-}
-
-function MyPlanScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">My Plan!</Text>
-    </View>
-  );
-}
-
-function ProfileScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Profile!</Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ToDoList"
+        component={ToDoList}
+      />
+      <Stack.Screen
+        name="DoneList"
+        component={DoneList}
+      />
+    </Stack.Navigator>
   );
 }
 
