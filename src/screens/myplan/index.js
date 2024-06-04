@@ -15,11 +15,7 @@ const MyPlan = () => {
   const [newCategory, setNewCategory] = useState('');
   const [categories, setCategories] = useState([{ id: 1, name: 'Pre-Wedding' }]);
 
-  const navi = useNavigation();
-  const handleButtonPress = () => {
-    console.log("Button Pressed");
-    navi.navigate("done");
-  };
+  const navigation = useNavigation();
 
   const handlePress = () => {
     setModalVisible(true);
@@ -56,7 +52,7 @@ const MyPlan = () => {
             <CustomButton
               title="Done"
               textColor={MyTheme.colors.neutral_3}
-              onPress={handleButtonPress}
+              onPress={() => navigation.navigate('DoneList')}
               type="outline"
               buttonColor={MyTheme.colors.neutral_300}
               outlineColor={MyTheme.colors.neutral_3}
@@ -64,6 +60,34 @@ const MyPlan = () => {
             />
           </View>
         </View>
+
+        {/* temporary routing */}
+        <View style={styles.listContainer}>
+          <View>
+            <CustomButton
+              title="Budget Planner"
+              textColor={MyTheme.colors.brown_2}
+              onPress={() => navigation.navigate('BudgetPlanner')}
+              type="outline"
+              buttonColor={MyTheme.colors.cream_2}
+              outlineColor={MyTheme.colors.brown_2}
+              fontSize={scaleFontSize}
+              style={styles.button}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title="Guest Manager"
+              textColor={MyTheme.colors.neutral_3}
+              onPress={() => navigation.navigate('GuestManager')}
+              type="outline"
+              buttonColor={MyTheme.colors.neutral_300}
+              outlineColor={MyTheme.colors.neutral_3}
+              fontSize={scaleFontSize}
+            />
+          </View>
+        </View>
+
         <View style={styles.pad}>
           {categories.map(category => (
             <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>

@@ -18,6 +18,8 @@ import DetailBlog from '../screens/blog/detailBlog.js';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebase_auth } from '../firebase/index.js';
+import BudgetPlanner from '../screens/budgetplanner/index.js';
+import GuestManager from '../screens/guestmanager/index.js';
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
