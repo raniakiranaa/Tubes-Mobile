@@ -135,6 +135,32 @@ function AuthLayout({ isAdmin }) {
                     header: () => <CustomHeader />
                 }}
             />
+            <AuthStack.Screen
+                    name="BudgetPlanner"
+                    component={BudgetPlanner}
+                    options={{
+                        header: () => (
+                        <>
+                            <CustomHeader />
+                            <CustomAppbar title="Budget Planner" isBackButton={true} isAction={false} isTransparent={true}/>
+                        </>
+                        ),
+                        tabBarStyle: { display: 'none' },
+                    }}
+            />
+            <AuthStack.Screen
+                name="GuestManager"
+                component={GuestManager}
+                options={{
+                    header: () => (
+                    <>
+                        <CustomHeader />
+                        <CustomAppbar title="Guest Manager" isBackButton={true} isAction={false} isTransparent={true}/>
+                    </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                }}
+            />
         </AuthStack.Navigator>
     );
 }

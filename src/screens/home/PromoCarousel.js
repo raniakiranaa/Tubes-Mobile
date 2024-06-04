@@ -21,24 +21,21 @@ const PromoCarousel = () => {
     navigation.navigate('DetailPromo', { id });
   };
 
-  useEffect(() => {
+useEffect(() => {
     const subscriber = onSnapshot(collection(db, 'promo'), querySnapshot => {
       const promo = [];
-
       querySnapshot.forEach(documentSnapshot => {
         promo.push({
           ...documentSnapshot.data(),
           key: documentSnapshot.id,
         });
       });
-
       setPromo(promo);
       setLoading(false);
     });
 
-    // Unsubscribe from events when no longer in use
     return () => subscriber();
-  }, []);
+}, []);
 
   if (loading) {
     <ActivityIndicator />
@@ -55,7 +52,7 @@ const PromoCarousel = () => {
             // onPress={() => handleCardPress(item.promo_id)}
           />
         )}
-        keyExtractor={(item) => item.promo_id.toString()}
+        keyExtractor={(item) => item.key.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.contentContainer}
