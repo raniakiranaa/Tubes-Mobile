@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
@@ -11,9 +11,11 @@ import { HeaderStart } from '../../components/shares/Nav/HeaderStart.js';
 import Toast from 'react-native-toast-message';
 import { firebase_auth } from '../../firebase/index.js';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { UserContext } from '../../contexts/UserContext.js';
 
 const Login = () => {
   const nav = useNavigation();
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // const [error, setError] = useState(null); // State for error message
@@ -59,6 +61,7 @@ const Login = () => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+      setUser(response.user)
       Toast.show({
         type: 'success',
         text1: 'Login successful!',

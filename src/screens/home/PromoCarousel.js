@@ -4,6 +4,7 @@ import { CarouselCard } from '../../components/shares/Card';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '../../firebase';  // Ensure you import the initialized Firestore
 import { collection, onSnapshot } from 'firebase/firestore'; // Import Firestore methods
+import MyTheme from '../../config/theme';
 
 // const data = [
 //   { id: 1, img: require('../../../assets/images/promo_1.png') },
@@ -34,11 +35,14 @@ useEffect(() => {
       setLoading(false);
     });
 
-    return () => subscriber();
+    return () => {
+      subscriber(); 
+    };
+
 }, []);
 
   if (loading) {
-    <ActivityIndicator />
+    return <ActivityIndicator color={MyTheme.colors.brown_2} />
   }
 
   return (

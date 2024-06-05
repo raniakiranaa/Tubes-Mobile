@@ -16,6 +16,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // import SavedVendorPage from './src/screens/vendor/SavedVendor.js';
 // import MyPlan from './src/screens/myplan/index.js';
 import Toast from 'react-native-toast-message';
+import { UserProvider } from './src/contexts/UserContext.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -53,8 +54,10 @@ export default function App() {
       {/* <BottomNavbar /> */}
     {/* <VendorScreen /> */}
     {/* <Login /> */}
-      <Navigation />
-      <Toast />
+      <UserProvider>
+        <Navigation />
+        <Toast />
+      </UserProvider>
     {/* <OrderDetail />
     <RatingReview /> */}
     </GestureHandlerRootView>
