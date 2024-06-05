@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   action: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 12,
     left: 0,
     right: 0,
     backgroundColor: '#fff',

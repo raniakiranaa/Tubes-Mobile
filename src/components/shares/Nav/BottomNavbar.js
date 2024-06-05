@@ -126,7 +126,7 @@ export default function TabNavigator({ isAdmin }) {
               header: () => (
                 <>
                   <CustomHeader />
-                  <CustomAppbar title="My Plan" isBackButton={false} isAction={false} isTransparent={true}/>
+                  <CustomAppbar title="My Plan" isBackButton={false} isAction={true} ActionIcon={'Dots'} isTransparent={true}/>
                 </>
               ),
             }}

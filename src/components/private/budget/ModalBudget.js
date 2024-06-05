@@ -8,7 +8,7 @@ const ModalBudget = ({ visible, onClose, onAddCategory, newCategory, setNewCateg
     const [selectedCategory, setSelectedCategory] = useState('Category');
     const [categorySelected, setCategorySelected] = useState(false);
     const categories = ['Venue', 'Attire', 'Food', 'Beverages'];
-    const availableCategories = categories.filter(category => !categoryList.some(cat => cat.name === category));
+    const availableCategories = categories.filter(category => !categoryList.some(cat => cat.category === category));
 
     useEffect(() => {
         if (!visible) {
@@ -28,7 +28,7 @@ const ModalBudget = ({ visible, onClose, onAddCategory, newCategory, setNewCateg
 
     const handleAddCategory = () => {
         if (newCategory && selectedCategory) {
-            onAddCategory({ name: selectedCategory, targetCat: newCategory });
+            onAddCategory({ category: selectedCategory, target_category: newCategory });
             setNewCategory('');
             setSelectedCategory('Category');
             setCategorySelected(false);
