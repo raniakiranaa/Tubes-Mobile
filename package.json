@@ -13,6 +13,8 @@
     "@react-native-community/datetimepicker": "^8.0.1",
     "@react-native-community/viewpager": "^5.0.11",
     "@react-native-firebase/app": "^20.0.0",
+    "@react-native-firebase/auth": "^20.0.0",
+    "@react-native-firebase/storage": "^20.0.0",
     "@react-native-firebase/firestore": "^20.0.0",
     "@react-native-picker/picker": "^2.7.6",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -42,6 +44,7 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-svg": "^15.3.0",
     "react-native-table-component": "^1.2.2",
+    "react-native-toast-message": "^2.2.0",
     "react-navigation": "^5.0.0",
     "tailwind-react-native-classnames": "^1.5.1"
   },

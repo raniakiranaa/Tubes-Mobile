@@ -9,8 +9,9 @@ import SettingIcon from '../../../assets/icons/SettingIcon/index.js';
 import FAQIcon from '../../../assets/icons/FAQ/index.js';
 import TnC from '../../../assets/icons/Tnc/index.js';
 import LogoutIcon from '../../../assets/icons/Logout/index.js';
+import { firebase_auth } from '../../firebase/index.js';
 
-const Profile = () => {
+const Profile = ( ) => {
     const nav = useNavigation();
     const handleEditProfile = () => {
         nav.navigate('#');
@@ -29,7 +30,8 @@ const Profile = () => {
     }
 
     const handleLogout = () => {
-        nav.navigate('#');
+        // nav.navigate('#');
+        firebase_auth.signOut();
     }
 
     return (
