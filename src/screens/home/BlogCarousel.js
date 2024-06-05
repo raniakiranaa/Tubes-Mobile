@@ -1,26 +1,64 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
-import { BigHomeCard, CarouselCard } from '../../components/shares/Card';
+import React, {useEffect, useState} from 'react';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { BigHomeCard } from '../../components/shares/Card';
 import { useNavigation } from '@react-navigation/native';
-
-const data = [
-  { id: 1, img: require('../../../assets/images/blog_1.png'), title: "Local Pride : Traditional Weddings", subtitle:"Discover 10 recommendations for traditional weddings", foot:"31 Mar 2024"},
-  { id: 2, img: require('../../../assets/images/blog_2.png'), title: "Do’s and Don’ts : Wedding Makeup", subtitle:"Tips and pitfalls to ensure perfect wedding makeup", foot:"16 Feb 2024" },
-  { id: 3, img: require('../../../assets/images/blog_3.png'),  title: "Top 3 Honeymoon Destination", subtitle:"Explore our top 3 honeymoon picks!", foot:"14 Feb 2024" },
-];
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import MyTheme from '../../config/theme';
 
 const BlogCarousel = ({ orientation = 'horizontal' }) => {
   const navigation = useNavigation();
+  const [blogData, setBlogData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      try {
+        const blogCollection = collection(db, 'blog');
+        const blogSnap = await getDocs(blogCollection);
+
+        const data = blogSnap.docs.map(doc => {
+          const blog = doc.data();
+          const createdDate = new Date(blog.created_at.seconds * 1000);
+          const options = { month: 'long', day: 'numeric', year: 'numeric' };
+          const formattedDate = createdDate.toLocaleDateString('en-US', options);
+
+          return {
+            id: doc.id,
+            img: blog.blog_img,
+            title: blog.title,
+            subtitle: blog.description,
+            foot: formattedDate,
+          };
+        });
+        setBlogData(data);
+      } catch(error){
+        console.error('Error fetching blog data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogData();
+  }, []);
 
   const handleCardPress = (id) => {
     navigation.navigate('DetailBlog', { id });
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         style={styles.cardContainer}
-        data={data}
+        data={blogData}
         renderItem={({ item }) => (
           <BigHomeCard 
             image={item.img}
@@ -48,6 +86,16 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     // paddingHorizontal: 10,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 

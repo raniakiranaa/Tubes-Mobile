@@ -32,16 +32,16 @@ export const CarouselCard = ({ image }) => { //({ image,onPress }) => {   onPres
 export const BigHomeCard = ({ image, title, subtitle, foot, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress} style={styles.bigHomeContainer}>
-            <Image source={image} style={styles.bigHomeImage} />
+            <Image source={{uri: image}} style={styles.bigHomeImage} />
             <Text style={[styles.title, MyTheme.typography.subtitle.sub_3]}
                 numberOfLines={1}
                 ellipsizeMode='tail'
             >{ title }</Text>
-            <Text style={[styles.subtitle, MyTheme.typography.subtitle.body_3]}
+            <Text style={[styles.subtitle, MyTheme.typography.body.body_2]}
                 numberOfLines={1}
                 ellipsizeMode='tail'
             >{ subtitle }</Text>
-            <Text style={[styles.foot, MyTheme.typography.subtitle.body_3]}>{ foot }</Text>
+            <Text style={[styles.foot, MyTheme.typography.body.body_3]}>{ foot }</Text>
         </TouchableOpacity>
     );
 }
@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         marginVertical: 10,
         marginHorizontal: 10,
+        marginBottom: 15,
     },
     bigHomeImage: {
         width: '100%',

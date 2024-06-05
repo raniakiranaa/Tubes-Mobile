@@ -1,17 +1,32 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import BlogCarousel from '../home/BlogCarousel';
 
 const Blog = () => {
-  const data = [
-    { key: 'carousel' },
-  ];
+  // const [loading, setLoading] = useState(true);
+
+  // const handleLoadingChange = (isLoading) => {
+  //   setLoading(isLoading);
+  // };
+
+  // if (loading) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //     </View>
+  //   );
+  // }
+
+  const data = [{ key: 'carousel' }];
 
   const renderItem = ({ item }) => {
     if (item.key === 'carousel') {
       return (
         <View style={styles.carouselContainer}>
-          <BlogCarousel orientation='vertical' />
+          <BlogCarousel 
+            orientation='vertical' 
+            // onLoadingChange={handleLoadingChange}
+          />
         </View>
       );
     }
@@ -37,6 +52,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   carouselContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
