@@ -15,7 +15,7 @@ import { UserContext } from '../../contexts/UserContext.js';
 const HomeScreen = () => {
   const navi = useNavigation();
   const { user } = useContext(UserContext);
-
+  // console.log(user);
   const handleBlog = () => {
     navi.navigate('Blog');
   }
@@ -31,7 +31,7 @@ const HomeScreen = () => {
             <NotifIcon width={28} height={28} fillColor={MyTheme.colors.white} />
           </View>
           <View style={styles.userContainer}>
-            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, {user?.email || 'Eveey!'}</Text>
+            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, {user?.name || 'Eveey!'} !</Text>
           </View>
           <View style={styles.sCardContainer}>
             <View style={[styles.searchCard, MyTheme.shadows.shadow_1]}>

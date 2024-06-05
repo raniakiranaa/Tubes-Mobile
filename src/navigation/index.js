@@ -190,7 +190,7 @@ export default function Navigation({ isAdmin }) {
 
     useEffect(() => {
         onAuthStateChanged(firebase_auth, (user) => {
-            console.log('user', user);
+            // console.log('user', user);
             setUser(user);
         });
     }, []);
