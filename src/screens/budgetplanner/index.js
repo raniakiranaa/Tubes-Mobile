@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import Pencil from '../../../assets/icons/Pencil/index.js';
 import ModalTarget from '../../components/private/budget/ModalTarget.js';
@@ -7,8 +7,11 @@ import ModalBudget from '../../components/private/budget/ModalBudget.js';
 import ModalEdit from '../../components/private/budget/ModalEdit.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import { Budget } from '../../components/private/budget/index.js'
+import { db } from '../../firebase';
+import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const BudgetPlanner = () => {
+  const [loading, setLoading] = useState(true);
   const [spend, setSpend] = useState(0);
   const [target, setTarget] = useState(0);
   const [newTarget, setNewTarget] = useState('');
@@ -18,6 +21,47 @@ const BudgetPlanner = () => {
   const [newCategory, setNewCategory] = useState('')
   const [editingCategory, setEditingCategory] = useState(null);
   const [newCategoryTarget, setNewCategoryTarget] = useState('');
+
+  // user
+  const [customerID, setCustomerID] = useState('1');
+
+  // get target budget
+  const getTargetBudget = async () => {
+    setLoading(true);
+    try {
+      const customerRef = doc(db, 'customer', customerID);
+      const customerDoc = await getDoc(customerRef);
+  
+      if (customerDoc.exists()) {
+        const customerData = customerDoc.data();
+        const targetBudget = customerData.target_budget || 0; // default to 0 if not set
+        setTarget(targetBudget);
+
+        // fetch categories
+        const budgetCollectionRef = collection(db, 'customer', customerID, 'budget');
+        const budgetSnapshot = await getDocs(budgetCollectionRef)
+
+        if (!budgetSnapshot.empty) {
+          const categories = budgetSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setCategoryList(categories);
+        } else {
+          console.log('No categories found in budget collection for customer ID:', customerID);
+        }
+      } else {
+        console.log('No customer document found for customer ID:', customerID);
+      }
+    } catch (error) {
+      console.error('Error getting document: ', error);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getTargetBudget();
+  }, [customerID]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
@@ -32,12 +76,25 @@ const BudgetPlanner = () => {
     setModalVisible(true);
   };
 
-  const handleAddTarget = () => {
+  const handleAddTarget = async () => {
     const parsedBudget = parseInt(newTarget.replace(/,/g, ''), 10);
     if (!isNaN(parsedBudget)) {
-      setTarget(parsedBudget);
+      try {
+        const customerRef = doc(db, 'customer', customerID);
+
+        await updateDoc(customerRef, {
+          target_budget: parsedBudget
+        });
+
+        setTarget(parsedBudget);
+        setModalVisible(false);
+
+      } catch (error) {
+        console.error('Error updating target budget:', error)
+      }
+    } else {
+      console.error('Invalid target budget:', newTarget);
     }
-    setModalVisible(false);
   };
 
   // add category button
@@ -45,34 +102,58 @@ const BudgetPlanner = () => {
     setModalBudgetVisible(true);
   };
 
-  const handleAddCategory = (newCategory) => {
-    setCategoryList(prevCategoryList => [...prevCategoryList, newCategory]);
-    setModalBudgetVisible(false);
+  const handleAddCategory = async (newCategory) => {
+    const budgetCollectionRef = collection(db, 'customer', customerID, 'budget');
+    try {
+      setModalBudgetVisible(false);
+      const newCategoryDoc = await addDoc(budgetCollectionRef, {
+        category: newCategory.category,
+        target_category: parseInt(newCategory.target_category.replace(/,/g, ''), 10)
+      });
+
+      setCategoryList(prevCategoryList => [...prevCategoryList, { id: newCategoryDoc.id, ...newCategory }]);
+    } catch (error) {
+      console.error('Error adding new category:', error);
+    }
   };
 
-  const handleDeleteCategory = (categoryName) => {
-    setCategoryList(prevCategoryList => prevCategoryList.filter(category => category.name !== categoryName));
+  const handleDeleteCategory = async (categoryID) => {
+    const categoryRef = doc(db, 'customer', customerID, 'budget', categoryID);
+    try {
+      await deleteDoc(categoryRef);
+
+      setCategoryList(prevCategoryList => prevCategoryList.filter(category => category.id !== categoryID));
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
   // pencil edit button
   const handleEditPress = (category) => {
     setEditingCategory(category);
-    setNewCategoryTarget(category.targetCat.toString());
+    setNewCategoryTarget(category.target_category.toString());
     setModalEditVisible(true);
   };
 
-  const handleEditCategory = () => {
+  const handleEditCategory = async () => {
     const parsedTarget = parseInt(newCategoryTarget.replace(/,/g, ''), 10);
-    if (!isNaN(parsedTarget)) {
-      setCategoryList(prevCategoryList =>
-        prevCategoryList.map(category =>
-          category.name === editingCategory.name ? { ...category, targetCat: parsedTarget } : category
-        )
-      );
+    if (!isNaN(parsedTarget) && editingCategory) {
+      const categoryRef = doc(db, 'customer', customerID, 'budget', editingCategory.id);
+      try {
+        await updateDoc(categoryRef, { target_category: parsedTarget });
+
+        setCategoryList(prevCategoryList =>
+          prevCategoryList.map(category =>
+            category.id === editingCategory.id ? { ...category, target_category: parsedTarget } : category
+          )
+        );
+        setModalEditVisible(false);
+        setEditingCategory(null);
+        setNewCategoryTarget('');
+      } catch (error) {
+        console.error('Error updating category:', error);
+      }
     }
-    setModalEditVisible(false);
-    setEditingCategory(null);
-    setNewCategoryTarget('');
   };
 
   return (
@@ -107,9 +188,9 @@ const BudgetPlanner = () => {
           {categoryList.map((category, index) => (
             <Budget
               key = {index}
-              name = {category.name}
-              targetCat = {formatCurrency(category.targetCat)}
-              onDelete={() => handleDeleteCategory(category.name)}
+              name = {category.category}
+              target_category = {formatCurrency(category.target_category)}
+              onDelete={() => handleDeleteCategory(category.id)}
               onEdit={() => handleEditPress(category)}
             />
           ))}
@@ -148,6 +229,11 @@ const BudgetPlanner = () => {
           newCategoryTarget={newCategoryTarget}
           setNewCategoryTarget={setNewCategoryTarget}
         />
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+          </View>
+        )}
     </View>
   );
 };
@@ -159,7 +245,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 12,
     left: 0,
     right: 0,
     padding: 20,
@@ -206,7 +292,7 @@ const styles = StyleSheet.create({
   },
   columnTitleCat: {
     width: 150,
-    textAlign: 'center',
+    textAlign: 'left',
     color: MyTheme.colors.neutral_2p, 
     ...MyTheme.typography.medium.medium_1
   },
@@ -219,7 +305,17 @@ const styles = StyleSheet.create({
   budgetDetail: {
     marginTop: 21,
     marginBottom: 42,
-  }
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
 });
 
 export default BudgetPlanner;

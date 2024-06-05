@@ -16,7 +16,7 @@ export const Budget = (props) => {
         <View style={styles.container}>
             <View style={styles.detail}>
                 <Text style={[MyTheme.typography.medium.medium_1]}>{props.name}</Text>
-                <Text style={[MyTheme.typography.medium.medium_2, { color: MyTheme.colors.peach_2, marginTop: 4 }]}>{props.targetCat}</Text>
+                <Text style={[MyTheme.typography.medium.medium_2, { color: MyTheme.colors.peach_2, marginTop: 4 }]}>{props.target_category}</Text>
                 <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p, marginTop: 4 }]}>
                     {totalTransaction}
                     {totalTransaction > 1 ? ' transactions' : ' transaction'}

@@ -25,7 +25,7 @@ const ModalEdit = ({ visible, onClose, onEditCategory, newCategoryTarget, setNew
           </View>
           <View style={{ paddingHorizontal: 5 }}>
             <TextInputIcon
-              placeholder={oldCategory ? oldCategory.targetCat.toString() : ""}
+              placeholder={oldCategory ? oldCategory.target_category.toString() : ""}
               mode="text"
               fontSize={MyTheme.typography.body.body_1}
               value={newCategoryTarget}

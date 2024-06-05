@@ -6,6 +6,8 @@ import MyTheme from '../../config/theme.js';
 import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 import ModalCategory from '../../components/private/myplan/ModalCategory.js';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 const scaleFontSize = screenWidth * 0.04;
@@ -13,7 +15,7 @@ const scaleFontSize = screenWidth * 0.04;
 const MyPlan = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategory, setNewCategory] = useState('');
-  const [categories, setCategories] = useState([{ id: 1, name: 'Pre-Wedding' }]);
+  const [categories, setCategories] = useState([{ id: 1, name: 'Pre-Wedding' }]); // default
 
   const navigation = useNavigation();
 
@@ -34,7 +36,7 @@ const MyPlan = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View className='mt-12'>
         <View style={styles.listContainer}>
           <View>
@@ -88,23 +90,24 @@ const MyPlan = () => {
           </View>
         </View>
 
-        <View style={styles.pad}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 250, justifyContent: 'center', alignItems: 'center' }}>
           {categories.map(category => (
             <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>
           ))}
-        </View>
-        <View style={styles.padTask}>
-          <CustomButton
-            title="Add Category"
-            type="icon"
-            iconSource={PlusCircle}
-            textColor={MyTheme.colors.brown_2}
-            onPress={handlePress}
-            size="block-square"
-            buttonColor={MyTheme.colors.cream_2}
-            fontSize={scaleFontSize}
-          />
-        </View>
+
+          <View style={styles.padTask}>
+            <CustomButton
+              title="Add Category"
+              type="icon"
+              iconSource={PlusCircle}
+              textColor={MyTheme.colors.brown_2}
+              onPress={handlePress}
+              size="block-square"
+              buttonColor={MyTheme.colors.cream_2}
+              fontSize={scaleFontSize}
+            />
+          </View>
+        </ScrollView>
 
         <ModalCategory
           visible={modalVisible}
@@ -114,7 +117,7 @@ const MyPlan = () => {
           setNewCategory={setNewCategory}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     backgroundColor: '#ffffff',
-    marginTop: 25,
+    marginTop: 20,
     paddingHorizontal: 20,
   },
   buttonContainer: {
@@ -140,8 +143,6 @@ const styles = StyleSheet.create({
   },
   padTask: {
     paddingTop: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   title: {
     fontSize: 24,
