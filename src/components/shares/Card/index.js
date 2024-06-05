@@ -20,10 +20,11 @@ const scalePadding = screenWidth * 0.03;
 const scaleFontSize = screenWidth * 0.04; 
 const star = require('../../../../assets/icons/star.png');
 
-export const CarouselCard = ({ image,onPress }) => {
+export const CarouselCard = ({ image }) => { //({ image,onPress }) => {   onPress={onPress}
+    // console.log(image);
     return (
-        <TouchableOpacity onPress={onPress} style={styles.carouselContainer}>
-            <Image source={ image } style={styles.carouselImage} />
+        <TouchableOpacity style={styles.carouselContainer}> 
+            <Image source={ {uri: image} } style={styles.carouselImage} />
         </TouchableOpacity>
     );
 }

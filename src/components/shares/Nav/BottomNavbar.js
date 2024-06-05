@@ -40,6 +40,7 @@ import OrderConfirmationPage from '../../../screens/vendor/OrderConfirmation.js'
 import SavedVendorPage from '../../../screens/vendor/SavedVendor.js';
 import VendorSearchPage from '../../../screens/vendor/VendorSearch.js';
 import DetailBlog from '../../../screens/blog/detailBlog.js';
+import Blog from '../../../screens/blog/index.js';
 import GuestManager from '../../../screens/guestmanager/index.js';
 
 const Tab = createBottomTabNavigator();

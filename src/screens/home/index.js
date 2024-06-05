@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
 import { TextInputIcon } from '../../components/shares/TextInput/TextInputIcon.js';
@@ -9,9 +9,16 @@ import NotifIcon from '../../../assets/icons/NotifIcon/index.js';
 import PromoCarousel from './PromoCarousel.js';
 import BlogCarousel from './BlogCarousel.js';
 import VendorCarousel from '../vendor/VendorCarousel.js';
+import { SCREEN_WIDTH } from '../../utils/deviceDimensions.js';
+import { UserContext } from '../../contexts/UserContext.js';
 
 const HomeScreen = () => {
   const navi = useNavigation();
+  const { user } = useContext(UserContext);
+
+  const handleBlog = () => {
+    navi.navigate('Blog');
+  }
 
   return (
     <ScrollView
@@ -24,7 +31,7 @@ const HomeScreen = () => {
             <NotifIcon width={28} height={28} fillColor={MyTheme.colors.white} />
           </View>
           <View style={styles.userContainer}>
-            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, Eveey!</Text>
+            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, {user?.email || 'Eveey!'}</Text>
           </View>
           <View style={styles.sCardContainer}>
             <View style={[styles.searchCard, MyTheme.shadows.shadow_1]}>
@@ -59,6 +66,9 @@ const HomeScreen = () => {
           <View style={styles.blogContainer}>
             <View style={styles.blogTitleContainer}>
               <Text style={[styles.blogTitle, MyTheme.typography.subtitle.sub_2]}>Highlights For You</Text>
+              <TouchableOpacity onPress={handleBlog}>
+                <Text style={[styles.viewContainer, MyTheme.typography.body.body_1]}>View all</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.bcContainer}>
               <BlogCarousel />
@@ -151,6 +161,13 @@ const styles = StyleSheet.create({
   },
   blogTitleContainer: {
     paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: SCREEN_WIDTH,
+    justifyContent: 'space-between',
+  },
+  viewContainer: {
+    paddingRight: 10,
   },
   blogTitle: {
     color: MyTheme.colors.neutral_1,

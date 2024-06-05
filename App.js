@@ -5,16 +5,18 @@ import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import Navigation from './src/navigation/index.js';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomNavbar from './src/components/shares/Nav/index.js';
-import VendorScreen from './src/screens/vendor/index.js';
-import Login from './src/screens/Login/index.js';
-import OrderDetail from './src/screens/order/OrderDetail.js';
-import RatingReview from './src/screens/order/RatingReview.js';
-import VendorDetailPage from './src/screens/vendor/VendorDetail.js';
-import ProductDetailPage from './src/screens/vendor/ProductDetail.js';
-import OrderConfirmationPage from './src/screens/vendor/OrderConfirmation.js';
-import SavedVendorPage from './src/screens/vendor/SavedVendor.js';
-import MyPlan from './src/screens/myplan/index.js';
+// import BottomNavbar from './src/components/shares/Nav/index.js';
+// import VendorScreen from './src/screens/vendor/index.js';
+// import Login from './src/screens/Login/index.js';
+// import OrderDetail from './src/screens/order/OrderDetail.js';
+// import RatingReview from './src/screens/order/RatingReview.js';
+// import VendorDetailPage from './src/screens/vendor/VendorDetail.js';
+// import ProductDetailPage from './src/screens/vendor/ProductDetail.js';
+// import OrderConfirmationPage from './src/screens/vendor/OrderConfirmation.js';
+// import SavedVendorPage from './src/screens/vendor/SavedVendor.js';
+// import MyPlan from './src/screens/myplan/index.js';
+import Toast from 'react-native-toast-message';
+import { UserProvider } from './src/contexts/UserContext.js';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -42,12 +44,20 @@ export default function App() {
     return null;
   }
 
+  // useEffect(() => {
+  //   SplashScreen.preventAutoHideAsync();
+  //   setTimeout(SplashScreen.hideAsync, 1000);
+  // }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* <BottomNavbar /> */}
     {/* <VendorScreen /> */}
     {/* <Login /> */}
-      <Navigation />
+      <UserProvider>
+        <Navigation />
+        <Toast />
+      </UserProvider>
     {/* <OrderDetail />
     <RatingReview /> */}
     </GestureHandlerRootView>
