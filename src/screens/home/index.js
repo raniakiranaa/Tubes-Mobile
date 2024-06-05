@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -10,9 +10,12 @@ import PromoCarousel from './PromoCarousel.js';
 import BlogCarousel from './BlogCarousel.js';
 import VendorCarousel from '../vendor/VendorCarousel.js';
 import { SCREEN_WIDTH } from '../../utils/deviceDimensions.js';
+import { UserContext } from '../../contexts/UserContext.js';
 
 const HomeScreen = () => {
   const navi = useNavigation();
+  const { user } = useContext(UserContext);
+
   const handleBlog = () => {
     navi.navigate('Blog');
   }
@@ -28,7 +31,7 @@ const HomeScreen = () => {
             <NotifIcon width={28} height={28} fillColor={MyTheme.colors.white} />
           </View>
           <View style={styles.userContainer}>
-            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, Eveey!</Text>
+            <Text style={[styles.userText, MyTheme.typography.subtitle.sub_name]}>Hello, {user?.email || 'Eveey!'}</Text>
           </View>
           <View style={styles.sCardContainer}>
             <View style={[styles.searchCard, MyTheme.shadows.shadow_1]}>
