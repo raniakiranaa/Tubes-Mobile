@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import Pencil from '../../../assets/icons/Pencil/index.js'
@@ -7,8 +7,14 @@ import { Yes, No, None } from '../../../assets/icons/budget'
 import { Guest } from '../../components/private/guest/index.js'
 import ModalDate from '../../components/private/guest/ModalDate.js';
 import ModalGuest from '../../components/private/guest/ModalGuest.js'
+import { db } from '../../firebase';
+import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const GuestManager = () => {
+  // user
+  const [customerID, setCustomerID] = useState('1');
+
+  const [loading, setLoading] = useState(true);
   const [guestList, setGuestList] = useState([]);
   const [guestCount, setGuestCount] = useState(0);
   const [yes, setYes] = useState(0)
@@ -25,8 +31,57 @@ const GuestManager = () => {
     setModalVisible(true);
   };
 
-  const handleAddDate = (date) => {
+  // get deadline
+  const getDeadline = async () => {
+    setLoading(true)
+    try {
+      const customerRef = doc(db, 'customer', customerID);
+      const customerDoc = await getDoc(customerRef);
+  
+      if (customerDoc.exists()) {
+        const customerData = customerDoc.data();
+        const deadlineGuest = customerData.deadline_guest ? customerData.deadline_guest.toDate() : null;
+        setDeadline(deadlineGuest)
+        
+        // fetch guest list
+        const guestCollectionRef = collection(db, 'customer', customerID, 'guest');
+        const guestSnapshot = await getDocs(guestCollectionRef);
+
+        if (!guestSnapshot.empty) {
+          const guests = guestSnapshot.docs.map(doc => ({ 
+            id: doc.id, ...doc.data() 
+          }));
+
+          setGuestList(guests);
+          setGuestCount(guests.length);
+          setYes(guests.filter(guest => guest.status === 'Yes').length);
+          setNo(guests.filter(guest => guest.status === 'No').length);
+          setNone(guests.filter(guest => guest.status === 'None').length);
+
+        } else {
+          console.log("No guest found for customer ID:", customerID)
+        }
+      } else {
+        console.log('No such document!');
+      }
+    } catch (error) {
+      console.error('Error getting document:', error);
+    }
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    getDeadline();
+  }, [customerID]);
+
+  const handleAddDate = async (date) => {
     setDeadline(date);
+    try {
+      const customerRef = doc(db, 'customer', customerID);
+      await updateDoc(customerRef, { deadline_guest: date });
+    } catch (error) {
+      console.error('Error updating document:', error);
+    }
   };
 
   const formatDate = (date) => {
@@ -37,19 +92,45 @@ const GuestManager = () => {
     setModalGuestVisible(true);
   };
 
-  const handleAddGuest = (name, role) => {
-    const newGuest = { name, role, status: 'None' };
-    setGuestList([...guestList, newGuest]);
-    setGuestCount(guestCount + 1);
-    setNone(none + 1);
-    setModalGuestVisible(false);
+  const handleAddGuest = async (name, role) => {
+    try {
+      setModalGuestVisible(false);
+      const newGuest = { name, role, status: 'None' };
+      const guestCollectionRef = collection(db, 'customer', customerID, 'guest');
+      const guestDocRef = await addDoc(guestCollectionRef, newGuest);
+      const guestWithId = { id: guestDocRef.id, ...newGuest };
+
+      setGuestList([...guestList, guestWithId]);
+      setGuestCount(guestCount + 1);
+      setNone(none + 1);
+      updateTotalGuestCount(guestCount + 1);
+    } catch (error) {
+      console.error('Error adding guest:', error);
+    }
   };
 
-  const handleRemoveGuest = (name, status) => {
-    const updatedGuestList = guestList.filter(guest => guest.name !== name);
-    setGuestList(updatedGuestList);
-    setGuestCount(updatedGuestList.length);
-    updateStatusCount(status, 'decrease');
+  const handleRemoveGuest = async (id, status) => {
+    try {
+      const guestRef = doc(db, 'customer', customerID, 'guest', id);
+      await deleteDoc(guestRef);
+      const updatedGuestList = guestList.filter(guest => guest.id !== id);
+
+      setGuestList(updatedGuestList);
+      setGuestCount(updatedGuestList.length);
+      updateStatusCount(status, 'decrease');
+      updateTotalGuestCount(updatedGuestList.length);
+    } catch (error) {
+      console.error('Error removing guest:', error);
+    }
+  };
+
+  const updateTotalGuestCount = async (count) => {
+    try {
+      const customerRef = doc(db, 'customer', customerID);
+      await updateDoc(customerRef, { total_guest: count });
+    } catch (error) {
+      console.error('Error updating total guest count:', error);
+    }
   };
 
   const updateStatusCount = (status, operation) => {
@@ -64,16 +145,28 @@ const GuestManager = () => {
     }
   };
 
-  const handleChangeStatus = (name, newStatus) => {
-    const updatedGuestList = guestList.map(guest => {
-      if (guest.name === name) {
-        updateStatusCount(guest.status, 'decrease');
+  const handleChangeStatus = async (id, newStatus) => {
+    try {
+      const guestRef = doc(db, 'customer', customerID, 'guest', id);
+      const guestDoc = await getDoc(guestRef);
+
+      if (guestDoc.exists()) {
+        const guestData = guestDoc.data();
+        updateStatusCount(guestData.status, 'decrease');
         updateStatusCount(newStatus, 'increase');
-        return { ...guest, status: newStatus };
+
+        await updateDoc(guestRef, { status: newStatus });
+        const updatedGuestList = guestList.map(guest => {
+          if (guest.id === id) {
+            return { ...guest, status: newStatus };
+          }
+          return guest;
+        });
+        setGuestList(updatedGuestList);
       }
-      return guest;
-    });
-    setGuestList(updatedGuestList);
+    } catch (error) {
+      console.error('Error updating guest status:', error);
+    }
   };
 
   return (
@@ -108,11 +201,12 @@ const GuestManager = () => {
           {guestList.map((guest, index) => (
             <Guest 
               key={index} 
+              id={guest.id}
               name={guest.name} 
               role={guest.role} 
               status={guest.status}
-              onRemove={() => handleRemoveGuest(guest.name, guest.status)}
-              onChangeStatus={(newStatus) => handleChangeStatus(guest.name, newStatus)}
+              onRemove={() => handleRemoveGuest(guest.id, guest.status)}
+              onChangeStatus={(newStatus) => handleChangeStatus(guest.id, newStatus)}
             />
           ))}
         </ScrollView>
@@ -139,6 +233,11 @@ const GuestManager = () => {
         newGuest={newGuest}
         setNewGuest={setNewGuest}
       />
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+        </View>
+      )}
     </View>
   );
 };
@@ -172,7 +271,17 @@ const styles = StyleSheet.create({
     marginTop: 42,
     marginHorizontal: 8,
     marginBottom: 42,
-  }
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
 
 });
 

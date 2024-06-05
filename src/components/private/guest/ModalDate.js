@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import MyTheme from '../../../config/theme.js';
 import { Cross } from '../../../../assets/icons/budget/index.js';
@@ -6,7 +6,16 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const ModalDate = ({ visible, onClose, onAddTarget, oldTarget }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date(oldTarget));
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    useEffect(() => {
+        if (oldTarget) {
+            const date = new Date(oldTarget);
+            if (!isNaN(date.getTime())) {
+                setSelectedDate(date);
+            }
+        }
+    }, [oldTarget]);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
