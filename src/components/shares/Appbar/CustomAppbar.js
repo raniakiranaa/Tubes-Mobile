@@ -1,5 +1,5 @@
-import React from 'react';
-import { Appbar, Text } from 'react-native-paper';
+import React, { useState } from 'react';
+import { Appbar, Text, Menu, PaperProvider } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import BackIcon from '../../../../assets/icons/Back';
 import SaveIcon from '../../../../assets/icons/Save';
@@ -9,52 +9,68 @@ import MyTheme from '../../../config/theme';
 
 const CustomAppbar = ({ title, isBackButton, isAction, ActionIcon, isTransparent }) => {
   const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
 
   return (
     <Appbar.Header style={[isTransparent ? styles.transparentHeader : styles.header]}>
-      <View style={styles.leftIconsContainer}>
-        {isBackButton && (
-          <Appbar.Action
-            icon={
-              isTransparent
-                ? () => <BackIcon strokeColor={MyTheme.colors.white} />
-                : () => <BackIcon strokeColor={MyTheme.colors.black} />
-            }
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      </View>
-      <View style={styles.titleContainer}>
-        {isTransparent ? (
-          <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>{title}</Text>
-        ) : (
-          <Text style={[MyTheme.typography.subtitle.sub_2]}>{title}</Text>
-        )}
-      </View>
-      <View style={styles.rightIconsContainer}>
-      {isAction && (
-        <Appbar.Action
-          icon={
-            ActionIcon === 'Save' && isTransparent
-              ? () => <SaveIcon strokeColor={MyTheme.colors.white} />
-              : ActionIcon === 'Save' && !isTransparent
-              ? () => <SaveIcon strokeColor={MyTheme.colors.black} />
-              : ActionIcon === 'Dots' && isTransparent
-              ? () => <DotsIcon strokeColor={MyTheme.colors.white} />
-              : ActionIcon === 'Dots' && !isTransparent
-              ? () => <DotsIcon strokeColor={MyTheme.colors.black} />
-              : null
-          }
-          onPress={
-            ActionIcon === 'Save'
-              ? () => navigation.navigate('SavedVendor')
-              : ActionIcon === 'Dots'
-              ? () => console.log('Dots Pressed')
-              : () => console.log('Action Pressed')
-          }
-        />
-      )}
-    </View>
+      <PaperProvider>
+        <View style={styles.leftIconsContainer}>
+          {isBackButton && (
+            <Appbar.Action
+              icon={
+                isTransparent
+                  ? () => <BackIcon strokeColor={MyTheme.colors.white} />
+                  : () => <BackIcon strokeColor={MyTheme.colors.black} />
+              }
+              onPress={() => navigation.goBack()}
+            />
+          )}
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={[
+            MyTheme.typography.subtitle.sub_2,
+            { color: isTransparent ? MyTheme.colors.white : MyTheme.colors.black }
+          ]}>
+            {title}
+          </Text>
+        </View>
+        <View style={styles.rightIconsContainer}>
+          {isAction && ActionIcon === 'Dots' && (
+            <Menu
+              visible={menuVisible}
+              onDismiss={closeMenu}
+              anchor={
+                <Appbar.Action
+                  icon={
+                    isTransparent
+                      ? () => <DotsIcon strokeColor={MyTheme.colors.white} />
+                      : () => <DotsIcon strokeColor={MyTheme.colors.black} />
+                  }
+                  onPress={openMenu}
+                />
+              }
+              contentStyle={styles.menuContent}
+              theme={{ roundness: 10 }}
+            >
+              <Menu.Item onPress={() => navigation.navigate('BudgetPlanner')} title="Budget Planner" />
+              <Menu.Item onPress={() => navigation.navigate('GuestManager')} title="Guest Manager" />
+            </Menu>
+          )}
+          {isAction && ActionIcon === 'Save' && (
+            <Appbar.Action
+              icon={
+                isTransparent
+                  ? () => <SaveIcon strokeColor={MyTheme.colors.white} />
+                  : () => <SaveIcon strokeColor={MyTheme.colors.black} />
+              }
+              onPress={() => navigation.navigate('SavedVendor')}
+            />
+          )}
+        </View>
+      </PaperProvider>
     </Appbar.Header>
   );
 };
@@ -98,6 +114,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
+  },
+  menuContent: {
+    backgroundColor: MyTheme.colors.white, // Set the background color of the menu to white
   },
 });
 
