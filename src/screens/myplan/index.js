@@ -1,21 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { CustomButton } from '../../components/shares/Buttons';
 import MyTheme from '../../config/theme.js';
 import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 import ModalCategory from '../../components/private/myplan/ModalCategory.js';
 import { db } from '../../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDoc, getDocs, updateDoc, query, where, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 const scaleFontSize = screenWidth * 0.04;
 
 const MyPlan = () => {
+  // user
+  const [customerID, setCustomerID] = useState('1');
+
+  const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategory, setNewCategory] = useState('');
-  const [categories, setCategories] = useState([{ id: 1, name: 'Pre-Wedding' }]); // default
+  const [categories, setCategories] = useState([])
+
+  // default category - Pre Wedding
+  const getCategories = async () => {
+    setLoading(true)
+    try {
+      const categoryQuery = query(collection(db, 'customer', customerID, 'categories'), where('name', '==', 'Pre-Wedding'));
+      const querySnapshot = await getDocs(categoryQuery);
+
+      if (querySnapshot.empty) {
+        await addDoc(collection(db, 'customer', customerID, 'categories'), { name: 'Pre-Wedding' });
+      }
+
+      const categoriesSnapshot = await getDocs(collection(db, 'customer', customerID, 'categories'));
+      const fetchedCategories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setCategories(fetchedCategories);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+    setLoading(false)
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, [customerID]);
 
   const navigation = useNavigation();
 
@@ -23,11 +51,18 @@ const MyPlan = () => {
     setModalVisible(true);
   };
 
-  const handleAddCategory = () => {
-    if (newCategory.trim()) {
-      setCategories([...categories, { id: categories.length + 1, name: newCategory }]);
-      setNewCategory('');
-      setModalVisible(false);
+  const handleAddCategory = async () => {
+    try {
+      if (newCategory.trim()) {
+        const categoryRef = collection(db, 'customer', customerID, 'categories');
+        await addDoc(categoryRef, { name: newCategory });
+
+        setCategories([...categories, { id: categories.length + 1, name: newCategory }]);
+        setNewCategory('');
+        setModalVisible(false);
+      }
+    } catch (error) {
+      console.error('Error adding category:', error);
     }
   };
 
@@ -90,6 +125,11 @@ const MyPlan = () => {
           setNewCategory={setNewCategory}
         />
       </View>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+        </View>
+      )}
     </View>
   );
 };
@@ -122,6 +162,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+
 });
 
 export default MyPlan;
