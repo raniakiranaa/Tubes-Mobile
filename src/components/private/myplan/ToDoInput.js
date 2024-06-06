@@ -5,22 +5,40 @@ import CheckBox from '../../../../assets/icons/myplan/Checkbox.js';
 import Checked from '../../../../assets/icons/myplan/Checked.js';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Trash } from '../../../../assets/icons/budget/index.js'
+import { db } from '../../../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 export const ToDoInput = (props) => {
+    // user
+    const customerID = props.customerID;
+
     const [inputValue, setInputValue] = useState(props.value);
     const [inputHeight, setInputHeight] = useState(42);
     const [isIconPressed, setIsIconPressed] = useState(false);
+    const [status, setStatus] = useState(props.status);
 
     const handleContentSizeChange = (e) => {
         const newHeight = e.nativeEvent.contentSize.height + 10;
         setInputHeight(newHeight);
     };
 
-    const handleIconPress = () => {
-        setIsIconPressed(!isIconPressed);
+    const handleIconPress = async () => {
+        try {
+            const todoDocRef = doc(db, 'customer', customerID, 'categories', props.categoryID, 'todos', props.id);
+            const newStatus = status === 'Yes' ? 'No' : 'Yes';
+            
+            await updateDoc(todoDocRef, { status: newStatus });
+    
+            setIsIconPressed(!isIconPressed);
+            setStatus(newStatus);
+        } catch (error) {
+            console.error('Error updating todo status:', error);
+        }
     };
 
-    const IconComponent = isIconPressed ? () => <Checked /> : () => <CheckBox /> ;
+    const IconComponent = ({ status }) => {
+        return status === 'Yes' ? <Checked /> : <CheckBox />;
+    };
 
     const containerStyle = {
         flexDirection: "row",
@@ -49,7 +67,7 @@ export const ToDoInput = (props) => {
         <Swipeable renderRightActions={renderRightActions}>
             <View style={containerStyle}>
                 <TouchableOpacity onPress={handleIconPress}>
-                    <IconComponent />
+                    <IconComponent status={status}/>
                 </TouchableOpacity>
                 <TextInput
                     style={styles.input}

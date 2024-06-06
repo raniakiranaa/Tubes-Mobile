@@ -82,10 +82,13 @@ export const ToDo = (props) => {
                     <ToDoInput 
                         key={todo.id}
                         id={todo.id}
+                        customerID={props.customerID}
+                        categoryID={props.categoryID}
                         placeholder="Add to-do"
                         mode="text"
                         iconProps={{ width: 20, height: 20 }}
                         value={todo.value}
+                        status={todo.status}
                         onChangeText={(text) => handleTodoChange(text, todo.id)}
                         onDelete={handleDelete}
                     />
