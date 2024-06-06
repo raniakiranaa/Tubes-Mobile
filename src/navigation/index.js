@@ -20,6 +20,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { firebase_auth } from '../firebase/index.js';
 import BudgetPlanner from '../screens/budgetplanner/index.js';
 import GuestManager from '../screens/guestmanager/index.js';
+import Blog from '../screens/blog/index.js';
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -124,9 +125,28 @@ function AuthLayout({ isAdmin }) {
                 options={{ header: () => null }}
             />
             <AuthStack.Screen
+                name="Blog"
+                component={Blog}
+                options={{
+                    header: () => (
+                    <>
+                        <CustomAppbar title="Blog" isBackButton={true} isAction={false} isTransparent={false}/>
+                    </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                }}
+            />
+            <AuthStack.Screen
                 name="DetailBlog"
                 component={DetailBlog}
-                options={{ header: () => null }}
+                options={{
+                    header: () => (
+                    <>
+                        <CustomAppbar title="Detail Blog" isBackButton={true} isAction={false} isTransparent={false}/>
+                    </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                }}
             />
             <AuthStack.Screen
                 name="Done"
