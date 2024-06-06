@@ -1,40 +1,30 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import MyTheme from '../../../config/theme';
-import { useNavigation } from '@react-navigation/native';
 
-const OrderItem = ({ order }) => {
-  const navigation = useNavigation();
-  const handlePress = () => {
-    if (order.status === 'Delivered') {
-      navigation.navigate('RatingReview');
-    }
-    else {
-      navigation.navigate('OrderDetail');
-    }
-  };
+const OrderItem = ({ image, vendor_name, catalog_name, catalog_category, pax, price, status, order_date, onPress }) => {
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
-        <Image source={{ uri: order.image }} style={styles.image} />
+        <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.details}>
-          <Text style={styles.title}>{order.title}</Text>
-          <Text style={[styles.package, MyTheme.typography.body.body_3]}>{order.package}</Text>
-          <Text style={[styles.price, MyTheme.typography.body.body_3]}>{order.price}</Text>
+          <Text style={styles.title}>{vendor_name}</Text>
+          <Text style={[styles.package, MyTheme.typography.body.body_3]}>{catalog_name} • {pax} pax</Text>
+          <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.brown_3}]}><Text style={{color: MyTheme.colors.pink_2}}>{catalog_category}</Text> • {price}</Text>
           <View style={styles.statusContainer}>
-              {order.status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3, { color: '#D1B75D' }]}>{order.status}</Text>}
-              {order.status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
-              {order.status === 'Delivered' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{order.status}</Text>}
-              {order.status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3, { color: '#E98D39' }]}>{order.status}</Text>}
-              {order.status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3, { color: '#E2796B' }]}>{order.status}</Text>}
+              {status === 'Payment Confirmation' && <Text style={[styles.statusYellow, MyTheme.typography.body.body_3, { color: '#D1B75D' }]}>{status}</Text>}
+              {status === 'Booked' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{status}</Text>}
+              {status === 'Delivered' && <Text style={[styles.statusGreen, MyTheme.typography.body.body_3, { color: '#77A670' }]}>{status}</Text>}
+              {status === 'Waiting for Payment' && <Text style={[styles.statusOrange, MyTheme.typography.body.body_3, { color: '#E98D39' }]}>{status}</Text>}
+              {status === 'Vendor Confirmation' && <Text style={[styles.statusRed, MyTheme.typography.body.body_3, { color: '#E2796B' }]}>{status}</Text>}
           </View>
         </View>
         <View style={styles.actions}>
-          <Text style={MyTheme.typography.body.body_3}>{order.date}</Text>
+          <Text style={MyTheme.typography.body.body_3}>{order_date}</Text>
           <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
-            {order.status === 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Pay</Text>}
-            {order.status === 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Rating</Text>}
-            {order.status !== 'Waiting for Payment' && order.status !== 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Chat</Text>}
+            {status === 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Pay</Text>}
+            {status === 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Rating</Text>}
+            {status !== 'Waiting for Payment' && status !== 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Chat</Text>}
           </TouchableOpacity>
         </View>
       </View>
@@ -65,9 +55,6 @@ const styles = StyleSheet.create({
   },
   package: {
     color: MyTheme.colors.neutral_1,
-  },
-  price: {
-    color: MyTheme.colors.brown_3,
   },
   statusContainer: {
     flexWrap: 'wrap',

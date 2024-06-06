@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState,useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyTheme from '../../config/theme';
 import CustomStarRating from '../../components/shares/Rating/CustomStarRating';
 import WriteIcon from '../../../assets/icons/Write.svg';
+import { db } from '../../firebase';
+import { getDoc, doc } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../contexts/UserContext.js';
 
-const RatingReview = () => {
+const RatingReview = ({ route }) => {
   const order = {
     customer: {
       name: 'Eveey',
@@ -25,6 +29,82 @@ const RatingReview = () => {
     status: 'Vendor Confirmation',
     statusMessage: 'Waiting for the vendor to confirm service availability on February 14th, 2024.',
   };
+
+  const { user } = useContext(UserContext);
+  const { id } = route.params;
+  const orderID = `${id}`
+  const [orderDeliveredData, setOrderDeliveredData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getOrderDelivered = async () => {
+    setLoading(true);
+    try {
+      const orderRef = doc(db, 'customer', user.id, 'order', orderID);
+      const orderSnap = await getDoc(orderRef);
+      
+      if (orderSnap.exists()) {
+        const orderData = orderSnap.data();
+        const vendorRef = doc(db, 'vendor', `${orderData.vendor_ID}`);
+        const vendorSnap = await getDoc(vendorRef);
+        if (vendorSnap.exists()) {
+          const vendorData = vendorSnap.data();
+          const catalogRef = doc(db, 'vendor', `${orderData.vendor_ID}`, 'catalog', `${orderData.catalog_ID}`);
+          const catalogSnap = await getDoc(catalogRef);
+          if (catalogSnap.exists()) {
+            const catalogData = catalogSnap.data();
+            setOrderDeliveredData({
+              id: orderSnap.id,
+              ...orderData,
+              vendor_name: vendorData.name,
+              vendor_image: vendorData.image,
+              vendor_location: vendorData.location,
+              catalog_name: catalogData.name,
+              catalog_image: catalogData.catalog_img,
+              catalog_pax: catalogData.pax,
+              catalog_price: catalogData.price,
+            });
+          } else {
+            console.error('No catalog found with ID: ', orderData.catalog_ID);
+            setOrderDeliveredData({
+              id: orderSnap.id,
+              ...orderData,
+              vendor_name: vendorData.name,
+              vendor_image: vendorData.image,
+              vendor_location: vendorData.location,
+              catalog_name: null,
+              catalog_image: null,
+              catalog_pax: null,
+              catalog_price: null,
+            });
+          }
+        } else {
+          console.error('No vendor found with ID: ', orderData.vendor_ID);
+          setOrderDeliveredData({
+            id: orderSnap.id,
+            ...orderData,
+            vendor_name: null,
+            vendor_image: null,
+            vendor_location: null,
+            catalog_name: null,
+            catalog_image: null,
+            catalog_pax: null,
+            catalog_price: null,
+          });
+        }
+      } else {
+        console.log('No matching documents.');
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.error('Error getting documents: ', error);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getOrderDelivered();
+  }, [id]);
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
@@ -53,29 +133,47 @@ const RatingReview = () => {
     await AsyncStorage.setItem('isSubmitted', 'true');
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+  };
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" color={MyTheme.colors.brown_2} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Image source={{ uri: order.vendor.image }} style={styles.vendorImage} />
+        <Image source={{ uri: orderDeliveredData.vendor_image }} style={styles.vendorImage} />
         <View>
-          <Text style={[styles.sectionHeader]}>{order.vendor.name}</Text>
-          <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1 }]}>{order.vendor.address}</Text>
+          <Text style={[styles.sectionHeader]}>{orderDeliveredData.vendor_name}</Text>
+          <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1 }]}>{orderDeliveredData.vendor_location}</Text>
         </View>
       </View>
       <View style={styles.rating}>
-        <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>How was the order, <Text style={{ color: MyTheme.colors.pink_2 }}>{order.customer.name}</Text></Text>
+        <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>How was the order, <Text style={{ color: MyTheme.colors.pink_2 }}>{user.name}?</Text></Text>
         <CustomStarRating rating={rating} onChange={setRating} starSize={40} disabled={isSubmitted} />
       </View>
       <View style={styles.packageContainer}>
-        <Image source={{ uri: order.vendor.image }} style={styles.packageImage} />
+        <Image source={{ uri: orderDeliveredData.catalog_image }} style={styles.packageImage} />
         <View style={styles.packageDetails}>
-          <Text style={MyTheme.typography.subtitle.sub_3}>{order.package.name}</Text>
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>by <Text style={{ color: MyTheme.colors.pink_2 }}>{order.vendor.name}</Text></Text>
+          <Text style={MyTheme.typography.subtitle.sub_3}>{orderDeliveredData.catalog_name}</Text>
+          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>by <Text style={{ color: MyTheme.colors.pink_2 }}>{orderDeliveredData.vendor_name}</Text></Text>
           <View style={styles.vendorPriceDetail}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]}>{order.package.price}</Text>
-            <Text style={MyTheme.typography.body.body_2}> • {order.package.pax}</Text>
+            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]}>{formatCurrency(orderDeliveredData.catalog_price)}</Text>
+            <Text style={MyTheme.typography.body.body_2}> • {orderDeliveredData.catalog_pax} pax</Text>
           </View>
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>Date: {order.package.date}</Text>
+          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>Date: {formatDate(orderDeliveredData.date_order)}</Text>
         </View>
       </View>
 
@@ -196,6 +294,16 @@ const styles = StyleSheet.create({
   thankYouContainer: {
     alignItems: 'center',
     marginTop: 20,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 

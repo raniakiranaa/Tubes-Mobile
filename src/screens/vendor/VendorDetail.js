@@ -158,10 +158,10 @@ const VendorDetailPage = ({ route }) => {
               title={item.name}
               subtitle={formatCurrency(item.price)}
               pax={item.pax + ' pax'}
-              onPress={() => navigation.navigate('ProductDetail', { id: item.catalog_id, vendor_name: vendorData.name, vendor_id: vendorID, vendor_image: vendorData.image})}
+              onPress={() => navigation.navigate('ProductDetail', { id: item.id, vendor_name: vendorData.name, vendor_id: vendorID, vendor_image: vendorData.image})}
             />
           )}
-          keyExtractor={item => item.catalog_id}
+          keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
         />
@@ -191,10 +191,10 @@ const VendorDetailPage = ({ route }) => {
                   description={item.description}
                   date={formatDate(item.created_at)}
                   vendor_name={vendorData.name}
-                  onPress={() => navigation.navigate('DetailBlog', { id: item.blog_id })}
+                  onPress={() => navigation.navigate('DetailBlog', { id: item.id })}
                 />
               )}
-              keyExtractor={item => item.blog_id}
+              keyExtractor={item => item.id}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
             />
