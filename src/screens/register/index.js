@@ -27,7 +27,7 @@ const Register = () => {
   }
 
   const handleVendor = () => {
-    nav.navigate("#");
+    nav.navigate("ComingSoon");
   }  
 
   const validation = () => {
@@ -71,7 +71,7 @@ const Register = () => {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       
-      await addDoc(collection(db, 'customer'), {
+      const docRef = await addDoc(collection(db, 'customer'), {
         name: name,
         email: email,
         password: password,
@@ -86,7 +86,9 @@ const Register = () => {
         wedding_role: null,
       });
 
+      console.log(docRef);
       setUser({
+        id: docRef.id,
         name: name,
         email: email,});
       // setUser(response.user)

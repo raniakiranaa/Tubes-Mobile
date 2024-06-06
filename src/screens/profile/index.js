@@ -16,19 +16,19 @@ const Profile = ( ) => {
     const nav = useNavigation();
     const { user } = useContext(UserContext);
     const handleEditProfile = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleSettings = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleHelpsFAQ = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleTnC = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleLogout = () => {

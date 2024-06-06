@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -26,7 +26,11 @@ const Login = () => {
   }
 
   const handleVendor = () => {
-    nav.navigate("#");
+    nav.navigate("ComingSoon");
+  }
+
+  const handleForget = () => {
+    nav.navigate("ComingSoon");
   }
 
   const validation = () => {
@@ -66,11 +70,19 @@ const Login = () => {
       const querySnapshot = await getDocs(userQuery);
 
       if(!querySnapshot.empty) {
-        const userData = querySnapshot.docs[0].data();
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
 
         // Set pengguna ke konteks pengguna
         const { name, email } = userData;
-        setUser({ name, email });
+        const docID = userDoc.id;
+
+        setUser({ 
+          id:docID, 
+          name: name, 
+          email: email 
+        });
+
       } else {
         console.log('User data not found');
       }
@@ -143,7 +155,7 @@ const Login = () => {
                     onChangeText={(text) => setPassword(text)}
                   />
                 </View>
-                <Text style={[styles.passContainer, MyTheme.typography.body.body_2]}>
+                <Text onPress={handleForget} style={[styles.passContainer, MyTheme.typography.body.body_2]}>
                   Forgot the password?
                 </Text>
               </View>

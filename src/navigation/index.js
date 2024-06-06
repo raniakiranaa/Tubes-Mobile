@@ -21,6 +21,7 @@ import { firebase_auth } from '../firebase/index.js';
 import BudgetPlanner from '../screens/budgetplanner/index.js';
 import GuestManager from '../screens/guestmanager/index.js';
 import Blog from '../screens/blog/index.js';
+import ComingSoon from '../screens/comingSoon/index.js';
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -181,6 +182,19 @@ function AuthLayout({ isAdmin }) {
                     tabBarStyle: { display: 'none' },
                 }}
             />
+            <AuthStack.Screen
+                name="ComingSoon"
+                component={ComingSoon}
+                options={{
+                    header: () => (
+                    <>
+                        <CustomHeader />
+                        <CustomAppbar title="" isBackButton={true} isAction={false} isTransparent={true}/>
+                    </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                }}
+            ></AuthStack.Screen>
         </AuthStack.Navigator>
     );
 }
@@ -190,7 +204,7 @@ export default function Navigation({ isAdmin }) {
 
     useEffect(() => {
         onAuthStateChanged(firebase_auth, (user) => {
-            // console.log('user', user);
+            console.log('user', user);
             setUser(user);
         });
     }, []);
@@ -213,6 +227,19 @@ export default function Navigation({ isAdmin }) {
                             name="Register"
                             component={Register}
                             options={{ header: () => null }}
+                        />
+                        <Stack.Screen
+                            name="ComingSoon"
+                            component={ComingSoon}
+                            options={{
+                                header: () => (
+                                <>
+                                    <CustomHeader />
+                                    <CustomAppbar title="" isBackButton={true} isAction={false} isTransparent={true}/>
+                                </>
+                                ),
+                                tabBarStyle: { display: 'none' },
+                            }}
                         />
                     </>
                 )}
