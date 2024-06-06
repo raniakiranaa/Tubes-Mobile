@@ -7,7 +7,7 @@ import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 import ModalCategory from '../../components/private/myplan/ModalCategory.js';
 import { db } from '../../firebase';
-import { collection, getDoc, getDocs, setDoc, updateDoc, query, where, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
+import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 const scaleFontSize = screenWidth * 0.04;
@@ -36,7 +36,7 @@ const MyPlan = () => {
         const preWeddingDocRef = await addDoc(categoriesCollectionRef, { createdAt: Timestamp.now(), name: 'Pre-Wedding' });
         
         const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', preWeddingDocRef.id, 'todos');
-        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: 'No' });
+        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: false });
 
         await updateDoc(customerDocRef, { initMyPlan: true });
       }
@@ -67,7 +67,7 @@ const MyPlan = () => {
         const categoryRef = collection(db, 'customer', customerID, 'categories');
         const newCategoryRef = await addDoc(categoryRef, { createdAt: Timestamp.now(), name: newCategory });
         const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', newCategoryRef.id, 'todos');
-        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: 'No' });
+        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: false });
 
         setCategories([...categories, { id: newCategoryRef.id, name: newCategory }]);
         setNewCategory('');

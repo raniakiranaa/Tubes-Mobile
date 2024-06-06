@@ -25,7 +25,7 @@ export const ToDoInput = (props) => {
     const handleIconPress = async () => {
         try {
             const todoDocRef = doc(db, 'customer', customerID, 'categories', props.categoryID, 'todos', props.id);
-            const newStatus = status === 'Yes' ? 'No' : 'Yes';
+            const newStatus = !status;
             
             await updateDoc(todoDocRef, { status: newStatus });
     
@@ -37,7 +37,7 @@ export const ToDoInput = (props) => {
     };
 
     const IconComponent = ({ status }) => {
-        return status === 'Yes' ? <Checked /> : <CheckBox />;
+        return status ? <Checked /> : <CheckBox />;
     };
 
     const containerStyle = {

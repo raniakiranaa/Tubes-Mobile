@@ -32,7 +32,7 @@ export const ToDo = (props) => {
 
     const addNewTodo = async () => {
         try {
-            const newTodo = { createdAt: Timestamp.now(), value: '', status: 'No' };
+            const newTodo = { createdAt: Timestamp.now(), value: '', status: false };
             const todosCollectionRef = collection(db, 'customer', customerID, 'categories', props.categoryID, 'todos');
             const newDocRef = await addDoc(todosCollectionRef, newTodo);
 
