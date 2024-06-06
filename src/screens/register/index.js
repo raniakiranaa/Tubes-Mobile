@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
@@ -10,7 +10,9 @@ import UnameIcon from '../../../assets/icons/Uname/index.js';
 import { HeaderStart } from '../../components/shares/Nav/HeaderStart.js';
 import Toast from 'react-native-toast-message';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { firebase_auth } from '../../firebase/index.js';
+import { db, firebase_auth } from '../../firebase/index.js';
+import { UserContext } from '../../contexts/UserContext.js';
+import { addDoc, collection } from 'firebase/firestore';
 
 const Register = () => {
   const nav = useNavigation();
@@ -18,13 +20,14 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cPassword, setcPassword] = useState('');
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = () => {
     nav.navigate("Login");
   }
 
   const handleVendor = () => {
-    nav.navigate("#");
+    nav.navigate("ComingSoon");
   }  
 
   const validation = () => {
@@ -36,6 +39,10 @@ const Register = () => {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return errors = 'Please enter a valid email address';
+    }
+
+    if(password.length < 6) {
+      return errors = 'Password should be at least 6 characters'
     }
 
     if(password !== cPassword) {
@@ -63,15 +70,44 @@ const Register = () => {
 
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
+      
+      const docRef = await addDoc(collection(db, 'customer'), {
+        name: name,
+        email: email,
+        password: password,
+        contact: null,
+        married_city: null,
+        deadline_guest: null,
+        married_date: null,
+        partner_name: null,
+        role: 'customer',
+        target_budget: null,
+        total_guest: null,
+        wedding_role: null,
+      });
+
+      console.log(docRef);
+      setUser({
+        id: docRef.id,
+        name: name,
+        email: email,});
+      // setUser(response.user)
       Toast.show({
         type: 'success',
         text1: 'Register successful!',
       });
     } catch (error) {
+      let errorMessage = 'Register failed! ' + error.message;
+  
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'Email already in use';
+      }
+  
       Toast.show({
         type: 'error',
-        text1: 'Register failed! ' + error.message,
+        text1: errorMessage,
       });
+      console.log(error.message);
     }
   };
 

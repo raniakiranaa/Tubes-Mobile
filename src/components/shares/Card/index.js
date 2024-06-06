@@ -23,9 +23,9 @@ const star = require('../../../../assets/icons/star.png');
 export const CarouselCard = ({ image }) => { //({ image,onPress }) => {   onPress={onPress}
     // console.log(image);
     return (
-        <TouchableOpacity style={styles.carouselContainer}> 
+        <View style={styles.carouselContainer}> 
             <Image source={ {uri: image} } style={styles.carouselImage} />
-        </TouchableOpacity>
+        </View>
     );
 }
 

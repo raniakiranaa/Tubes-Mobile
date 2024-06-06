@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -9,9 +9,10 @@ import PasswordIcon from '../../../assets/icons/Password/index.js';
 import UnameIcon from '../../../assets/icons/Uname/index.js';
 import { HeaderStart } from '../../components/shares/Nav/HeaderStart.js';
 import Toast from 'react-native-toast-message';
-import { firebase_auth } from '../../firebase/index.js';
+import { db, firebase_auth } from '../../firebase/index.js';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { UserContext } from '../../contexts/UserContext.js';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const Login = () => {
   const nav = useNavigation();
@@ -25,7 +26,11 @@ const Login = () => {
   }
 
   const handleVendor = () => {
-    nav.navigate("#");
+    nav.navigate("ComingSoon");
+  }
+
+  const handleForget = () => {
+    nav.navigate("ComingSoon");
   }
 
   const validation = () => {
@@ -60,8 +65,29 @@ const Login = () => {
     
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
-      setUser(response.user)
+      // console.log(response);
+      const userQuery = query(collection(db, 'customer'),  where('email', '==', email));
+      const querySnapshot = await getDocs(userQuery);
+
+      if(!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+
+        // Set pengguna ke konteks pengguna
+        const { name, email } = userData;
+        const docID = userDoc.id;
+
+        setUser({ 
+          id:docID, 
+          name: name, 
+          email: email 
+        });
+
+      } else {
+        console.log('User data not found');
+      }
+
+      // setUser(response.user)
       Toast.show({
         type: 'success',
         text1: 'Login successful!',
@@ -129,7 +155,7 @@ const Login = () => {
                     onChangeText={(text) => setPassword(text)}
                   />
                 </View>
-                <Text style={[styles.passContainer, MyTheme.typography.body.body_2]}>
+                <Text onPress={handleForget} style={[styles.passContainer, MyTheme.typography.body.body_2]}>
                   Forgot the password?
                 </Text>
               </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -10,23 +10,25 @@ import FAQIcon from '../../../assets/icons/FAQ/index.js';
 import TnC from '../../../assets/icons/Tnc/index.js';
 import LogoutIcon from '../../../assets/icons/Logout/index.js';
 import { firebase_auth } from '../../firebase/index.js';
+import { UserContext } from '../../contexts/UserContext.js';
 
 const Profile = ( ) => {
     const nav = useNavigation();
+    const { user } = useContext(UserContext);
     const handleEditProfile = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleSettings = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleHelpsFAQ = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleTnC = () => {
-        nav.navigate('#');
+        nav.navigate('ComingSoon');
     }
 
     const handleLogout = () => {
@@ -42,10 +44,10 @@ const Profile = ( ) => {
                     source={require('../../../assets/images/Eveey.jpg')}
                 />
                 <Text style={[styles.nameCust, MyTheme.typography.subtitle.sub_1]}>
-                    Eveey
+                    {user?.name || 'Eveey'}
                 </Text>
                 <Text style={MyTheme.typography.body.body_2}>
-                    eveey12345
+                    {user?.email || 'eveey12345@gmail.com'}
                 </Text>
             </View>
             <View style={styles.optionContainer}>
