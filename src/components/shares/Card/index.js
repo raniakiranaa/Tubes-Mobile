@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from 'rea
 import * as React from 'react';
 import MyTheme from '../../../config/theme';
 import { shadow } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -46,35 +45,33 @@ export const BigHomeCard = ({ image, title, subtitle, foot, onPress }) => {
     );
 }
 
-export const BigSearchCard = ({ image, title, type, location, price, rating }) => {
+export const BigSearchCard = ({ image, title, type, location, price, rating, onPress }) => {
     return (
-        <View className='flex-column items-center rounded-xl bg-white' style={[MyTheme.shadows.shadow_1, {width: 330, height: 182}]}>
-            <Image source={image} className='h-2/3 w-full rounded-t-lg' />
-            <View className='flex-row justify-between items-center px-2 pt-2 pb-0.5'>
-                <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch flex-1'>{title}</Text>
-                <View className='flex-row items-center border rounded-full py-0.5 px-1.5' style={{borderColor: MyTheme.colors.neutral_300}}>
-                    <Image className='h-3 w-3' source={star} />
-                    {rating % 1 === 0 ? <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}.0</Text> : <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}</Text>}
+        <TouchableOpacity onPress={onPress}>
+            <View className='flex-column items-center rounded-xl bg-white' style={[MyTheme.shadows.shadow_1, {width: 330, height: 182}]}>
+                <Image source={image} className='h-2/3 w-full rounded-t-lg' />
+                <View className='flex-row justify-between items-center px-2 pt-2 pb-0.5'>
+                    <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch flex-1'>{title}</Text>
+                    <View className='flex-row items-center border rounded-full py-0.5 px-1.5' style={{borderColor: MyTheme.colors.neutral_300}}>
+                        <Image className='h-3 w-3' source={star} />
+                        {rating % 1 === 0 ? <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}.0</Text> : <Text style={[MyTheme.typography.body.body_3, {color: MyTheme.colors.black}]}> {rating}</Text>}
+                    </View>
+                </View>
+                <View className='px-2 mb-3 text-left self-stretch'>
+                    <Text style={[MyTheme.typography.body.body_3]}>
+                        <Text style={{color: MyTheme.colors.pink_2}}>{type}</Text>
+                        <Text> • {location}</Text>
+                        {price && <Text> • {price}</Text>}
+                    </Text>
                 </View>
             </View>
-            <View className='px-2 mb-3 text-left self-stretch'>
-                <Text style={[MyTheme.typography.body.body_3]}>
-                    <Text style={{color: MyTheme.colors.pink_2}}>{type}</Text>
-                    <Text> • {location}</Text>
-                    {price && <Text> • {price}</Text>}
-                </Text>
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
-export const BigVendorCard = ({ image, title, subtitle, pax }) => {
-    const navigation = useNavigation();
-    const handlePress = () => {
-        navigation.navigate('ProductDetail');
-    }
+export const BigVendorCard = ({ image, title, subtitle, pax, onPress }) => {
     return (
-        <TouchableOpacity onPress={handlePress}>
+        <TouchableOpacity onPress={onPress}>
             <View className='h-52 w-72 flex-column items-center border-lg bg-white mr-3' style={MyTheme.shadows.shadow_1}>
                 <Image source={image} className='h-2/3 w-full rounded-t-lg' />
                 <Text style={[MyTheme.typography.subtitle.sub_3]} className='text-left self-stretch px-2 pt-2 pb-1'>{ title }</Text>
@@ -87,14 +84,9 @@ export const BigVendorCard = ({ image, title, subtitle, pax }) => {
     );
 }
 
-export const SmallCard = ({ image, title, rating }) => {
-    const navigation = useNavigation();
-    const handleCardPress = () => {
-        navigation.navigate('VendorDetail');
-      };
-
+export const SmallCard = ({ image, title, rating, onPress }) => {
     return (
-        <TouchableOpacity onPress={handleCardPress} style={styles.smallContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.smallContainer}>
             <Image source={image} style={styles.bigSearchImage} />
             <Text style={[styles.titleSmall, MyTheme.typography.subtitle.sub_3]}
                 numberOfLines={1}

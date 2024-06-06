@@ -32,6 +32,10 @@ const VendorCarousel = () => {
   const navigation = useNavigation();
   const [vendorData, setVendorData] = useState([]);
 
+  const handlePress = (id) => {
+    navigation.navigate('VendorDetail', { id });
+  };
+
   useEffect(() => {
     const fetchVendorData = async () => {
       const data = await getVendorData();
@@ -49,7 +53,7 @@ const VendorCarousel = () => {
 
       <FlatList
         data={vendorData.filter(item => item.category.includes('Venue'))}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} />}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} onPress={() => handlePress(item.vendor_id)} />}
         keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -63,7 +67,7 @@ const VendorCarousel = () => {
 
       <FlatList
         data={vendorData.filter(item => item.category.includes('Catering'))}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} />}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} onPress={() => handlePress(item.vendor_id)} />}
         keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
