@@ -1,43 +1,78 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme';
-// import ChatIcon from '../../../assets/icons/Chat.svg';
 import CalendarIcon from '../../../assets/icons/Calendar.svg';
+import { db } from '../../firebase';
+import { collection, getDoc, getDocs, doc } from 'firebase/firestore';
+import ModalDate from '../../components/private/guest/ModalDate.js';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const data = [
-  {
-    id: '1',
-    image: 'https://via.placeholder.com/400',
-    name: 'Royal Ballroom Package',
-    price: 'IDR 300,000,000',
-    capacity: '330 pax',
-    vendor: 'JW Marriott Hotel Surabaya',
-    location: 'JW Marriott Hotel Surabaya, Jalan Embong Malang, Kedungdoro, Surabaya City, East Java, Indonesia',
-    facilities: [
-      'Wedding event at the Royal Ballroom JW Marriott Hotel Surabaya',
-      '1 Bridal Suite including breakfast for 2 (two) persons',
-      '2 Deluxe Premium rooms including breakfast for 2 (two) persons',
-      'Includes buffet menu or set menu per person',
-      'Unique pillar-less high ceiling that can host up to 60 tables',
-    ],
-    date : 'February 14, 2024'
-  }
-]
+const OrderConfirmationPage = ({ route }) => {
+  const { id, vendor_name, vendor_id } = route.params;
+  const CatalogID = `${id}`;
 
-const OrderConfirmationPage = () => {
+  const [catalogData, setCatalogData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [serviceDate, setServiceDate] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const getCatalogData = async () => {
+    setLoading(true);
+    try {
+      const catalogRef = doc(db, 'vendor', vendor_id, 'catalog', CatalogID);
+      const catalogSnap = await getDoc(catalogRef);
+
+      if (catalogSnap.exists()) {
+        setCatalogData({ id: catalogSnap.id, ...catalogSnap.data() });
+      } else {
+        console.log('No such document!');
+      }
+    } catch (error) {
+      console.error('Error getting document:', error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCatalogData();
+  }, [id]);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+  };
+
+  const formatDate = (date) => {
+    return date ? date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No date set';
+  };
+
+  const handleModalPress = () => {
+    setModalVisible(true);
+  };
+
+  const handleAddDate = (date) => {
+    setServiceDate(date);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" color={MyTheme.colors.brown_2} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container} className='mt-12'>
       <ScrollView contentContainerStyle={styles.content}>
         <View className='flex-row items-center rounded-md p-4 mb-8' style={MyTheme.shadows.shadow_1} >
-          <Image source={{ uri: data[0].image }} className='h-14 w-14 rounded-md mr-4' />
+          <Image source={{ uri: catalogData.catalog_img }} className='h-14 w-14 rounded-md mr-4' />
           <View className='flex-1'>
-            <Text style={MyTheme.typography.subtitle.sub_3}>{data[0].name}</Text>
-            <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_2p}]}>by <Text style={{color:MyTheme.colors.pink_2}}> {data[0].vendor}</Text></Text>
+            <Text style={MyTheme.typography.subtitle.sub_3}>{catalogData.name}</Text>
+            <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_2p}]}>by <Text style={{color:MyTheme.colors.pink_2}}> {vendor_name}</Text></Text>
             <View className='flex-row items-center'>
-              <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_3}]}>{data[0].price}</Text>
-              <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.black}]}> •  {data[0].capacity}</Text>
+              <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_3}]}>{formatCurrency(catalogData.price)}</Text>
+              <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.black}]}> •  {catalogData.pax} pax</Text>
             </View>
           </View>
         </View>
@@ -45,13 +80,15 @@ const OrderConfirmationPage = () => {
           <Text style={[MyTheme.typography.subtitle.sub_2, {color:MyTheme.colors.neutral_1}]}>Service Date</Text>
           <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_1}]}>This is the day when you’ll be needing the product or service from the vendor.</Text>
         </View>
-        <View className='h-20 w-72 flex-row items-center self-center rounded-md p-4 mb-5' style={MyTheme.shadows.shadow_1}>
-          <CalendarIcon width={24} height={24} />
-          <View className='flex-1 ml-4'>
-            <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_1}]}>Date</Text>
-            <Text style={[MyTheme.typography.medium.medium_2, {color:MyTheme.colors.neutral_1}]}>{data[0].date}</Text>
+        <TouchableOpacity onPress={handleModalPress}>
+          <View className='h-20 w-72 flex-row items-center self-center rounded-md p-4 mb-5' style={MyTheme.shadows.shadow_1}>
+            <CalendarIcon width={24} height={24} />
+            <View className='flex-1 ml-4'>
+              <Text style={[MyTheme.typography.body.body_2, {color:MyTheme.colors.neutral_1}]}>Date</Text>
+              <Text style={[MyTheme.typography.medium.medium_2, {color:MyTheme.colors.neutral_1}]}>{formatDate(serviceDate)}</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
       
       <View style={styles.actions}>
@@ -62,6 +99,12 @@ const OrderConfirmationPage = () => {
           <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Order</Text>
         </TouchableOpacity>
       </View>
+      <ModalDate
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        oldTarget={serviceDate ? serviceDate.toISOString() : null}
+        onAddTarget={handleAddDate}
+      />
     </View>
   );
 };
@@ -100,6 +143,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 
