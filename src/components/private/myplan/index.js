@@ -1,34 +1,76 @@
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MyTheme from '../../../config/theme';
 import { SCREEN_WIDTH } from '../../../utils/deviceDimensions';
 import { ToDoInput } from './ToDoInput.js';
 import PlusCircle from "../../../../assets/icons/plus-circle.svg";
+import { db } from '../../../firebase';
+import { collection, addDoc, doc, updateDoc, deleteDoc, getDocs, Timestamp } from 'firebase/firestore';
 
 const blockWidth = SCREEN_WIDTH * 0.87;
 
 export const ToDo = (props) => {
-    const [todos, setTodos] = useState([{ id: 1, value: '' }]); 
+    const customerID = props.customerID;
+    const [todos, setTodos] = useState([]); 
 
-    const addNewTodo = () => {
-        const newId = Date.now();
-        setTodos([...todos, { id: newId, value: '' }]); 
+    const getDetail = async () => {
+        props.setLoading(true)
+        try {
+            const todosCollectionRef = collection(db, 'customer', customerID, 'categories', props.categoryID, 'todos');
+            const todosSnapshot = await getDocs(todosCollectionRef);
+            const fetchedTodos = todosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setTodos(fetchedTodos);
+        } catch (error) {
+            console.error('Error fetching todos:', error);
+        }
+        props.setLoading(false)
+    }
+
+    useEffect(() => {
+        getDetail();
+    }, [customerID]);
+
+    const addNewTodo = async () => {
+        try {
+            const newTodo = { createdAt: Timestamp.now(), value: '', status: 'No' };
+            const todosCollectionRef = collection(db, 'customer', customerID, 'categories', props.categoryID, 'todos');
+            const newDocRef = await addDoc(todosCollectionRef, newTodo);
+
+            setTodos([...todos, { ...newTodo, id: newDocRef.id }]);
+        } catch (error) {
+            console.error('Error adding todo:', error);
+        }
     };
 
-    const handleTodoChange = (text, id) => {
+    const handleTodoChange = async (text, id) => {
         const updatedTodos = todos.map(todo => {
             if (todo.id === id) {
-                return { ...todo, value: text };
+                return { ...todo, value: text, createdAt: Timestamp.now() };
             }
             return todo;
         });
         setTodos(updatedTodos);
+
+        try {
+            const todoDocRef = doc(db, 'customer', customerID, 'categories', props.categoryID, 'todos', id);
+            await updateDoc(todoDocRef, { value: text, createdAt: Timestamp.now() });
+        } catch (error) {
+            console.error('Error updating todo:', error);
+        }
     };
 
-    const handleDelete = (id) => {
-        setTodos(todos.filter(todo => todo.id !== id));
-        if (todos.length === 1) {
-            props.onCategoryDelete(); 
+    const handleDelete = async (id) => {
+        try {
+            const todoDocRef = doc(db, 'customer', customerID, 'categories', props.categoryID, 'todos', id);
+            await deleteDoc(todoDocRef);
+
+            setTodos(todos.filter(todo => todo.id !== id));
+
+            if (todos.length === 1) {
+                props.onCategoryDelete();
+            }
+        } catch (error) {
+            console.error('Error deleting todo:', error);
         }
     };
 

@@ -7,7 +7,7 @@ import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 import ModalCategory from '../../components/private/myplan/ModalCategory.js';
 import { db } from '../../firebase';
-import { collection, getDoc, getDocs, updateDoc, query, where, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDoc, getDocs, setDoc, updateDoc, query, where, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
 const scaleFontSize = screenWidth * 0.04;
@@ -25,15 +25,25 @@ const MyPlan = () => {
   const getCategories = async () => {
     setLoading(true)
     try {
-      const categoryQuery = query(collection(db, 'customer', customerID, 'categories'), where('name', '==', 'Pre-Wedding'));
-      const querySnapshot = await getDocs(categoryQuery);
+      // initialize MyPlan
+      const customerDocRef = doc(db, 'customer', customerID);
+      const customerDocSnapshot = await getDoc(customerDocRef);
+      const customerData = customerDocSnapshot.data();
+      const initMyPlan = customerData.initMyPlan;
 
-      if (querySnapshot.empty) {
-        await addDoc(collection(db, 'customer', customerID, 'categories'), { name: 'Pre-Wedding' });
+      if (!initMyPlan) {
+        const categoriesCollectionRef = collection(db, 'customer', customerID, 'categories');
+        const preWeddingDocRef = await addDoc(categoriesCollectionRef, { createdAt: Timestamp.now(), name: 'Pre-Wedding' });
+        
+        const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', preWeddingDocRef.id, 'todos');
+        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: 'No' });
+
+        await updateDoc(customerDocRef, { initMyPlan: true });
       }
 
       const categoriesSnapshot = await getDocs(collection(db, 'customer', customerID, 'categories'));
       const fetchedCategories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      fetchedCategories.sort((a, b) => a.createdAt - b.createdAt);
       setCategories(fetchedCategories);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -55,9 +65,11 @@ const MyPlan = () => {
     try {
       if (newCategory.trim()) {
         const categoryRef = collection(db, 'customer', customerID, 'categories');
-        await addDoc(categoryRef, { name: newCategory });
+        const newCategoryRef = await addDoc(categoryRef, { createdAt: Timestamp.now(), name: newCategory });
+        const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', newCategoryRef.id, 'todos');
+        await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: 'No' });
 
-        setCategories([...categories, { id: categories.length + 1, name: newCategory }]);
+        setCategories([...categories, { id: newCategoryRef.id, name: newCategory }]);
         setNewCategory('');
         setModalVisible(false);
       }
@@ -66,8 +78,15 @@ const MyPlan = () => {
     }
   };
 
-  const handleCategoryDelete = (categoryId) => {
-    setCategories(categories.filter(category => category.id !== categoryId));
+  const handleCategoryDelete = async (categoryId) => {
+    try {
+      setCategories(categories.filter(category => category.id !== categoryId));
+
+      await deleteDoc(doc(db, 'customer', customerID, 'categories', categoryId));
+
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
   return (
@@ -100,7 +119,14 @@ const MyPlan = () => {
 
         <ScrollView contentContainerStyle={{ paddingBottom: 250, justifyContent: 'center', alignItems: 'center' }}>
           {categories.map(category => (
-            <ToDo key={category.id} category={category.name} onCategoryDelete={() => handleCategoryDelete(category.id)}/>
+            <ToDo 
+              key={category.id} 
+              customerID={customerID} 
+              categoryID={category.id} 
+              category={category.name} 
+              onCategoryDelete={() => handleCategoryDelete(category.id)}
+              setLoading={setLoading}  
+            />
           ))}
 
           <View style={styles.padTask}>
