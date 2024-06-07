@@ -32,6 +32,7 @@ const SavedVendorPage = () => {
   const { user } = useContext(UserContext);
   const [savedVendorData, setSavedVendorData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   const getSavedVendorData = async () => {
     setLoading(true);
@@ -94,6 +95,7 @@ const SavedVendorPage = () => {
         type={item.category[0]}
         location={item.location}
         rating={item.average_rating}
+        onPress={() => navigation.navigate('VendorDetail', { id: item.vendor_id })}
       />
     </View>
   );

@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
+import Toast from 'react-native-toast-message';
 import MyTheme from '../../config/theme';
 import CalendarIcon from '../../../assets/icons/Calendar.svg';
 import { db } from '../../firebase';
-import { collection, getDoc, getDocs, doc } from 'firebase/firestore';
+import { collection, doc, getDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { UserContext } from '../../contexts/UserContext.js';
+import { useNavigation } from '@react-navigation/native';
 import ModalDate from '../../components/private/guest/ModalDate.js';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const OrderConfirmationPage = ({ route }) => {
+  const { user } = useContext(UserContext);
   const { id, vendor_name, vendor_id } = route.params;
   const CatalogID = `${id}`;
+
+  const navigation = useNavigation();
 
   const [catalogData, setCatalogData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +60,44 @@ const OrderConfirmationPage = ({ route }) => {
     setServiceDate(date);
   };
 
+  const handleOrder = async () => {
+    if (!serviceDate) {
+      Toast.show({
+        type: 'error',
+        text1: 'Order Failed',
+        text2: 'Please set a service date',
+      });
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'customer', user.id, 'order'), {
+        catalog_ID: CatalogID,
+        date_service: serviceDate,
+        date_order: serverTimestamp(),
+        status: 'Vendor Confirmation',
+        total_price: catalogData.price,
+        vendor_ID: parseInt(vendor_id),
+      });
+      Toast.show({
+        type: 'success',
+        text1: 'Order Success',
+        text2: 'Your order has been placed successfully!',
+      });
+      
+      setTimeout(() => {
+        navigation.navigate('Orders');
+      }, 1000);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Order Failed',
+        text2: 'There was an error placing your order. Please try again.',
+      });
+      console.error('Error adding document:', error);
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingOverlay}>
@@ -95,7 +139,7 @@ const OrderConfirmationPage = ({ route }) => {
         <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
           <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_2}]}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButton} onPress={() => console.log('Order Pressed')}>
+        <TouchableOpacity style={styles.orderButton} onPress={handleOrder}>
           <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.white}]}>Order</Text>
         </TouchableOpacity>
       </View>
@@ -105,6 +149,7 @@ const OrderConfirmationPage = ({ route }) => {
         oldTarget={serviceDate ? serviceDate.toISOString() : null}
         onAddTarget={handleAddDate}
       />
+      <Toast />
     </View>
   );
 };
