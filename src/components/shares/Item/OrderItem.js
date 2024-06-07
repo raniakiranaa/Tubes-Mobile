@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyTheme from '../../../config/theme';
 
 const OrderItem = ({ image, vendor_name, catalog_name, catalog_category, pax, price, status, order_date, onPress }) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    const checkSubmission = async () => {
+      const submitted = await AsyncStorage.getItem('isSubmitted');
+      if (submitted === 'true') {
+        setIsSubmitted(true);
+      }
+    };
+    checkSubmission();
+  }, []);
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
@@ -21,9 +34,9 @@ const OrderItem = ({ image, vendor_name, catalog_name, catalog_category, pax, pr
         </View>
         <View style={styles.actions}>
           <Text style={MyTheme.typography.body.body_3}>{order_date}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
+          <TouchableOpacity style={isSubmitted && status === 'Delivered' ? styles.reviewSubmittedButton : styles.button}>
             {status === 'Waiting for Payment' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Pay</Text>}
-            {status === 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Rating</Text>}
+            {status === 'Delivered' && <Text style={isSubmitted ? [MyTheme.typography.subtitle.sub_4, {color: '#979C9E'}] : [styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Review</Text>}
             {status !== 'Waiting for Payment' && status !== 'Delivered' && <Text style={[styles.buttonText, MyTheme.typography.subtitle.sub_4]}>Chat</Text>}
           </TouchableOpacity>
         </View>
@@ -113,6 +126,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: MyTheme.colors.brown_2,
+    marginTop: 5,
+    borderRadius: 25,
+    height: 21,
+    width: 63,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  reviewSubmittedButton: {
+    backgroundColor: MyTheme.colors.neutral_5,
     marginTop: 5,
     borderRadius: 25,
     height: 21,

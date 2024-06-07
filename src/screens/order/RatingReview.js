@@ -1,11 +1,11 @@
-import React, { useEffect, useState,useContext } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyTheme from '../../config/theme';
 import CustomStarRating from '../../components/shares/Rating/CustomStarRating';
 import WriteIcon from '../../../assets/icons/Write.svg';
 import { db } from '../../firebase';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../contexts/UserContext.js';
 
@@ -32,7 +32,7 @@ const RatingReview = ({ route }) => {
 
   const { user } = useContext(UserContext);
   const { id } = route.params;
-  const orderID = `${id}`
+  const orderID = `${id}`;
   const [orderDeliveredData, setOrderDeliveredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +41,7 @@ const RatingReview = ({ route }) => {
     try {
       const orderRef = doc(db, 'customer', user.id, 'order', orderID);
       const orderSnap = await getDoc(orderRef);
-      
+
       if (orderSnap.exists()) {
         const orderData = orderSnap.data();
         const vendorRef = doc(db, 'vendor', `${orderData.vendor_ID}`);
@@ -100,7 +100,7 @@ const RatingReview = ({ route }) => {
       console.error('Error getting documents: ', error);
     }
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     getOrderDelivered();
@@ -111,26 +111,38 @@ const RatingReview = ({ route }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    // Check if the review has been submitted before
     const checkSubmission = async () => {
       const submitted = await AsyncStorage.getItem('isSubmitted');
       if (submitted === 'true') {
         setIsSubmitted(true);
         const savedRating = await AsyncStorage.getItem('rating');
-        if (savedRating) {
-          setRating(parseInt(savedRating, 10));
-        }
+        const savedReview = await AsyncStorage.getItem('review');
+        setRating(parseInt(savedRating, 10));
+        setReview(savedReview);
       }
     };
     checkSubmission();
   }, []);
 
   const handleSubmit = async () => {
-    // Handle the submit action (e.g., send the review to your server)
     console.log('Rating:', rating);
     console.log('Review:', review);
     setIsSubmitted(true);
     await AsyncStorage.setItem('isSubmitted', 'true');
+    await AsyncStorage.setItem('rating', rating.toString());
+    await AsyncStorage.setItem('review', review);
+
+    try {
+      await addDoc(collection(db, 'vendor', `${orderDeliveredData.vendor_ID}`, 'review'), {
+        comment: review,
+        created_at: serverTimestamp(),
+        name: user.name,
+        rating: rating,
+      });
+      console.log('Review successfully submitted!');
+    } catch (error) {
+      console.error('Error submitting review: ', error);
+    }
   };
 
   const formatCurrency = (value) => {
@@ -152,59 +164,61 @@ const RatingReview = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Image source={{ uri: orderDeliveredData.vendor_image }} style={styles.vendorImage} />
-        <View>
-          <Text style={[styles.sectionHeader]}>{orderDeliveredData.vendor_name}</Text>
-          <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1 }]}>{orderDeliveredData.vendor_location}</Text>
-        </View>
-      </View>
-      <View style={styles.rating}>
-        <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>How was the order, <Text style={{ color: MyTheme.colors.pink_2 }}>{user.name}?</Text></Text>
-        <CustomStarRating rating={rating} onChange={setRating} starSize={40} disabled={isSubmitted} />
-      </View>
-      <View style={styles.packageContainer}>
-        <Image source={{ uri: orderDeliveredData.catalog_image }} style={styles.packageImage} />
-        <View style={styles.packageDetails}>
-          <Text style={MyTheme.typography.subtitle.sub_3}>{orderDeliveredData.catalog_name}</Text>
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>by <Text style={{ color: MyTheme.colors.pink_2 }}>{orderDeliveredData.vendor_name}</Text></Text>
-          <View style={styles.vendorPriceDetail}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]}>{formatCurrency(orderDeliveredData.catalog_price)}</Text>
-            <Text style={MyTheme.typography.body.body_2}> • {orderDeliveredData.catalog_pax} pax</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={styles.section}>
+          <Image source={{ uri: orderDeliveredData.vendor_image }} style={styles.vendorImage} />
+          <View>
+            <Text style={[styles.sectionHeader]}>{orderDeliveredData.vendor_name}</Text>
+            <Text style={[MyTheme.typography.body.body_3, { color: MyTheme.colors.neutral_1 }]}>{orderDeliveredData.vendor_location}</Text>
           </View>
-          <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>Date: {formatDate(orderDeliveredData.date_order)}</Text>
         </View>
+        <View style={styles.rating}>
+          <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.black }]}>How was the order, <Text style={{ color: MyTheme.colors.pink_2 }}>{user.name}?</Text></Text>
+          <CustomStarRating rating={rating} onChange={setRating} starSize={40} disabled={isSubmitted} />
+        </View>
+        <View style={styles.packageContainer}>
+          <Image source={{ uri: orderDeliveredData.catalog_image }} style={styles.packageImage} />
+          <View style={styles.packageDetails}>
+            <Text style={MyTheme.typography.subtitle.sub_3}>{orderDeliveredData.catalog_name}</Text>
+            <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>by <Text style={{ color: MyTheme.colors.pink_2 }}>{orderDeliveredData.vendor_name}</Text></Text>
+            <View style={styles.vendorPriceDetail}>
+              <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_3 }]}>{formatCurrency(orderDeliveredData.catalog_price)}</Text>
+              <Text style={MyTheme.typography.body.body_2}> • {orderDeliveredData.catalog_pax} pax</Text>
+            </View>
+            <Text style={[MyTheme.typography.body.body_2, { color: MyTheme.colors.neutral_2p }]}>Date: {formatDate(orderDeliveredData.date_order)}</Text>
+          </View>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <WriteIcon width={17} height={17} style={styles.writeIcon} />
+          <TextInput
+            style={styles.reviewInput}
+            placeholder="Write your review here..."
+            multiline
+            numberOfLines={4}
+            onChangeText={setReview}
+            value={review}
+            placeholderTextColor={MyTheme.colors.neutral_3}
+            editable={!isSubmitted}
+          />
+        </View>
+
+        {!isSubmitted && (
+          <View style={styles.action}>
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.white }]}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {isSubmitted && (
+          <View style={styles.thankYouContainer}>
+            <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.brown_2 }]}>Thank you for your review!</Text>
+          </View>
+        )}
       </View>
-
-      <View style={styles.inputContainer}>
-        <WriteIcon width={17} height={17} style={styles.writeIcon} />
-        <TextInput
-          style={styles.reviewInput}
-          placeholder="Write your review here..."
-          multiline
-          numberOfLines={4}
-          onChangeText={setReview}
-          value={review}
-          placeholderTextColor={MyTheme.colors.neutral_3}
-          editable={!isSubmitted}
-        />
-      </View>
-
-      {!isSubmitted && (
-        <View style={styles.action}>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.white }]}>Submit</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {isSubmitted && (
-        <View style={styles.thankYouContainer}>
-          <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.brown_2 }]}>Thank you for your review!</Text>
-        </View>
-      )}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -294,6 +308,16 @@ const styles = StyleSheet.create({
   thankYouContainer: {
     alignItems: 'center',
     marginTop: 20,
+  },
+  resetButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    borderColor: MyTheme.colors.brown_2,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingOverlay: {
     position: 'absolute',
