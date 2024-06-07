@@ -91,7 +91,7 @@ const MyPlan = () => {
 
   return (
     <View style={styles.container}>
-      <View className='mt-12'>
+      <View style={styles.contentContainer}>
         <View style={styles.listContainer}>
           <View>
             <CustomButton
@@ -164,6 +164,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+  },
+  contentContainer: {
+    marginTop: 60,
   },
   listContainer: {
     flexDirection: 'row',

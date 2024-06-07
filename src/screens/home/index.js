@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -15,7 +15,8 @@ import { UserContext } from '../../contexts/UserContext.js';
 const HomeScreen = () => {
   const navi = useNavigation();
   const { user } = useContext(UserContext);
-  console.log(user);
+  const [temp, setTemp] = useState('');
+  // console.log(user);
   const handleBlog = () => {
     navi.navigate('Blog');
   }
@@ -55,6 +56,8 @@ const HomeScreen = () => {
                     placeholder="Search"
                     type="search"
                     mode="text"
+                    value={temp}
+                    onChangeText={(text) => setTemp(text)}
                     fontSize={MyTheme.typography.body.body_1}
                     iconProps={{ width: 20, height: 20 }}
                   />

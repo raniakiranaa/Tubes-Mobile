@@ -22,6 +22,7 @@ import BudgetPlanner from '../screens/budgetplanner/index.js';
 import GuestManager from '../screens/guestmanager/index.js';
 import Blog from '../screens/blog/index.js';
 import ComingSoon from '../screens/comingSoon/index.js';
+import EditProfile from '../screens/profile/EditProfile.js';
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -194,7 +195,20 @@ function AuthLayout({ isAdmin }) {
                     ),
                     tabBarStyle: { display: 'none' },
                 }}
-            ></AuthStack.Screen>
+            />
+            <AuthStack.Screen
+                name="EditProfile"
+                component={EditProfile}
+                options={{
+                    header: () => (
+                    <>
+                        <CustomHeader />
+                        <CustomAppbar title="Edit Profile" isBackButton={true} isAction={false} isTransparent={true}/>
+                    </>
+                    ),
+                    tabBarStyle: { display: 'none' },
+                }}
+            />
         </AuthStack.Navigator>
     );
 }

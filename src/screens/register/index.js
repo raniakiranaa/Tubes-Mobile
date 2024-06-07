@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +21,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [cPassword, setcPassword] = useState('');
   const { setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false); // State for loading
 
   const handleLogin = () => {
     nav.navigate("Login");
@@ -67,6 +68,7 @@ const Register = () => {
     }
 
     const auth = firebase_auth;
+    setLoading(true); // Set loading to true before starting the registration process
 
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
@@ -90,8 +92,9 @@ const Register = () => {
       setUser({
         id: docRef.id,
         name: name,
-        email: email,});
-      // setUser(response.user)
+        email: email,
+      });
+
       Toast.show({
         type: 'success',
         text1: 'Register successful!',
@@ -108,6 +111,8 @@ const Register = () => {
         text1: errorMessage,
       });
       console.log(error.message);
+    } finally {
+      setLoading(false); // Set loading to false after completing the registration process
     }
   };
 
@@ -212,6 +217,11 @@ const Register = () => {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+        </View>
+      )}
     </View>
   );
 };
@@ -261,6 +271,16 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 

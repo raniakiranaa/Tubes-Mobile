@@ -200,10 +200,12 @@ function MyPlanStack() {
       <Stack.Screen
         name="ToDoList"
         component={ToDoList}
+        options={{ header: () => null }}
       />
       <Stack.Screen
         name="DoneList"
         component={DoneList}
+        options={{ header: () => null }}
       />
     </Stack.Navigator>
   );

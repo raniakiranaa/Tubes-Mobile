@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MyTheme from '../../config/theme.js';
 import { useNavigation } from '@react-navigation/native';
@@ -19,7 +19,7 @@ const Login = () => {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [error, setError] = useState(null); // State for error message
+  const [loading, setLoading] = useState(false); // State for loading
 
   const handleRegis = () => {
     nav.navigate("Register");
@@ -47,13 +47,9 @@ const Login = () => {
     return errors;
   };
 
-  // const isValidEmail = (email) => {
-  //   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  // };
-
   const handleLogin = async () => {
     const err = validation();
-    if(err != '') {
+    if(err !== '') {
       Toast.show({
         type: 'error',
         text1: err,
@@ -62,10 +58,10 @@ const Login = () => {
     }
     
     const auth = firebase_auth;
+    setLoading(true); // Set loading to true before starting the login process
     
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      // console.log(response);
       const userQuery = query(collection(db, 'customer'),  where('email', '==', email));
       const querySnapshot = await getDocs(userQuery);
 
@@ -73,32 +69,37 @@ const Login = () => {
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
 
-        // Set pengguna ke konteks pengguna
         const { name, email } = userData;
         const docID = userDoc.id;
 
         setUser({ 
-          id:docID, 
+          id: docID, 
           name: name, 
           email: email 
         });
 
+        Toast.show({
+          type: 'success',
+          text1: 'Login successful!',
+        });
+        
       } else {
         console.log('User data not found');
+        Toast.show({
+          type: 'error',
+          text1: 'Login failed!',
+          text2: 'User data not found'
+        });
       }
-
-      // setUser(response.user)
-      Toast.show({
-        type: 'success',
-        text1: 'Login successful!',
-      });
     } catch (error) {
       Toast.show({
         type: 'error',
         text1: 'Login failed!',
-        text2: 'check your email or password'
+        text2: 'Check your email or password'
       });
       console.log(error.message);
+    } finally {
+      setLoading(false); // Set loading to false after completing the login process
     }
   };
   
@@ -169,6 +170,11 @@ const Login = () => {
                   buttonColor={MyTheme.colors.brown_2}
                 />
               </View>
+              {loading && (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={MyTheme.colors.brown_2} />
+                </View>
+              )}
               <View style={styles.regisContainer}>
                 <Text style={[styles.outerText, MyTheme.typography.body.body_1]}>
                   Don’t have an account yet?  
@@ -182,6 +188,11 @@ const Login = () => {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
+      {/* {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+          </View>
+        )} */}
     </View>
   );
 };
@@ -233,6 +244,10 @@ const styles = StyleSheet.create({
   submitButtonContainer: {
     paddingTop: 40,
   },
+  loadingContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
   regisContainer: {
     paddingTop: 40,
     alignItems: 'center',
@@ -243,6 +258,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     marginLeft: 10,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 

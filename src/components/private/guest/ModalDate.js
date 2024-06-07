@@ -64,6 +64,9 @@ const ModalDate = ({ visible, onClose, onAddTarget, oldTarget }) => {
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
                         date={selectedDate}
+                        pickerContainerStyleIOS={styles.pickerContainerStyleIOS}
+                        textColor='black'// Ensure text color is visible
+                        themeVariant='light'
                     />
                     <View style={styles.modalButtons}>
                         <TouchableOpacity style={styles.modalButton} onPress={handleSave}>
@@ -110,6 +113,9 @@ const styles = StyleSheet.create({
         backgroundColor: MyTheme.colors.brown_2,
         alignItems: 'center',
         borderRadius: 48,
+    },
+    pickerContainerStyleIOS: {
+        backgroundColor: MyTheme.colors.white,
     },
 });
 
