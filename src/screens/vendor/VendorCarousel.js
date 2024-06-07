@@ -1,49 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import { FlatList, View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MyTheme from '../../config/theme';
 import { SmallCard } from '../../components/shares/Card';
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
-
-const getVendorData = async () => {
-  try {
-    const querySnapshot = await getDocs(collection(db, 'vendor'));
-    
-    if (querySnapshot.empty) {
-      console.log('No matching documents.');
-      return [];
-    }
-
-    const vendorData = [];
-
-    querySnapshot.forEach(doc => {
-      vendorData.push({ id: doc.id, ...doc.data() }); // Ensure each item has a unique id
-    });
-
-    return vendorData;
-
-  } catch (error) {
-    console.error('Error getting documents: ', error);
-  }
-};
+import { set } from 'firebase/database';
 
 const VendorCarousel = () => {
   const navigation = useNavigation();
   const [vendorData, setVendorData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const getVendorData = async () => {
+    setLoading(true);
+    try {
+      const vendorRef = collection(db, 'vendor');
+      const vendorSnap = await getDocs(vendorRef);
+
+      if (vendorSnap.empty) {
+        console.log('No matching documents.');
+        setLoading(false);
+        return;
+      }
+
+      const vendorData = await Promise.all(vendorSnap.docs.map(async (vendorDoc) => {
+        const vendorData = vendorDoc.data();
+        const reviewRef = collection(db, 'vendor', `${vendorDoc.id}`, 'review');
+        const reviewSnap = await getDocs(reviewRef);
+        const reviewData = reviewSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const totalRating = reviewData.reduce((acc, review) => acc + parseFloat(review.rating), 0);
+        const averageRating = totalRating / reviewData.length;
+        return {
+          vendor_id: vendorDoc.id,
+          ...vendorData,
+          average_rating: averageRating,
+        };
+      }
+      ));
+      setVendorData(vendorData);
+    } catch (error) {
+      console.error('Error getting documents: ', error);
+    }
+    setLoading(false);
+  };
+  
   const handlePress = (id) => {
     navigation.navigate('VendorDetail', { id });
   };
 
   useEffect(() => {
-    const fetchVendorData = async () => {
-      const data = await getVendorData();
-      setVendorData(data);
-    };
-
-    fetchVendorData();
+    getVendorData();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" color={MyTheme.colors.brown_2} />
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -53,7 +72,7 @@ const VendorCarousel = () => {
 
       <FlatList
         data={vendorData.filter(item => item.category.includes('Venue'))}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} onPress={() => handlePress(item.vendor_id)} />}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.average_rating} onPress={() => handlePress(item.vendor_id)} />}
         keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -67,7 +86,7 @@ const VendorCarousel = () => {
 
       <FlatList
         data={vendorData.filter(item => item.category.includes('Catering'))}
-        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.rating} onPress={() => handlePress(item.vendor_id)} />}
+        renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.average_rating} onPress={() => handlePress(item.vendor_id)} />}
         keyExtractor={item => item.id} // Ensure the id is unique
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -86,7 +105,17 @@ const styles = StyleSheet.create({
     color: MyTheme.colors.brown_2,
     marginVertical: 5,
     paddingHorizontal: 20,
-  }
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
 });
 
 export default VendorCarousel;
