@@ -114,7 +114,7 @@ const HistoryScreen = () => {
     <View style={styles.container}>
       <FlatList
         data={historyOrdersData}
-        renderItem={({ item }) => <OrderItem image={item.vendor_image} vendor_name={item.vendor_name} catalog_name={item.catalog_name} catalog_category={item.catalog_category} pax={item.catalog_pax} price={formatCurrency(item.total_price)} status={item.status} order_date={item.order_date}
+        renderItem={({ item }) => <OrderItem id={item.id} image={item.vendor_image} vendor_name={item.vendor_name} catalog_name={item.catalog_name} catalog_category={item.catalog_category} pax={item.catalog_pax} price={formatCurrency(item.total_price)} status={item.status} order_date={item.order_date}
         onPress={() => {
           if (item.status === 'Delivered') {
             navigation.navigate('RatingReview', { id: item.id });
