@@ -21,9 +21,9 @@ export const TextInputIcon = (props) => {
                 styles.container,
                 { 
                     borderColor: isFocused ? MyTheme.colors.brown_3 : MyTheme.colors.neutral_4,
-                    backgroundColor: props.type === 'search' ? MyTheme.colors.neutral_search : MyTheme.colors.white,
+                    backgroundColor: props.type === 'search' || props.disabled ? MyTheme.colors.neutral_search : MyTheme.colors.white,
                     height: props.type === 'search' ? 36 : 42,
-                    borderWidth: props.type === 'search' ? 0 : 2,
+                    borderWidth: props.type === 'search' || props.disabled ? 0 : 2,
                 }
             ]}
         >
@@ -40,6 +40,7 @@ export const TextInputIcon = (props) => {
                 secureTextEntry={secureTextEntry}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
+                editable={props.type === 'date' ? (false) : (!props.disabled)}
             />
             {props.type === 'password' && (
                 <TouchableOpacity onPress={togglePasswordVisibility}>

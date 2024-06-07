@@ -16,7 +16,7 @@ const Profile = ( ) => {
     const nav = useNavigation();
     const { user } = useContext(UserContext);
     const handleEditProfile = () => {
-        nav.navigate('ComingSoon');
+        nav.navigate('EditProfile');
     }
 
     const handleSettings = () => {
