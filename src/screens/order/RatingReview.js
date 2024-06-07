@@ -10,26 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../contexts/UserContext.js';
 
 const RatingReview = ({ route }) => {
-  const order = {
-    customer: {
-      name: 'Eveey',
-      address: 'Jl. Kusuma Bangsa No. 5 Surabaya, Jawa Timur',
-    },
-    vendor: {
-      name: 'JW Marriott Surabaya',
-      address: 'JW Marriott Hotel Surabaya, Jalan Embong Malang, Kedungdoro, Surabaya City, East Java, Indonesia',
-      image: 'https://via.placeholder.com/150',
-    },
-    package: {
-      name: 'Royal Ballroom Package',
-      price: 'IDR 300,000,000',
-      pax: '330 pax',
-      date: '14 February 2024',
-    },
-    status: 'Vendor Confirmation',
-    statusMessage: 'Waiting for the vendor to confirm service availability on February 14th, 2024.',
-  };
-
   const { user } = useContext(UserContext);
   const { id } = route.params;
   const orderID = `${id}`;
@@ -112,26 +92,26 @@ const RatingReview = ({ route }) => {
 
   useEffect(() => {
     const checkSubmission = async () => {
-      const submitted = await AsyncStorage.getItem('isSubmitted');
+      const submitted = await AsyncStorage.getItem(`isSubmitted_${orderID}`);
       if (submitted === 'true') {
         setIsSubmitted(true);
-        const savedRating = await AsyncStorage.getItem('rating');
-        const savedReview = await AsyncStorage.getItem('review');
+        const savedRating = await AsyncStorage.getItem(`rating_${orderID}`);
+        const savedReview = await AsyncStorage.getItem(`review_${orderID}`);
         setRating(parseInt(savedRating, 10));
         setReview(savedReview);
       }
     };
     checkSubmission();
-  }, []);
+  }, [orderID]);
 
   const handleSubmit = async () => {
     console.log('Rating:', rating);
     console.log('Review:', review);
     setIsSubmitted(true);
-    await AsyncStorage.setItem('isSubmitted', 'true');
-    await AsyncStorage.setItem('rating', rating.toString());
-    await AsyncStorage.setItem('review', review);
-
+    await AsyncStorage.setItem(`isSubmitted_${orderID}`, 'true');
+    await AsyncStorage.setItem(`rating_${orderID}`, rating.toString());
+    await AsyncStorage.setItem(`review_${orderID}`, review);
+  
     try {
       await addDoc(collection(db, 'vendor', `${orderDeliveredData.vendor_ID}`, 'review'), {
         comment: review,

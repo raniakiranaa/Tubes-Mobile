@@ -3,18 +3,18 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyTheme from '../../../config/theme';
 
-const OrderItem = ({ image, vendor_name, catalog_name, catalog_category, pax, price, status, order_date, onPress }) => {
+const OrderItem = ({ id, image, vendor_name, catalog_name, catalog_category, pax, price, status, order_date, onPress }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const checkSubmission = async () => {
-      const submitted = await AsyncStorage.getItem('isSubmitted');
+      const submitted = await AsyncStorage.getItem(`isSubmitted_${id}`);
       if (submitted === 'true') {
         setIsSubmitted(true);
       }
     };
     checkSubmission();
-  }, []);
+  }, [id]);
 
   return (
     <TouchableOpacity onPress={onPress}>
