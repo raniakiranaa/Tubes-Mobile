@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme';
 import OrderItem from '../../components/shares/Item/OrderItem';
 import { db } from '../../firebase';
 import { collection, getDoc, getDocs, doc, query, where } from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { UserContext } from '../../contexts/UserContext.js';
 
 const OngoingScreen = () => {
@@ -18,13 +18,13 @@ const OngoingScreen = () => {
       const orderRef = collection(db, 'customer', user.id, 'order');
       const q = query(orderRef, where('status', 'in', ['Payment Confirmation', 'Booked', 'Waiting for Payment', 'Vendor Confirmation']));
       const orderSnap = await getDocs(q);
-  
+
       if (orderSnap.empty) {
         console.log('No matching documents.');
         setLoading(false);
         return;
       }
-  
+
       const ongoingOrdersData = await Promise.all(orderSnap.docs.map(async (orderDoc) => {
         const orderData = orderDoc.data();
         const vendorRef = doc(db, 'vendor', `${orderData.vendor_ID}`);
@@ -75,11 +75,12 @@ const OngoingScreen = () => {
     }
     setLoading(false);
   }  
-  
-  useEffect(() => {
-    getOngoingOrders();
-  }, [user.id]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getOngoingOrders();
+    }, [user.id])
+  );
 
   const navigation = useNavigation();
 
@@ -105,7 +106,7 @@ const OngoingScreen = () => {
     <View style={styles.container}>
       <FlatList
         data={ongoingOrdersData}
-        renderItem={({ item }) => <OrderItem image={item.vendor_image} vendor_name={item.vendor_name} catalog_name={item.catalog_name} catalog_category={item.catalog_category} pax={item.catalog_pax} price={formatCurrency(item.total_price)} status={item.status} order_date={item.order_date}
+        renderItem={({ item }) => <OrderItem id={item.id} image={item.vendor_image} vendor_name={item.vendor_name} catalog_name={item.catalog_name} catalog_category={item.catalog_category} pax={item.catalog_pax} price={formatCurrency(item.total_price)} status={item.status} order_date={item.order_date}
         onPress={() => {
           if (item.status === 'Delivered') {
             navigation.navigate('RatingReview', { id: item.id });

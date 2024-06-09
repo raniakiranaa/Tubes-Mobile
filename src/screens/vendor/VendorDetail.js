@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList, Platform, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme';
 import { BigVendorCard } from '../../components/shares/Card';
 import BlogItem from '../../components/shares/Item/BlogItem';
 import ReviewItem from '../../components/shares/Item/ReviewItem';
 import ChatIcon from '../../../assets/icons/Vendor-chat.svg';
-import SaveIcon from '../../../assets/icons/Vendor-save.svg';
+import SaveIcon from '../../../assets/icons/Save';
 import { db } from '../../firebase';
-import { collection, getDoc, getDocs, doc, query, where } from 'firebase/firestore';
+import { collection, getDoc, getDocs, addDoc, doc, query, where } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../contexts/UserContext.js';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -16,10 +17,13 @@ const VendorDetailPage = ({ route }) => {
   const { id } = route.params;
   const vendorID = `${id}`
 
+  const { user } = useContext(UserContext);
+
   const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true);
   const [vendorData, setVendorData] = useState([]);
+  const [savedVendorData, setSavedVendorData] = useState([]);
   const [blogData, setBlogData] = useState([]);
   const [catalogData, setCatalogData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
@@ -70,6 +74,27 @@ const VendorDetailPage = ({ route }) => {
     setLoading(false);
   };
 
+  const getSavedVendorData = async () => {
+    try {
+      const savedVendorRef = collection(db, 'customer', user.id, 'saved_vendor');
+      const savedVendorSnap = await getDocs(savedVendorRef);
+
+      if (savedVendorSnap.empty) {
+        console.log('No matching documents.');
+        return [];
+      }
+
+      const savedVendorData = savedVendorSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSavedVendorData(savedVendorData);
+
+    } catch (error) {
+      console.error('Error getting documents: ', error);
+    }
+  };
+
   const getBlogDataByVendor = async () => {
     try {
       const vendorRef = doc(db, 'vendor', vendorID);
@@ -99,15 +124,33 @@ const VendorDetailPage = ({ route }) => {
       console.error('Error getting documents: ', error);
     }
   };
+  
 
   useEffect(() => {
     getVendorData();
+    getSavedVendorData();
     getBlogDataByVendor();
   }, [id]);
 
   const totalRating = reviewData.reduce((acc, review) => acc + parseFloat(review.rating), 0);
   const averageRating = totalRating / reviewData.length;
   const totalReviews = reviewData.length;
+
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    try {
+      await addDoc(collection(db, 'customer', user.id, 'saved_vendor'), {
+        vendor_id: vendorID,
+      });
+      console.log('Vendor successfully saved!');
+      setSaved(true);
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+  };
+
+  const isVendorSaved = savedVendorData.some(vendor => vendor.vendor_id === vendorID);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
@@ -130,13 +173,20 @@ const VendorDetailPage = ({ route }) => {
           </Text>
           <View style={styles.ratingContainer}>
             <Image source={require('../../../assets/icons/star.png')} style={{ height: 11, width: 11, marginLeft: 8 }} />
-            <Text style={MyTheme.typography.body.body_3} className='pl-0.5 pr-2 pt-0.5'>{vendorData.rating}</Text>
+            <Text style={MyTheme.typography.body.body_3} className='pl-0.5 pr-2 pt-0.5'>{averageRating}</Text>
           </View>
           <View style={styles.actionButtons}>
-            <TouchableOpacity style={styles.saveButton}>
-              <SaveIcon width={20} height={20} />
-              <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_2 }]} className='ml-1'>Save</Text>
-            </TouchableOpacity>
+            {isVendorSaved || saved ? (
+              <TouchableOpacity style={styles.savedButton}>
+                <SaveIcon width={20} height={20} strokeColor={MyTheme.colors.neutral_2p}/>
+                <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.neutral_2p }]} className='ml-1'>Saved</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <SaveIcon width={20} height={20} strokeColor={MyTheme.colors.brown_2}/>
+                <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_2 }]} className='ml-1'>Save</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity style={styles.chatButton}>
               <ChatIcon width={20} height={20} />
               <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.white }]} className='ml-1'>Chat</Text>
@@ -295,6 +345,18 @@ const styles = StyleSheet.create({
     backgroundColor: MyTheme.colors.white,
     borderWidth: 1,
     borderColor: MyTheme.colors.brown_2,
+    borderRadius: 20,
+    marginRight: 5,
+  },
+  savedButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: MyTheme.colors.white,
+    borderWidth: 1,
+    borderColor: MyTheme.colors.neutral_2p,
     borderRadius: 20,
     marginRight: 5,
   },

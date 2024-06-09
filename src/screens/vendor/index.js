@@ -35,7 +35,7 @@ const VendorPage = () => {
   ];
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} className='mt-12'>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} >
       <View className='p-5'>
         <View style={styles.inputWrapper}>
           <SearchIcon style={styles.icon} />
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: Platform.OS === 'ios' ? 100 : 68,
+    marginTop: 60,
   },
   inputWrapper: {
     flexDirection: 'row',
