@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
 import SearchIcon from '../../../assets/icons/Search.svg';
@@ -9,23 +9,30 @@ import { useNavigation } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 
 const VendorPage = () => {
+  const [searchText, setSearchText] = useState('');  // State for search text
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
   const navigation = useNavigation();
 
-  const searchVendor = () => {
-    navigation.navigate('VendorSearch');
+  const searchVendor = () => {    
+    navigation.navigate('VendorSearch', { name: searchText, location: selectedLocation, category: selectedCategory, budget: selectedBudget });
   };
 
   const locationData = [
     { label: 'Surabaya', value: 'surabaya' },
     { label: 'Jakarta', value: 'jakarta' },
+    { label: 'Bandung', value: 'bandung' },
+    { label: 'Bali', value: 'bali' },
+    { label: 'Sidoarjo', value: 'sidoarjo' },
   ];
 
   const categoryData = [
     { label: 'Venue', value: 'venue' },
     { label: 'Catering', value: 'catering' },
+    { label: 'Photography', value: 'photography' },
+    { label: 'Entertainment', value: 'entertainment' },
+    { label: 'Music', value: 'music' },
   ];
 
   const budgetData = [
@@ -44,6 +51,8 @@ const VendorPage = () => {
             style={MyTheme.typography.body.body_1}
             placeholder="Search"
             placeholderTextColor={MyTheme.colors.neutral_3}
+            value={searchText}  // Bind the TextInput value to searchText state
+            onChangeText={text => setSearchText(text)}  // Update the searchText state on change
           />
         </View>
 
