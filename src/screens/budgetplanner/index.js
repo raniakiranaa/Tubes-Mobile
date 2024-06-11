@@ -32,18 +32,18 @@ const BudgetPlanner = () => {
     setLoading(true);
     try {
       if (user && user.id) {
-        const customerRef = doc(db, 'customer', user.id); 
+        const customerRef = doc(db, 'customer', user.id);
         const customerDoc = await getDoc(customerRef);
-    
+
         if (customerDoc.exists()) {
           const customerData = customerDoc.data();
           const targetBudget = customerData.target_budget || 0; // default to 0 if not set
           setTarget(targetBudget);
-  
-          // fetch target budget categories
+
+          // fetch categories
           const budgetCollectionRef = collection(db, 'customer', user.id, 'budget');
           const budgetSnapshot = await getDocs(budgetCollectionRef);
-  
+
           if (!budgetSnapshot.empty) {
             const categories = budgetSnapshot.docs.map(doc => ({
               id: doc.id,
@@ -52,26 +52,6 @@ const BudgetPlanner = () => {
             setCategoryList(categories);
           } else {
             console.log('No categories found in budget collection for customer ID:', user.id);
-          }
-
-          // Fetch customer orders
-          const orderCollectionRef = collection(db, 'customer', user.id, 'order');
-          const orderSnapshot = await getDocs(orderCollectionRef);
-          let totalSpend = 0;
-
-          if (!orderSnapshot.empty) {
-            const orders = orderSnapshot.docs.map(doc => {
-              const orderData = doc.data();
-              totalSpend += parseInt(orderData.total_price, 10) || 0;
-              return {
-                id: doc.id,
-                ...orderData
-              };
-            });
-            setOrderList(orders);
-            setSpend(totalSpend);
-          } else {
-            console.log('No orders found for customer ID:', user.id);
           }
         } else {
           console.log('No customer document found for customer ID:', user.id);
@@ -84,10 +64,68 @@ const BudgetPlanner = () => {
     }
     setLoading(false);
   };
-  
+
+  const getOrderList = async () => {
+    try {
+      const ordersCollectionRef = collection(db, 'customer', user.id, 'order');
+      const ordersSnapshot = await getDocs(ordersCollectionRef);
+      const orders = ordersSnapshot.docs.map(doc => doc.data());
+      return orders;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     getTargetBudget();
   }, [user.id]);
+
+  useEffect(() => {
+    const checkBudgets = async () => {
+      const orders = await getOrderList();
+      setOrderList(orders);
+
+      const totalSpend = orders.reduce((acc, order) => acc + parseInt(order.total_price, 10), 0);
+      setSpend(totalSpend);
+
+      if (totalSpend > target) {
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Total spend is more than the overall target budget!',
+        });
+      }
+
+      const categorySpends = categoryList.reduce((acc, category) => {
+        const categorySpend = orders
+          .filter(order => order.category === category.category)
+          .reduce((acc, order) => acc + parseInt(order.total_price, 10), 0);
+        
+        if (categorySpend > category.target_category) {
+          Toast.show({
+            type: 'error',
+            text1: 'Warning',
+            text2: `Spend for category ${category.category} is more than the target budget!`,
+          });
+        }
+  
+        return acc + category.target_category;
+      }, 0);
+  
+      if (categorySpends > target && budgetRemaining >= 0) {
+        Toast.show({
+          type: 'error',
+          text1: 'Warning',
+          text2: 'Total target budget in each category is more than the overall target budget!',
+        });
+      }
+    };
+
+    if (categoryList.length > 0) {
+      checkBudgets();
+    }
+  }, [categoryList, target]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
@@ -206,16 +244,16 @@ const BudgetPlanner = () => {
             </View>
           </View>
         </View>
-        <View style={ styles.columnContainer }>
-          <Text style={ styles.columnTitleCat }>Category</Text>
-          <Text style={ styles.columnTitle }>Actual Spend</Text>
+        <View style={styles.columnContainer}>
+          <Text style={styles.columnTitleCat}>Category</Text>
+          <Text style={styles.columnTitle}>Actual Spend</Text>
         </View>
         <ScrollView style={styles.budgetDetail} contentContainerStyle={{ paddingBottom: 240 }}>
           {categoryList.map((category, index) => (
             <Budget
-              key = {index}
-              name = {category.category}
-              target_category = {formatCurrency(category.target_category)}
+              key={index}
+              name={category.category}
+              target_category={formatCurrency(category.target_category)}
               onDelete={() => handleDeleteCategory(category.id)}
               onEdit={() => handleEditPress(category)}
               orderList={orderList.filter(order => order.category === category.category)}
@@ -232,35 +270,35 @@ const BudgetPlanner = () => {
           onPress={handleButtonPress}
         />
       </View>
-        <ModalTarget
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          oldTarget={target}
-          onAddTarget={handleAddTarget}
-          newTarget={newTarget}
-          setNewTarget={setNewTarget}
-        />
-        <ModalBudget
-          visible={modalBudgetVisible}
-          onClose={() => setModalBudgetVisible(false)}
-          onAddCategory={handleAddCategory}
-          newCategory={newCategory}
-          setNewCategory={setNewCategory}
-          categoryList={categoryList}
-        />
-        <ModalEdit
-          visible={modalEditVisible}
-          onClose={() => setModalEditVisible(false)}
-          oldCategory={editingCategory}
-          onEditCategory={handleEditCategory}
-          newCategoryTarget={newCategoryTarget}
-          setNewCategoryTarget={setNewCategoryTarget}
-        />
-        {loading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
-          </View>
-        )}
+      <ModalTarget
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        oldTarget={target}
+        onAddTarget={handleAddTarget}
+        newTarget={newTarget}
+        setNewTarget={setNewTarget}
+      />
+      <ModalBudget
+        visible={modalBudgetVisible}
+        onClose={() => setModalBudgetVisible(false)}
+        onAddCategory={handleAddCategory}
+        newCategory={newCategory}
+        setNewCategory={setNewCategory}
+        categoryList={categoryList}
+      />
+      <ModalEdit
+        visible={modalEditVisible}
+        onClose={() => setModalEditVisible(false)}
+        oldCategory={editingCategory}
+        onEditCategory={handleEditCategory}
+        newCategoryTarget={newCategoryTarget}
+        setNewCategoryTarget={setNewCategoryTarget}
+      />
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={MyTheme.colors.neutral_2p} />
+        </View>
+      )}
     </View>
   );
 };
@@ -312,7 +350,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8
   },
   columnContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     marginLeft: 36,
     marginRight: 48,
     marginTop: 32
@@ -320,15 +358,15 @@ const styles = StyleSheet.create({
   columnTitleCat: {
     width: 150,
     textAlign: 'left',
-    color: MyTheme.colors.neutral_2p, 
+    color: MyTheme.colors.neutral_2p,
     ...MyTheme.typography.medium.medium_1
   },
   columnTitle: {
     width: 150,
     textAlign: 'center',
-    color: MyTheme.colors.neutral_2p, 
+    color: MyTheme.colors.neutral_2p,
     ...MyTheme.typography.medium.medium_1
-  }, 
+  },
   budgetDetail: {
     marginTop: 21,
     marginBottom: 42,

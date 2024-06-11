@@ -17,6 +17,14 @@ export const Budget = (props) => {
             setTotalTransaction(0);
             setActualSpend(0);
         }
+
+        if (actualSpend > parseInt(props.target_category.replace(/,/g, ''), 10)) {
+            Toast.show({
+                type: 'error',
+                text1: 'Warning',
+                text2: `Spend for category ${props.name} is more than the target budget!`,
+            });
+        }
     }, [props.orderList]);
 
     const formatCurrency = (value) => {
