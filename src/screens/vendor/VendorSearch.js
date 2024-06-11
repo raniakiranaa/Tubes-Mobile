@@ -1,85 +1,104 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Dimensions, Platform, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import MyTheme from '../../config/theme';
 import { BigSearchCard } from '../../components/shares/Card';
 import SearchIcon from '../../../assets/icons/Search.svg';
+import { db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const data = [
-    {
-        id: '1',
-        name: 'JW Marriott Surabaya',
-        category: 'Venue',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.8,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '2',
-        name: 'Sonokembang',
-        category: 'Catering',
-        location: 'Surabaya, Jawa Timur',
-        rating: 5.0,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '3',
-        name: 'Vasa Hotel Surabaya',
-        category: 'Venue',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.5,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '4',
-        name: 'Novotel Surabaya',
-        category: 'Venue',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.3,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '5',
-        name: 'The Alana Surabaya',
-        category: 'Venue',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.2,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '6',
-        name: 'Jatiroso',
-        category: 'Catering',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.6,
-        image: 'https://via.placeholder.com/300',
-    },
-    {
-        id: '7',
-        name: 'Katering Surya',
-        category: 'Catering',
-        location: 'Surabaya, Jawa Timur',
-        rating: 4.5,
-        image: 'https://via.placeholder.com/300',
-    },
-];
-
-
 const VendorSearchPage = () => {
+  const route = useRoute();
+  const { name, category, location, budget } = route.params;
+
+  let searchedName = name ? name.toLowerCase() : '';
+  let searchedCategory = category ? category.toLowerCase() : '';
+  let searchedLocation = location ? location.toLowerCase() : '';
+  let searchedBudget = budget ? budget.toLowerCase() : '';
+
+  const navigation = useNavigation();
+  const [searchedVendorData, setSearchedVendorData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [searchText, setSearchText] = useState('');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBudget, setSelectedBudget] = useState(null);
+
+  const getVendorData = async () => {
+    setLoading(true);
+    try {
+      const vendorRef = collection(db, 'vendor');
+      const vendorSnap = await getDocs(vendorRef);
+
+      if (vendorSnap.empty) {
+        console.log('No matching documents.');
+        setLoading(false);
+        return;
+      }
+
+      const vendorData = await Promise.all(vendorSnap.docs.map(async (vendorDoc) => {
+        const vendorData = vendorDoc.data();
+        const reviewRef = collection(db, 'vendor', `${vendorDoc.id}`, 'review');
+        const reviewSnap = await getDocs(reviewRef);
+        const reviewData = reviewSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        const totalRating = reviewData.reduce((acc, review) => acc + parseFloat(review.rating), 0);
+        const averageRating = reviewData.length > 0 ? totalRating / reviewData.length : 0;
+        return {
+          vendor_id: vendorDoc.id,
+          ...vendorData,
+          average_rating: averageRating,
+        };
+      }));
+
+      const filteredData = vendorData.filter(vendor => {
+        const vendorName = vendor.name ? vendor.name.toLowerCase() : '';
+        const vendorCategories = vendor.category ? vendor.category.map(cat => cat.toLowerCase()) : [];
+        const vendorLocation = vendor.location ? vendor.location.toLowerCase() : '';
+        const vendorBudget = vendor.budget ? vendor.budget.toLowerCase() : '';
+
+        return (
+          (!searchedName || vendorName.includes(searchedName)) &&
+          (!searchedCategory || vendorCategories.includes(searchedCategory)) &&
+          (!searchedLocation || vendorLocation.includes(searchedLocation)) &&
+          (!searchedBudget || vendorBudget.includes(searchedBudget))
+        );
+      });
+
+      setSearchedVendorData(filteredData);
+    } catch (error) {
+      console.error('Error getting documents: ', error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getVendorData();
+  }, [searchedName, searchedCategory, searchedLocation, searchedBudget]);
+
+  const handleSearch = () => {
+    searchedName = searchText.toLowerCase();
+    searchedCategory = selectedCategory ? selectedCategory.toLowerCase() : '';
+    searchedLocation = selectedLocation ? selectedLocation.toLowerCase() : '';
+    searchedBudget = selectedBudget ? selectedBudget.toLowerCase() : '';
+    
+    getVendorData();
+  };
 
   const renderVendorItem = ({ item }) => (
     <View style={styles.vendorItem}>
       <BigSearchCard
         image={item.image}
         title={item.name}
-        type={item.category}
+        type={item.category[0]}
         location={item.location}
-        rating={item.rating}
+        rating={item.average_rating}
       />
     </View>
   );
@@ -87,11 +106,17 @@ const VendorSearchPage = () => {
   const locationData = [
     { label: 'Surabaya', value: 'surabaya' },
     { label: 'Jakarta', value: 'jakarta' },
+    { label: 'Bandung', value: 'bandung' },
+    { label: 'Bali', value: 'bali' },
+    { label: 'Sidoarjo', value: 'sidoarjo' },
   ];
 
   const categoryData = [
     { label: 'Venue', value: 'venue' },
     { label: 'Catering', value: 'catering' },
+    { label: 'Photography', value: 'photography' },
+    { label: 'Entertainment', value: 'entertainment' },
+    { label: 'Music', value: 'music' },
   ];
 
   const budgetData = [
@@ -100,7 +125,13 @@ const VendorSearchPage = () => {
     { label: 'High', value: 'high' },
   ];
 
-  const [searchQuery, setSearchQuery] = useState('');
+  if (loading) {
+    return (
+      <View style={styles.loadingOverlay}>
+        <ActivityIndicator size="large" color={MyTheme.colors.brown_2} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container} className='mt-12'>
@@ -112,8 +143,8 @@ const VendorSearchPage = () => {
             style={MyTheme.typography.body.body_1}
             placeholder="Search"
             placeholderTextColor={MyTheme.colors.neutral_3}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
 
@@ -161,14 +192,14 @@ const VendorSearchPage = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.searchButton} >
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Text style={[MyTheme.typography.subtitle.sub_2, { color: MyTheme.colors.white }]}>Search Vendor</Text>
         </TouchableOpacity>
         
       </View>
 
       <FlatList
-        data={data.filter(vendor => vendor.name.toLowerCase().includes(searchQuery.toLowerCase()))}
+        data={searchedVendorData.filter(vendor => vendor.name.toLowerCase().includes(searchText.toLowerCase()))}
         keyExtractor={(item) => item.id}
         renderItem={renderVendorItem}
         contentContainerStyle={styles.listContent}
@@ -254,6 +285,16 @@ const styles = StyleSheet.create({
   },
   vendorItem: {
     marginBottom: 10,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
 });
 

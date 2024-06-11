@@ -78,6 +78,7 @@ const OrderConfirmationPage = ({ route }) => {
         status: 'Vendor Confirmation',
         total_price: catalogData.price,
         vendor_ID: parseInt(vendor_id),
+        category: catalogData.category,
       });
       Toast.show({
         type: 'success',
@@ -136,7 +137,7 @@ const OrderConfirmationPage = ({ route }) => {
       </ScrollView>
       
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => navigation.navigate('ComingSoon')}>
           <Text style={[MyTheme.typography.subtitle.sub_3, {color:MyTheme.colors.brown_2}]}>Chat</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.orderButton} onPress={handleOrder}>
