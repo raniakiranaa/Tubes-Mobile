@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainer: {
-    paddingBottom: Platform.OS === 'ios' ? 100 : 68,
+    paddingBottom: Platform.OS === 'ios' ? 150 : 118,
     marginTop: 60,
   },
   inputWrapper: {
