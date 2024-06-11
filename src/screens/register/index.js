@@ -67,15 +67,16 @@ const Register = () => {
       return;
     }
 
+    const lowerEmail = email.toLowerCase();
     const auth = firebase_auth;
     setLoading(true); // Set loading to true before starting the registration process
 
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(auth, lowerEmail, password);
       
       const docRef = await addDoc(collection(db, 'customer'), {
         name: name,
-        email: email,
+        email: lowerEmail,
         password: password,
         contact: null,
         married_city: null,

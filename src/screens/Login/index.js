@@ -57,14 +57,15 @@ const Login = () => {
       return;
     }
     
+    const lowerEmail = email.toLowerCase();
     const auth = firebase_auth;
     setLoading(true); // Set loading to true before starting the login process
     
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      const userQuery = query(collection(db, 'customer'),  where('email', '==', email));
+      const response = await signInWithEmailAndPassword(auth, lowerEmail, password);
+      const userQuery = query(collection(db, 'customer'),  where('email', '==', lowerEmail));
       const querySnapshot = await getDocs(userQuery);
-
+      // console.log('q', querySnapshot);
       if(!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
