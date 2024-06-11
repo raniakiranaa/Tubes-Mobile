@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
@@ -8,11 +8,12 @@ import { Guest } from '../../components/private/guest/index.js'
 import ModalDate from '../../components/private/guest/ModalDate.js';
 import ModalGuest from '../../components/private/guest/ModalGuest.js'
 import { db } from '../../firebase';
+import { UserContext } from '../../contexts/UserContext.js';
 import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const GuestManager = () => {
   // user
-  const [customerID, setCustomerID] = useState('1');
+  const { user } = useContext(UserContext);
 
   const [loading, setLoading] = useState(true);
   const [guestList, setGuestList] = useState([]);
@@ -35,7 +36,7 @@ const GuestManager = () => {
   const getDeadline = async () => {
     setLoading(true)
     try {
-      const customerRef = doc(db, 'customer', customerID);
+      const customerRef = doc(db, 'customer', user.id);
       const customerDoc = await getDoc(customerRef);
   
       if (customerDoc.exists()) {
@@ -44,7 +45,7 @@ const GuestManager = () => {
         setDeadline(deadlineGuest)
         
         // fetch guest list
-        const guestCollectionRef = collection(db, 'customer', customerID, 'guest');
+        const guestCollectionRef = collection(db, 'customer', user.id, 'guest');
         const guestSnapshot = await getDocs(guestCollectionRef);
 
         if (!guestSnapshot.empty) {
@@ -59,7 +60,7 @@ const GuestManager = () => {
           setNone(guests.filter(guest => guest.status === 'None').length);
 
         } else {
-          console.log("No guest found for customer ID:", customerID)
+          console.log("No guest found for customer ID:", user.id)
         }
       } else {
         console.log('No such document!');
@@ -72,12 +73,12 @@ const GuestManager = () => {
 
   useEffect(() => {
     getDeadline();
-  }, [customerID]);
+  }, [user.id]);
 
   const handleAddDate = async (date) => {
     setDeadline(date);
     try {
-      const customerRef = doc(db, 'customer', customerID);
+      const customerRef = doc(db, 'customer', user.id);
       await updateDoc(customerRef, { deadline_guest: date });
     } catch (error) {
       console.error('Error updating document:', error);
@@ -96,7 +97,7 @@ const GuestManager = () => {
     try {
       setModalGuestVisible(false);
       const newGuest = { name, role, status: 'None' };
-      const guestCollectionRef = collection(db, 'customer', customerID, 'guest');
+      const guestCollectionRef = collection(db, 'customer', user.id, 'guest');
       const guestDocRef = await addDoc(guestCollectionRef, newGuest);
       const guestWithId = { id: guestDocRef.id, ...newGuest };
 
@@ -111,7 +112,7 @@ const GuestManager = () => {
 
   const handleRemoveGuest = async (id, status) => {
     try {
-      const guestRef = doc(db, 'customer', customerID, 'guest', id);
+      const guestRef = doc(db, 'customer', user.id, 'guest', id);
       await deleteDoc(guestRef);
       const updatedGuestList = guestList.filter(guest => guest.id !== id);
 
@@ -126,7 +127,7 @@ const GuestManager = () => {
 
   const updateTotalGuestCount = async (count) => {
     try {
-      const customerRef = doc(db, 'customer', customerID);
+      const customerRef = doc(db, 'customer', user.id);
       await updateDoc(customerRef, { total_guest: count });
     } catch (error) {
       console.error('Error updating total guest count:', error);
@@ -147,7 +148,7 @@ const GuestManager = () => {
 
   const handleChangeStatus = async (id, newStatus) => {
     try {
-      const guestRef = doc(db, 'customer', customerID, 'guest', id);
+      const guestRef = doc(db, 'customer', user.id, 'guest', id);
       const guestDoc = await getDoc(guestRef);
 
       if (guestDoc.exists()) {

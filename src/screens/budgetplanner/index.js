@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MyTheme from '../../config/theme.js';
 import Pencil from '../../../assets/icons/Pencil/index.js';
 import ModalTarget from '../../components/private/budget/ModalTarget.js';
 import ModalBudget from '../../components/private/budget/ModalBudget.js';
 import ModalEdit from '../../components/private/budget/ModalEdit.js';
+import Toast from 'react-native-toast-message';
 import { CustomButton } from '../../components/shares/Buttons/index.js';
 import { Budget } from '../../components/private/budget/index.js'
 import { db } from '../../firebase';
+import { UserContext } from '../../contexts/UserContext.js';
 import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const BudgetPlanner = () => {
+  const { user } = useContext(UserContext);
+
   const [loading, setLoading] = useState(true);
   const [spend, setSpend] = useState(0);
   const [target, setTarget] = useState(0);
@@ -18,50 +22,72 @@ const BudgetPlanner = () => {
   const budgetRemaining = target - spend;
 
   const [categoryList, setCategoryList] = useState([]);
+  const [orderList, setOrderList] = useState([]);
   const [newCategory, setNewCategory] = useState('')
   const [editingCategory, setEditingCategory] = useState(null);
   const [newCategoryTarget, setNewCategoryTarget] = useState('');
-
-  // user
-  const [customerID, setCustomerID] = useState('1');
 
   // get target budget
   const getTargetBudget = async () => {
     setLoading(true);
     try {
-      const customerRef = doc(db, 'customer', customerID);
-      const customerDoc = await getDoc(customerRef);
+      if (user && user.id) {
+        const customerRef = doc(db, 'customer', user.id); 
+        const customerDoc = await getDoc(customerRef);
+    
+        if (customerDoc.exists()) {
+          const customerData = customerDoc.data();
+          const targetBudget = customerData.target_budget || 0; // default to 0 if not set
+          setTarget(targetBudget);
   
-      if (customerDoc.exists()) {
-        const customerData = customerDoc.data();
-        const targetBudget = customerData.target_budget || 0; // default to 0 if not set
-        setTarget(targetBudget);
+          // fetch target budget categories
+          const budgetCollectionRef = collection(db, 'customer', user.id, 'budget');
+          const budgetSnapshot = await getDocs(budgetCollectionRef);
+  
+          if (!budgetSnapshot.empty) {
+            const categories = budgetSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+            setCategoryList(categories);
+          } else {
+            console.log('No categories found in budget collection for customer ID:', user.id);
+          }
 
-        // fetch categories
-        const budgetCollectionRef = collection(db, 'customer', customerID, 'budget');
-        const budgetSnapshot = await getDocs(budgetCollectionRef)
+          // Fetch customer orders
+          const orderCollectionRef = collection(db, 'customer', user.id, 'order');
+          const orderSnapshot = await getDocs(orderCollectionRef);
+          let totalSpend = 0;
 
-        if (!budgetSnapshot.empty) {
-          const categories = budgetSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          setCategoryList(categories);
+          if (!orderSnapshot.empty) {
+            const orders = orderSnapshot.docs.map(doc => {
+              const orderData = doc.data();
+              totalSpend += parseInt(orderData.total_price, 10) || 0;
+              return {
+                id: doc.id,
+                ...orderData
+              };
+            });
+            setOrderList(orders);
+            setSpend(totalSpend);
+          } else {
+            console.log('No orders found for customer ID:', user.id);
+          }
         } else {
-          console.log('No categories found in budget collection for customer ID:', customerID);
+          console.log('No customer document found for customer ID:', user.id);
         }
       } else {
-        console.log('No customer document found for customer ID:', customerID);
+        console.error('Invalid user ID');
       }
     } catch (error) {
       console.error('Error getting document: ', error);
     }
     setLoading(false);
-  }
-
+  };
+  
   useEffect(() => {
     getTargetBudget();
-  }, [customerID]);
+  }, [user.id]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
@@ -80,7 +106,7 @@ const BudgetPlanner = () => {
     const parsedBudget = parseInt(newTarget.replace(/,/g, ''), 10);
     if (!isNaN(parsedBudget)) {
       try {
-        const customerRef = doc(db, 'customer', customerID);
+        const customerRef = doc(db, 'customer', user.id);
 
         await updateDoc(customerRef, {
           target_budget: parsedBudget
@@ -103,7 +129,7 @@ const BudgetPlanner = () => {
   };
 
   const handleAddCategory = async (newCategory) => {
-    const budgetCollectionRef = collection(db, 'customer', customerID, 'budget');
+    const budgetCollectionRef = collection(db, 'customer', user.id, 'budget');
     try {
       setModalBudgetVisible(false);
       const newCategoryDoc = await addDoc(budgetCollectionRef, {
@@ -118,7 +144,7 @@ const BudgetPlanner = () => {
   };
 
   const handleDeleteCategory = async (categoryID) => {
-    const categoryRef = doc(db, 'customer', customerID, 'budget', categoryID);
+    const categoryRef = doc(db, 'customer', user.id, 'budget', categoryID);
     try {
       await deleteDoc(categoryRef);
 
@@ -138,7 +164,7 @@ const BudgetPlanner = () => {
   const handleEditCategory = async () => {
     const parsedTarget = parseInt(newCategoryTarget.replace(/,/g, ''), 10);
     if (!isNaN(parsedTarget) && editingCategory) {
-      const categoryRef = doc(db, 'customer', customerID, 'budget', editingCategory.id);
+      const categoryRef = doc(db, 'customer', user.id, 'budget', editingCategory.id);
       try {
         await updateDoc(categoryRef, { target_category: parsedTarget });
 
@@ -192,6 +218,7 @@ const BudgetPlanner = () => {
               target_category = {formatCurrency(category.target_category)}
               onDelete={() => handleDeleteCategory(category.id)}
               onEdit={() => handleEditPress(category)}
+              orderList={orderList.filter(order => order.category === category.category)}
             />
           ))}
         </ScrollView>

@@ -7,7 +7,7 @@ const ModalBudget = ({ visible, onClose, onAddCategory, newCategory, setNewCateg
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('Category');
     const [categorySelected, setCategorySelected] = useState(false);
-    const categories = ['Venue', 'Attire', 'Food', 'Beverages'];
+    const categories = ['Venue', 'Catering', 'Photography', 'Entertainment', 'Music'];
     const availableCategories = categories.filter(category => !categoryList.some(cat => cat.category === category));
 
     useEffect(() => {

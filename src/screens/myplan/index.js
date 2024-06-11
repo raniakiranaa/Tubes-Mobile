@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { CustomButton } from '../../components/shares/Buttons';
@@ -7,6 +7,7 @@ import PlusCircle from "../../../assets/icons/plus-circle.svg";
 import { ToDo } from '../../components/private/myplan/index.js';
 import ModalCategory from '../../components/private/myplan/ModalCategory.js';
 import { db } from '../../firebase';
+import { UserContext } from '../../contexts/UserContext.js';
 import { collection, getDoc, getDocs, updateDoc, addDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -14,7 +15,7 @@ const scaleFontSize = screenWidth * 0.04;
 
 const MyPlan = () => {
   // user
-  const [customerID, setCustomerID] = useState('1');
+  const { user } = useContext(UserContext);
 
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,22 +27,22 @@ const MyPlan = () => {
     setLoading(true)
     try {
       // initialize MyPlan
-      const customerDocRef = doc(db, 'customer', customerID);
+      const customerDocRef = doc(db, 'customer', user.id);
       const customerDocSnapshot = await getDoc(customerDocRef);
       const customerData = customerDocSnapshot.data();
       const initMyPlan = customerData.initMyPlan;
 
       if (!initMyPlan) {
-        const categoriesCollectionRef = collection(db, 'customer', customerID, 'categories');
+        const categoriesCollectionRef = collection(db, 'customer', user.id, 'categories');
         const preWeddingDocRef = await addDoc(categoriesCollectionRef, { createdAt: Timestamp.now(), name: 'Pre-Wedding' });
         
-        const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', preWeddingDocRef.id, 'todos');
+        const nestedCollectionRef = collection(db, 'customer', user.id, 'categories', preWeddingDocRef.id, 'todos');
         await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: false });
 
         await updateDoc(customerDocRef, { initMyPlan: true });
       }
 
-      const categoriesSnapshot = await getDocs(collection(db, 'customer', customerID, 'categories'));
+      const categoriesSnapshot = await getDocs(collection(db, 'customer', user.id, 'categories'));
       const fetchedCategories = categoriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       fetchedCategories.sort((a, b) => a.createdAt - b.createdAt);
       setCategories(fetchedCategories);
@@ -53,7 +54,7 @@ const MyPlan = () => {
 
   useEffect(() => {
     getCategories();
-  }, [customerID]);
+  }, [user.id]);
 
   const navigation = useNavigation();
 
@@ -64,9 +65,9 @@ const MyPlan = () => {
   const handleAddCategory = async () => {
     try {
       if (newCategory.trim()) {
-        const categoryRef = collection(db, 'customer', customerID, 'categories');
+        const categoryRef = collection(db, 'customer', user.id, 'categories');
         const newCategoryRef = await addDoc(categoryRef, { createdAt: Timestamp.now(), name: newCategory });
-        const nestedCollectionRef = collection(db, 'customer', customerID, 'categories', newCategoryRef.id, 'todos');
+        const nestedCollectionRef = collection(db, 'customer', user.id, 'categories', newCategoryRef.id, 'todos');
         await addDoc(nestedCollectionRef, { createdAt: Timestamp.now(), value: '', status: false });
 
         setCategories([...categories, { id: newCategoryRef.id, name: newCategory }]);
@@ -82,7 +83,7 @@ const MyPlan = () => {
     try {
       setCategories(categories.filter(category => category.id !== categoryId));
 
-      await deleteDoc(doc(db, 'customer', customerID, 'categories', categoryId));
+      await deleteDoc(doc(db, 'customer', user.id, 'categories', categoryId));
 
     } catch (error) {
       console.error('Error deleting category:', error);
@@ -121,7 +122,7 @@ const MyPlan = () => {
           {categories.map(category => (
             <ToDo 
               key={category.id} 
-              customerID={customerID} 
+              customerID={user.id} 
               categoryID={category.id} 
               category={category.name} 
               onCategoryDelete={() => handleCategoryDelete(category.id)}

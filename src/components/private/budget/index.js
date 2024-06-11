@@ -8,6 +8,17 @@ export const Budget = (props) => {
     const [totalTransaction, setTotalTransaction] = useState(0)
     const [actualSpend, setActualSpend] = useState(0)
 
+    useEffect(() => {
+        if (props.orderList && props.orderList.length > 0) {
+            setTotalTransaction(props.orderList.length);
+            const totalSpend = props.orderList.reduce((acc, order) => acc + parseInt(order.total_price, 10), 0);
+            setActualSpend(totalSpend);
+        } else {
+            setTotalTransaction(0);
+            setActualSpend(0);
+        }
+    }, [props.orderList]);
+
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
     };
