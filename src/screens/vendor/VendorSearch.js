@@ -99,6 +99,7 @@ const VendorSearchPage = () => {
         type={item.category[0]}
         location={item.location}
         rating={item.average_rating}
+        onPress={() => navigation.navigate('VendorDetail', { id: item.vendor_id })}
       />
     </View>
   );
