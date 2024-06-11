@@ -56,7 +56,7 @@ const MyPlan = () => {
     getCategories();
   }, [user.id]);
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const handlePress = () => {
     setModalVisible(true);
@@ -93,7 +93,7 @@ const MyPlan = () => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={styles.listContainer}>
+        {/* <View style={styles.listContainer}>
           <View>
             <CustomButton
               title="To-Do"
@@ -116,7 +116,7 @@ const MyPlan = () => {
               fontSize={scaleFontSize}
             />
           </View>
-        </View>
+        </View> */}
 
         <ScrollView contentContainerStyle={{ paddingBottom: 250, justifyContent: 'center', alignItems: 'center' }}>
           {categories.map(category => (
