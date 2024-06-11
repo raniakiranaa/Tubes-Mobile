@@ -73,7 +73,7 @@ const VendorCarousel = () => {
       <FlatList
         data={vendorData.filter(item => item.category.includes('Venue'))}
         renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.average_rating} onPress={() => handlePress(item.vendor_id)} />}
-        keyExtractor={item => item.id} // Ensure the id is unique
+        keyExtractor={(item, index) => `${item.vendor_id}-${index}`} // Ensure the key is unique
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}
@@ -87,7 +87,7 @@ const VendorCarousel = () => {
       <FlatList
         data={vendorData.filter(item => item.category.includes('Catering'))}
         renderItem={({ item }) => <SmallCard image={{ uri: item.image }} title={item.name} rating={item.average_rating} onPress={() => handlePress(item.vendor_id)} />}
-        keyExtractor={item => item.id} // Ensure the id is unique
+        keyExtractor={(item, index) => `${item.vendor_id}-${index}`} // Ensure the key is unique
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.cardsContainer}

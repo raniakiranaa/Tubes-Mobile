@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
+    paddingBottom: 25,
   },
   promoContainer: {
     marginTop: 30,

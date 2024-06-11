@@ -103,7 +103,7 @@ const ProductDetailPage = ({ route }) => {
       </ScrollView>
 
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.chatButton} onPress={() => console.log('Chat Pressed')}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => navigation.navigate('ComingSoon')}>
           <Text style={[MyTheme.typography.subtitle.sub_3, { color: MyTheme.colors.brown_2 }]}>Chat</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.orderButton} onPress={() => navigation.navigate('OrderConfirmation', { id: catalogData.id, vendor_id, vendor_name })}>
