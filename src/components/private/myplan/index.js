@@ -74,11 +74,19 @@ export const ToDo = (props) => {
         }
     };
 
+    // Sort todos so that todos with status true appear at the end
+    const sortedTodos = [...todos].sort((a, b) => {
+        if (a.status && !b.status) return 1;
+        if (!a.status && b.status) return -1;
+        return 0;
+    });
+
     return (
         <View style={styles.container}>
             <Text style={[styles.subTitle, MyTheme.typography.subtitle.sub_2]}>{props.category}</Text>
             <View style={styles.toDoContainer}>
-                {todos.map(todo => (
+                {/* Render todos in the order of sortedTodos */}
+                {sortedTodos.map(todo => (
                     <ToDoInput 
                         key={todo.id}
                         id={todo.id}
